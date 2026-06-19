@@ -1,0 +1,75 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "sendTo": "={{ $json.body.to_email }}",
+        "subject": "={{ $json.body.email_subject }}",
+        "emailType": "html",
+        "message": "={{ $json.body.email_html }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        450,
+        200
+      ],
+      "id": "cfc2e4da-c0f1-46d9-89cd-6c5069931567",
+      "name": "Send Confirmation Email",
+      "webhookId": "45b28322-d51a-46e8-89ed-a972e2454cd1",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qQlxCYfGLOYdGSGq",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "3c32c409-8f9d-4dda-81e8-8b9a22f2cd21",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        200,
+        200
+      ],
+      "id": "39ea2ede-c6a4-46c9-8957-0a1a5e907dac",
+      "name": "Webhook Intake",
+      "webhookId": "3c32c409-8f9d-4dda-81e8-8b9a22f2cd21"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook Intake": {
+      "main": [
+        [
+          {
+            "node": "Send Confirmation Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "5b86d7d2-4873-4c48-a971-dbf79dfc6715",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a64068d3fabbc1d09c2bb35e1359562c7c55d41dfb6759ea3903f4769a66b03c"
+  },
+  "nodeGroups": [],
+  "id": "pqUZ7g8mITGFjSwO",
+  "tags": []
+}

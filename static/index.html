@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantumAI | Lead Automation Agent Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+    <!-- Lucide Icons for premium micro-icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo">Q</div>
+                <h2>Quantum<span>AI</span></h2>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" id="nav-dashboard">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" id="nav-leads">
+                    <i data-lucide="users"></i>
+                    <span>Leads Console</span>
+                </a>
+                <a href="#" class="nav-item" id="nav-settings">
+                    <i data-lucide="settings"></i>
+                    <span>API Config</span>
+                </a>
+            </nav>
+
+            <div class="api-status-card" id="api-status-badge">
+                <div class="pulse-indicator red"></div>
+                <div class="status-info">
+                    <p class="status-title">Gemini API Connection</p>
+                    <p class="status-desc">Unconfigured</p>
+                </div>
+            </div>
+            
+            <div class="sidebar-footer">
+                <p>v1.0.0 • AI Automation Agency</p>
+            </div>
+        </aside>
+
+        <!-- Main Dashboard View -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="content-header">
+                <div class="header-title">
+                    <h1 id="view-title">Dashboard Overview</h1>
+                    <p id="view-desc">Monitor, score, and automate responses for incoming leads in real-time.</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="openTestLeadModal()">
+                        <i data-lucide="plus-circle"></i>
+                        <span>Submit Test Lead</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Status Alerts -->
+            <div class="alert alert-warning hidden" id="api-key-alert">
+                <i data-lucide="alert-triangle"></i>
+                <div class="alert-content">
+                    <h4>Gemini API Key Missing</h4>
+                    <p>The server is running in simulation mode. Configure your Gemini API Key in the API Config tab to enable full structured AI summaries and auto-response drafts.</p>
+                </div>
+                <button class="btn btn-sm btn-outline-warning" onclick="switchTab('settings')">Fix Now</button>
+            </div>
+
+            <!-- Page 1: Dashboard Analytics -->
+            <section id="section-dashboard" class="tab-section active">
+                <!-- Stat Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Total Leads</span>
+                            <div class="stat-icon-wrapper blue">
+                                <i data-lucide="inbox"></i>
+                            </div>
+                        </div>
+                        <h3 id="stat-total" class="stat-value">0</h3>
+                        <p class="stat-footer"><span class="trend positive">↑ Live</span> webhook feed</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">High Priority Leads</span>
+                            <div class="stat-icon-wrapper red">
+                                <i data-lucide="flame"></i>
+                            </div>
+                        </div>
+                        <h3 id="stat-high" class="stat-value">0</h3>
+                        <p class="stat-footer">Requires response ASAP</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Inquiries / Support</span>
+                            <div class="stat-icon-wrapper orange">
+                                <i data-lucide="message-square-text"></i>
+                            </div>
+                        </div>
+                        <h3 id="stat-inquiries" class="stat-value">0</h3>
+                        <p class="stat-footer">Active buyer intent queries</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Spam Blocked</span>
+                            <div class="stat-icon-wrapper green">
+                                <i data-lucide="shield-check"></i>
+                            </div>
+                        </div>
+                        <h3 id="stat-spam" class="stat-value">0</h3>
+                        <p class="stat-footer">Filtered out by AI auto-scorer</p>
+                    </div>
+                </div>
+
+                <!-- Main Layout Grid: Leads Overview and Quick Stats -->
+                <div class="dashboard-layout-grid">
+                    <!-- Recent Leads Feed -->
+                    <div class="card feed-card">
+                        <div class="card-header">
+                            <h3>Recent Leads Live Feed</h3>
+                            <button class="btn btn-sm btn-secondary" onclick="fetchLeadsData()">
+                                <i data-lucide="refresh-cw"></i>
+                                <span>Sync Feed</span>
+                            </button>
+                        </div>
+                        <div class="leads-list-compact" id="recent-leads-list">
+                            <!-- Populated dynamically -->
+                            <div class="empty-state">
+                                <i data-lucide="inbox" size="48"></i>
+                                <p>No leads received yet. Submit a test lead using the button at the top!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category Breakdown Chart placeholder & Webhook Info -->
+                    <div class="card info-card">
+                        <div class="card-header">
+                            <h3>Webhook Integrations</h3>
+                        </div>
+                        <div class="webhook-info-body">
+                            <p class="section-subtitle">Send your lead data to this endpoint from Webflow, Typeform, Elementor, Zapier, or Make:</p>
+                            <div class="code-block-wrapper">
+                                <code id="webhook-url">http://127.0.0.1:8000/webhook</code>
+                                <button class="btn-copy" onclick="copyWebhookUrl()" title="Copy to clipboard">
+                                    <i data-lucide="copy" id="copy-icon-webhook"></i>
+                                </button>
+                            </div>
+                            
+                            <h4 class="schema-title">Payload JSON Schema (POST)</h4>
+                            <pre class="schema-code">
+{
+  "name": "Jane Doe",
+  "email": "jane@company.com",
+  "phone": "+1234567890",
+  "company": "Growth Systems Inc.",
+  "message": "Looking to automate client booking...",
+  "source": "Landing Page"
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Page 2: Leads Console (Full details) -->
+            <section id="section-leads" class="tab-section">
+                <div class="card console-card">
+                    <div class="console-toolbar">
+                        <div class="search-wrapper">
+                            <i data-lucide="search"></i>
+                            <input type="text" id="leads-search-input" placeholder="Search leads by name, company, email..." oninput="filterLeads()">
+                        </div>
+                        <div class="filter-actions">
+                            <select id="priority-filter" onchange="filterLeads()">
+                                <option value="all">All Priorities</option>
+                                <option value="High">High Urgency</option>
+                                <option value="Medium">Medium Urgency</option>
+                                <option value="Low">Low Urgency</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="leads-full-table-container">
+                        <table class="leads-table">
+                            <thead>
+                                <tr>
+                                    <th>Lead Info</th>
+                                    <th>Source</th>
+                                    <th>AI Classification</th>
+                                    <th>Urgency</th>
+                                    <th>AI Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leads-table-body">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Page 3: API Config & System Settings -->
+            <section id="section-settings" class="tab-section">
+                <div class="card settings-card">
+                    <div class="card-header">
+                        <h3>Gemini LLM Connection</h3>
+                    </div>
+                    <div class="settings-body">
+                        <p class="settings-desc">
+                            This server processes incoming leads using **Gemini 2.5 Flash** for ultra-fast, structured lead analysis, summaries, and reply drafting.
+                        </p>
+                        
+                        <form id="api-key-form" onsubmit="saveApiKey(event)">
+                            <div class="form-group">
+                                <label for="api-key-input">Gemini API Key</label>
+                                <div class="api-key-input-wrapper">
+                                    <input type="password" id="api-key-input" placeholder="AIzaSy...">
+                                    <button type="button" class="btn-toggle-visibility" onclick="togglePasswordVisibility()">
+                                        <i data-lucide="eye" id="eye-icon"></i>
+                                    </button>
+                                </div>
+                                <span class="input-help">Get a free key from Google AI Studio. The key will be saved securely to your local <code>.env</code> file.</span>
+                            </div>
+
+                            <div class="form-group" style="margin-top: 1.5rem;">
+                                <label for="n8n-url-input">n8n Webhook URL (Optional Integration)</label>
+                                <input type="url" id="n8n-url-input" placeholder="https://your-n8n-instance.com/webhook/..." style="width: 100%;">
+                                <span class="input-help">Paste your n8n Production Webhook URL to automatically forward lead data and AI drafts to n8n workflows.</span>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary" id="btn-save-config" style="margin-top: 1.5rem;">
+                                <i data-lucide="save"></i>
+                                <span>Save Configuration</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Lead Detail Modal -->
+    <div class="modal-backdrop" id="lead-modal">
+        <div class="modal-card modal-large">
+            <div class="modal-header">
+                <h3>Lead Details & AI Analysis</h3>
+                <button class="btn-close" onclick="closeLeadModal()">×</button>
+            </div>
+            <div class="modal-body" id="lead-modal-content">
+                <!-- Rendered dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Lead Submitter Modal -->
+    <div class="modal-backdrop" id="test-lead-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Submit Test Lead Webhook</h3>
+                <button class="btn-close" onclick="closeTestLeadModal()">×</button>
+            </div>
+            <form onsubmit="submitTestLead(event)">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Name*</label>
+                            <input type="text" id="test-name" required placeholder="e.g. Richard Hendricks">
+                        </div>
+                        <div class="form-group">
+                            <label>Email*</label>
+                            <input type="email" id="test-email" required placeholder="e.g. richard@piedpiper.com">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Company</label>
+                            <input type="text" id="test-company" placeholder="e.g. Pied Piper">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="text" id="test-phone" placeholder="e.g. +1 555 432 1009">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Source</label>
+                        <select id="test-source">
+                            <option value="Web Form">Web Form</option>
+                            <option value="Facebook Ads">Facebook Ads</option>
+                            <option value="AI Voice Agent">AI Voice Agent</option>
+                            <option value="LinkedIn Cold Outreach">LinkedIn Cold Outreach</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Message/Query*</label>
+                        <textarea id="test-message" rows="4" required placeholder="Describe their request (e.g. Need an AI chatbot built for my agency site ASAP, call me at 12:00 PM!)"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeTestLeadModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="btn-submit-test">Submit Webhook</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast hidden">Message Copied!</div>
+
+    <script>
+        // State variables
+        let leadsData = [];
+        let apiConfigured = false;
+        let activeTab = 'dashboard';
+
+        // Initialize Webpage
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set dynamic hostname for webhook url display
+            document.getElementById('webhook-url').innerText = `${window.location.origin}/webhook`;
+            
+            // Register navigation listeners
+            document.getElementById('nav-dashboard').addEventListener('click', (e) => { e.preventDefault(); switchTab('dashboard'); });
+            document.getElementById('nav-leads').addEventListener('click', (e) => { e.preventDefault(); switchTab('leads'); });
+            document.getElementById('nav-settings').addEventListener('click', (e) => { e.preventDefault(); switchTab('settings'); });
+
+            // Fetch initial status and data
+            checkApiConfig();
+            fetchLeadsData();
+
+            // Refresh leads periodically
+            setInterval(fetchLeadsData, 8000);
+        });
+
+        // Tab Switcher
+        function switchTab(tabId) {
+            activeTab = tabId;
+            // Update Navigation Menu Active State
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            if (tabId === 'dashboard') document.getElementById('nav-dashboard').classList.add('active');
+            if (tabId === 'leads') document.getElementById('nav-leads').classList.add('active');
+            if (tabId === 'settings') document.getElementById('nav-settings').classList.add('active');
+
+            // Toggle Page Section Visibility
+            document.querySelectorAll('.tab-section').forEach(section => section.classList.remove('active'));
+            document.getElementById(`section-${tabId}`).classList.add('active');
+
+            // Update Header Text
+            const titleEl = document.getElementById('view-title');
+            const descEl = document.getElementById('view-desc');
+            if (tabId === 'dashboard') {
+                titleEl.innerText = "Dashboard Overview";
+                descEl.innerText = "Monitor, score, and automate responses for incoming leads in real-time.";
+            } else if (tabId === 'leads') {
+                titleEl.innerText = "Leads Console";
+                descEl.innerText = "Review lead message history, priorities, and detailed AI analysis.";
+                filterLeads();
+            } else if (tabId === 'settings') {
+                titleEl.innerText = "API Configuration";
+                descEl.innerText = "Manage your backend keys and LLM settings.";
+            }
+        }
+
+        // Check Gemini API Configuration Status
+        async function checkApiConfig() {
+            try {
+                const res = await fetch('/api/config');
+                const data = await res.json();
+                apiConfigured = data.configured;
+
+                const badge = document.getElementById('api-status-badge');
+                const indicator = badge.querySelector('.pulse-indicator');
+                const desc = badge.querySelector('.status-desc');
+                const alertEl = document.getElementById('api-key-alert');
+
+                if (apiConfigured) {
+                    indicator.className = "pulse-indicator green";
+                    desc.innerText = "Connected";
+                    alertEl.classList.add('hidden');
+                } else {
+                    indicator.className = "pulse-indicator red";
+                    desc.innerText = "Unconfigured";
+                    alertEl.classList.remove('hidden');
+                }
+
+                if (data.n8n_url) {
+                    document.getElementById('n8n-url-input').value = data.n8n_url;
+                }
+            } catch (err) {
+                console.error("Error checking configuration:", err);
+            }
+        }
+
+        // Fetch Leads from Backend
+        async function fetchLeadsData() {
+            try {
+                const res = await fetch('/api/leads');
+                leadsData = await res.json();
+                
+                // Fetch Stats
+                const statsRes = await fetch('/api/stats');
+                const stats = await statsRes.json();
+                
+                updateStatsUI(stats);
+                updateRecentLeadsFeed();
+                updateLeadsTable();
+                lucide.createIcons(); // Refresh icons
+            } catch (err) {
+                console.error("Error syncing data:", err);
+            }
+        }
+
+        // Update Dashboard Stats UI
+        function updateStatsUI(stats) {
+            document.getElementById('stat-total').innerText = stats.total_leads || 0;
+            document.getElementById('stat-high').innerText = stats.urgency.High || 0;
+            document.getElementById('stat-inquiries').innerText = (stats.category['Inquiry'] || 0) + (stats.category['Technical Support'] || 0);
+            document.getElementById('stat-spam').innerText = stats.category['Spam'] || 0;
+        }
+
+        // Render Recent Leads Feed (Dashboard Tab)
+        function updateRecentLeadsFeed() {
+            const listEl = document.getElementById('recent-leads-list');
+            if (leadsData.length === 0) {
+                listEl.innerHTML = `
+                    <div class="empty-state">
+                        <i data-lucide="inbox"></i>
+                        <p>No leads received yet. Submit a test lead using the button at the top!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const itemsHtml = leadsData.slice(0, 5).map(lead => {
+                const analysis = lead.ai_analysis || {};
+                const urgency = analysis.urgency || "Low";
+                const category = analysis.category || "Inquiry";
+                const summary = analysis.summary || lead.message;
+                
+                return `
+                    <div class="lead-item-compact" onclick="viewLeadDetail('${lead.id}')">
+                        <div class="lead-header-row">
+                            <span class="lead-name-badge">${lead.name}</span>
+                            <span class="badge badge-urgency-${urgency.toLowerCase()}">${urgency}</span>
+                        </div>
+                        <div class="lead-meta-row">
+                            <span>${lead.company || 'Individual'}</span> • <span>${lead.source}</span>
+                        </div>
+                        <p class="lead-summary-compact">${summary}</p>
+                    </div>
+                `;
+            }).join('');
+
+            listEl.innerHTML = itemsHtml;
+        }
+
+        // Render Leads Table (Console Tab)
+        function updateLeadsTable() {
+            const tableBody = document.getElementById('leads-table-body');
+            if (leadsData.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="table-empty">No leads found.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tableBody.innerHTML = ''; // Clear existing
+            filterLeads();
+        }
+
+        // Apply filters & search logic to leads table
+        function filterLeads() {
+            const query = document.getElementById('leads-search-input').value.toLowerCase();
+            const filterPriority = document.getElementById('priority-filter').value;
+            const tableBody = document.getElementById('leads-table-body');
+
+            const filtered = leadsData.filter(lead => {
+                const nameMatch = lead.name.toLowerCase().includes(query);
+                const companyMatch = (lead.company || '').toLowerCase().includes(query);
+                const emailMatch = lead.email.toLowerCase().includes(query);
+                const searchMatch = nameMatch || companyMatch || emailMatch;
+
+                const urgency = lead.ai_analysis?.urgency || 'Low';
+                const priorityMatch = filterPriority === 'all' || urgency === filterPriority;
+
+                return searchMatch && priorityMatch;
+            });
+
+            if (filtered.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="table-empty">No leads match the filters.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tableBody.innerHTML = filtered.map(lead => {
+                const analysis = lead.ai_analysis || {};
+                const urgency = analysis.urgency || "Low";
+                const category = analysis.category || "Inquiry";
+                const aiStatus = analysis.ai_status || "Standard Evaluation";
+                const isRealAI = aiStatus.startsWith("AI");
+
+                return `
+                    <tr>
+                        <td>
+                            <div class="table-lead-info">
+                                <span class="name">${lead.name}</span>
+                                <span class="company-email">${lead.company ? lead.company + ' • ' : ''}${lead.email}</span>
+                            </div>
+                        </td>
+                        <td><span class="source-pill">${lead.source}</span></td>
+                        <td><span class="category-pill">${category}</span></td>
+                        <td><span class="badge badge-urgency-${urgency.toLowerCase()}">${urgency}</span></td>
+                        <td>
+                            <span class="ai-status-pill ${isRealAI ? 'real-ai' : 'simulated'}">
+                                <i data-lucide="${isRealAI ? 'sparkles' : 'terminal'}"></i>
+                                <span>${aiStatus}</span>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn btn-sm btn-icon" onclick="viewLeadDetail('${lead.id}')" title="View details">
+                                    <i data-lucide="eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-icon btn-danger" onclick="deleteLead('${lead.id}', event)" title="Delete Lead">
+                                    <i data-lucide="trash-2"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            lucide.createIcons();
+        }
+
+        // View Lead Details in Modal
+        function viewLeadDetail(leadId) {
+            const lead = leadsData.find(l => l.id === leadId);
+            if (!lead) return;
+
+            const modal = document.getElementById('lead-modal');
+            const content = document.getElementById('lead-modal-content');
+            const analysis = lead.ai_analysis || {};
+
+            content.innerHTML = `
+                <div class="lead-detail-grid">
+                    <div class="lead-profile-pane">
+                        <h3>Client Profile</h3>
+                        <div class="profile-field">
+                            <span class="label">Contact Name</span>
+                            <span class="value">${lead.name}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="label">Email Address</span>
+                            <span class="value"><a href="mailto:${lead.email}">${lead.email}</a></span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="label">Phone Number</span>
+                            <span class="value">${lead.phone || 'Not provided'}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="label">Company / Organization</span>
+                            <span class="value">${lead.company || 'Not provided'}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="label">Acquisition Source</span>
+                            <span class="value">${lead.source}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="label">Submission Date</span>
+                            <span class="value">${new Date(lead.timestamp).toLocaleString()}</span>
+                        </div>
+                        
+                        <div class="message-box">
+                            <span class="label">Original Message</span>
+                            <p class="original-message-text">${lead.message}</p>
+                        </div>
+                    </div>
+
+                    <div class="lead-ai-pane">
+                        <div class="ai-header-badge">
+                            <i data-lucide="sparkles"></i>
+                            <span>AI Analysis Result</span>
+                        </div>
+
+                        <div class="analysis-meta-row">
+                            <div class="meta-box">
+                                <span class="label">Urgency Score</span>
+                                <span class="badge badge-urgency-${analysis.urgency.toLowerCase()}">${analysis.urgency}</span>
+                            </div>
+                            <div class="meta-box">
+                                <span class="label">Identified Category</span>
+                                <span class="category-pill">${analysis.category}</span>
+                            </div>
+                        </div>
+
+                        <div class="analysis-box">
+                            <span class="label">Urgency Rationale</span>
+                            <p class="analysis-text">${analysis.urgency_rationale}</p>
+                        </div>
+
+                        <div class="analysis-box">
+                            <span class="label">AI Executive Summary</span>
+                            <div class="summary-bullets">
+                                ${analysis.summary.split('\n').map(bullet => `<div>• ${bullet.replace(/^[-\*•]\s*/, '')}</div>`).join('')}
+                            </div>
+                        </div>
+
+                        <div class="draft-email-container">
+                            <div class="draft-header">
+                                <span class="label">AI Drafted Email Reply</span>
+                                <button class="btn btn-sm btn-outline" onclick="copyDraftReply('${lead.id}')">
+                                    <i data-lucide="copy" id="copy-icon-draft"></i>
+                                    <span>Copy Draft</span>
+                                </button>
+                            </div>
+                            <textarea class="draft-textarea" readonly id="draft-reply-text">${analysis.draft_reply}</textarea>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.add('visible');
+            lucide.createIcons();
+        }
+
+        // Close Lead Modal
+        function closeLeadModal() {
+            document.getElementById('lead-modal').classList.remove('visible');
+        }
+
+        // Open Test Lead Modal
+        function openTestLeadModal() {
+            document.getElementById('test-lead-modal').classList.add('visible');
+        }
+
+        // Close Test Lead Modal
+        function closeTestLeadModal() {
+            document.getElementById('test-lead-modal').classList.remove('visible');
+        }
+
+        // Submit Test Lead Webhook
+        async function submitTestLead(event) {
+            event.preventDefault();
+            const btn = document.getElementById('btn-submit-test');
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner"></span> Processing...`;
+
+            const payload = {
+                name: document.getElementById('test-name').value,
+                email: document.getElementById('test-email').value,
+                company: document.getElementById('test-company').value,
+                phone: document.getElementById('test-phone').value,
+                source: document.getElementById('test-source').value,
+                message: document.getElementById('test-message').value
+            };
+
+            try {
+                const res = await fetch('/webhook', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (res.ok) {
+                    showToast("Lead webhook triggered successfully!");
+                    closeTestLeadModal();
+                    // Reset fields
+                    document.getElementById('test-name').value = '';
+                    document.getElementById('test-email').value = '';
+                    document.getElementById('test-company').value = '';
+                    document.getElementById('test-phone').value = '';
+                    document.getElementById('test-message').value = '';
+                    // Sync leads
+                    await fetchLeadsData();
+                } else {
+                    const err = await res.json();
+                    alert(`Failed to submit webhook: ${err.detail || 'Unknown error'}`);
+                }
+            } catch (err) {
+                alert(`Network error triggering webhook: ${err.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `Submit Webhook`;
+            }
+        }
+
+        // Delete a lead
+        async function deleteLead(leadId, event) {
+            event.stopPropagation(); // Avoid opening details modal
+            if (!confirm("Are you sure you want to delete this lead?")) return;
+
+            try {
+                const res = await fetch(`/api/leads/${leadId}`, {
+                    method: 'DELETE'
+                });
+                if (res.ok) {
+                    showToast("Lead deleted successfully");
+                    fetchLeadsData();
+                } else {
+                    alert("Failed to delete lead");
+                }
+            } catch (err) {
+                alert("Error deleting lead: " + err.message);
+            }
+        }
+
+        // Save Gemini API Key Configuration
+        async function saveApiKey(event) {
+            event.preventDefault();
+            const btn = document.getElementById('btn-save-config');
+            btn.disabled = true;
+            btn.innerHTML = `Saving...`;
+
+            const apiKey = document.getElementById('api-key-input').value.trim();
+            const n8nUrl = document.getElementById('n8n-url-input').value.trim();
+
+            try {
+                const res = await fetch('/api/config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        api_key: apiKey,
+                        n8n_url: n8nUrl
+                    })
+                });
+
+                if (res.ok) {
+                    showToast("Configuration updated successfully!");
+                    document.getElementById('api-key-input').value = '';
+                    await checkApiConfig();
+                    await fetchLeadsData();
+                    switchTab('dashboard');
+                } else {
+                    const err = await res.json();
+                    alert("Error setting configuration: " + (err.detail || "Server error"));
+                }
+            } catch (err) {
+                alert("Network error: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="lucide lucide-save"></i> <span>Save Configuration</span>`;
+                lucide.createIcons();
+            }
+        }
+
+        // Copy webhook URL
+        function copyWebhookUrl() {
+            const urlText = document.getElementById('webhook-url').innerText;
+            navigator.clipboard.writeText(urlText);
+            
+            const icon = document.getElementById('copy-icon-webhook');
+            icon.setAttribute('data-lucide', 'check');
+            lucide.createIcons();
+            showToast("Webhook URL copied to clipboard!");
+
+            setTimeout(() => {
+                icon.setAttribute('data-lucide', 'copy');
+                lucide.createIcons();
+            }, 2000);
+        }
+
+        // Copy drafted email
+        function copyDraftReply(leadId) {
+            const textarea = document.getElementById('draft-reply-text');
+            textarea.select();
+            document.execCommand('copy');
+            
+            const btnIcon = document.getElementById('copy-icon-draft');
+            btnIcon.setAttribute('data-lucide', 'check');
+            lucide.createIcons();
+            showToast("AI Email draft copied!");
+
+            setTimeout(() => {
+                btnIcon.setAttribute('data-lucide', 'copy');
+                lucide.createIcons();
+            }, 2000);
+        }
+
+        // Toggle API Key Input Visibility
+        function togglePasswordVisibility() {
+            const input = document.getElementById('api-key-input');
+            const icon = document.getElementById('eye-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                input.type = 'password';
+                icon.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons();
+        }
+
+        // Toast Helper
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.classList.remove('hidden');
+            toast.classList.add('visible');
+
+            setTimeout(() => {
+                toast.classList.remove('visible');
+                setTimeout(() => toast.classList.add('hidden'), 300);
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
