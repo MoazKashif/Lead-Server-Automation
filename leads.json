@@ -1,5 +1,77 @@
 [
     {
+        "id": "20260622224137916319",
+        "timestamp": "2026-06-22T17:41:37.916645Z",
+        "name": "Muhammad  salman  Siddiqui",
+        "email": "salmansiddiqui4273@gmail.com",
+        "phone": "03334273155",
+        "company": "siddiquiandcompany",
+        "message": "ai chatbot for faqs",
+        "source": "Web Intake Form",
+        "ai_analysis": {
+            "urgency": "Medium",
+            "urgency_rationale": "Direct inquiry about a core service (AI chatbot for FAQs).",
+            "category": "Inquiry",
+            "summary": "- Muhammad Salman Siddiqui from siddiquiandcompany is interested in an AI chatbot. - The primary use case mentioned is for handling FAQs.",
+            "draft_reply": "<p>Dear Muhammad Salman Siddiqui,</p><br><p>Thank you for reaching out to QuantumAI! We understand you're interested in an AI chatbot specifically for managing FAQs, and we're excited to discuss how we can help your company, siddiquiandcompany, with this.</p><br><p>An AI-powered FAQ chatbot can significantly enhance your customer service by providing instant, accurate answers 24/7, reducing the workload on your team, and improving overall customer satisfaction. We specialize in developing custom AI solutions tailored to specific business needs.</p><br><p>We'd love to learn more about your specific requirements and show you how a QuantumAI chatbot can be implemented to streamline your FAQ process. Would you be available for a brief call sometime next week to explore this further?</p><br><p>Best regards,</p><p><strong>The QuantumAI Team</strong></p>",
+            "ai_status": "AI Evaluated (gemini-2.5-flash)"
+        }
+    },
+    {
+        "id": "20260622214745204666",
+        "timestamp": "2026-06-22T16:47:45.206882Z",
+        "name": "Muhammad Umer Siddiqui",
+        "email": "umersiddiuqi614@gmail.com",
+        "phone": "None Provided",
+        "company": "Appointment Lead",
+        "message": "Booking Request Details:\n- Proposed Date: 2026-06-23\n- Preferred Time Window: 09:00 AM - 12:00 PM\n- Scope of Discussion: i want to discuss about your previous experiences",
+        "source": "Appointment Booking Form",
+        "ai_analysis": {
+            "urgency": "High",
+            "urgency_rationale": "This is a direct appointment booking request from a warm lead, indicating immediate interest in discussing our services.",
+            "category": "Inquiry",
+            "summary": "- Muhammad Umer Siddiqui from Appointment Lead has submitted a booking request for June 23, 2026, between 9:00 AM - 12:00 PM. - The lead wishes to discuss QuantumAI's previous experiences during the meeting.",
+            "draft_reply": "<p>Dear Muhammad Umer Siddiqui,</p><br><p>Thank you for reaching out and booking a meeting with QuantumAI! We're excited about the opportunity to connect with you.</p><br><p>We've received your booking request for <strong>June 23, 2026, between 9:00 AM - 12:00 PM</strong>. Discussing our previous experiences is an excellent topic, and we're eager to share relevant case studies and insights into how we've helped other businesses achieve their automation goals.</p><br><p>We will be in touch shortly to confirm the details of our meeting and ensure we're fully prepared to address your interest in our past projects.</p><br><p>We look forward to speaking with you soon!</p><br><p>The QuantumAI Team</p>",
+            "ai_status": "AI Evaluated (gemini-2.5-flash)"
+        }
+    },
+    {
+        "id": "20260622205229374131",
+        "timestamp": "2026-06-22T15:52:29.374450Z",
+        "name": "Muhammad Umer Siddiqui",
+        "email": "umersiddiqui614@gmail.com",
+        "phone": "03120784672",
+        "company": "Lolo popo",
+        "message": "i have a spare parts company and i want an automated system for e- commerce website in 1 week ",
+        "source": "Web Intake Form",
+        "ai_analysis": {
+            "urgency": "High",
+            "urgency_rationale": "Customer requests an automated e-commerce system with a 1-week deadline.",
+            "category": "Inquiry",
+            "summary": "- Muhammad Umer Siddiqui from Lolo popo, a spare parts company, is seeking an automated e-commerce system.- He requires the system to be implemented within a tight deadline of one week.",
+            "draft_reply": "<p>Dear Muhammad Umer Siddiqui,</p><br><p>Thank you for reaching out to QuantumAI. We understand you're looking for an automated system for your spare parts e-commerce website at Lolo popo, with an ambitious timeline of one week.</p><br><p>We specialize in creating tailored AI automation solutions that can significantly streamline e-commerce operations, from inventory management to customer service and sales processes. While a comprehensive automation system within a single week can be challenging, we are eager to learn more about your specific requirements and explore what's possible.</p><br><p>To best understand your needs and discuss how we can help achieve your automation goals, we would love to schedule a brief discovery call. This will allow us to delve into the functionalities you envision and assess the most effective approach for your business.</p><br><p>Please let us know your availability for a quick chat, or you can book a time directly through our calendar.</p><br><p>We look forward to the possibility of working with you.</p><br><p>Best regards,</p><p><strong>The QuantumAI Team</strong></p>",
+            "ai_status": "AI Evaluated (gemini-2.5-flash)"
+        }
+    },
+    {
+        "id": "20260620215609913270",
+        "timestamp": "2026-06-20T16:56:09.913384Z",
+        "name": "Kashif Yaqub",
+        "email": "moazkashif367@gmail.com",
+        "phone": "+1(321)946-0187",
+        "company": "Ideal Pakistan",
+        "message": "I want to automate my ecommerce store i.e auto confirm my clients their orders via emails so that i don't want to type a confirmation emai every time to each one of them can you make it quick like in mid week or something.",
+        "source": "Web Intake Form",
+        "ai_analysis": {
+            "urgency": "High",
+            "urgency_rationale": "The lead explicitly requested a quick turnaround, stating 'can you make it quick like in mid week or something'.",
+            "category": "Inquiry",
+            "summary": "Kashif Yaqub from Ideal Pakistan is seeking to automate order confirmation emails for his e-commerce store. He wants to eliminate manual email typing for each order. He is looking for a solution that can be implemented quickly, ideally within a few days.",
+            "draft_reply": "<p>Dear Kashif,</p><p>Thank you for reaching out to QuantumAI! We understand your need to automate order confirmation emails for your e-commerce store, and we can certainly help streamline this process for you.</p><p>Automating order confirmations is a fantastic way to save time and ensure your clients receive timely updates without manual effort. This is precisely the kind of automation we specialize in.</p><p>Regarding your request for a quick turnaround, we'd love to schedule a brief call to understand the specifics of your current e-commerce platform and your exact requirements. This will allow us to provide you with a tailored solution and a realistic timeline for implementation.</p><p>Please let us know what time works best for a quick chat, or you can reply to this email with any further questions.</p><p>Best regards,<br>The QuantumAI Team</p>",
+            "ai_status": "AI Evaluated (gemini-2.5-flash)"
+        }
+    },
+    {
         "id": "20260619184222928175",
         "timestamp": "2026-06-19T13:42:22.928345Z",
         "name": "HMK",
