@@ -1,5 +1,24 @@
 [
     {
+        "id": "20260624152634173498",
+        "timestamp": "2026-06-24T10:26:34.173553Z",
+        "name": "Faheem Ahmad",
+        "email": "faheem.a1992@gmail.com",
+        "phone": "+92-333671749-1",
+        "company": "GigaLabs",
+        "message": "Hi, I am building a startup and i really think that your tool might be helpful for our case. I would love to jump on a call and understand what your tool does. Also, how much complexity we might incur during integrations. I would also like to know if you offer free or highly discounted rates for startups such as mine.",
+        "source": "Web Intake Form",
+        "ai_analysis": {
+            "urgency": "Medium",
+            "urgency_rationale": "New startup lead expressing direct interest in our tool, requesting a call, and inquiring about pricing for startups.",
+            "category": "Inquiry",
+            "summary": "- Faheem Ahmad from GigaLabs, a new startup, is interested in QuantumAI's tool for their case. - He would like to schedule a call to understand the tool's functionality and potential integration complexity. - He is also inquiring about free or highly discounted rates for startups.",
+            "draft_reply": "<p>Hi Faheem,</p><br><p>Thank you for reaching out and for your interest in QuantumAI! It's great to hear that you see the potential for our tools to benefit GigaLabs.</p><br><p>We would be delighted to schedule a call to discuss your startup's specific needs, walk you through our tool's capabilities, and address any questions you have regarding integration complexity. We understand that every startup has unique requirements, and we're here to help you navigate them.</p><br><p>Regarding your inquiry about pricing, we do have various options and are always keen to support innovative startups. We can certainly discuss potential free or discounted rates during our conversation to find a solution that works best for GigaLabs.</p><br><p>Please let us know what times work best for you for a brief introductory call, or you can book a slot directly through our calendar <a href=\"[Link to your booking calendar]\">here</a>.</p><br><p>We look forward to connecting with you!</p><br><p>Best regards,</p><p><strong>The QuantumAI Team</strong></p>",
+            "ai_status": "AI Evaluated (gemini-2.5-flash)"
+        },
+        "read": true
+    },
+    {
         "id": "20260622224137916319",
         "timestamp": "2026-06-22T17:41:37.916645Z",
         "name": "Muhammad  salman  Siddiqui",
@@ -15,7 +34,8 @@
             "summary": "- Muhammad Salman Siddiqui from siddiquiandcompany is interested in an AI chatbot. - The primary use case mentioned is for handling FAQs.",
             "draft_reply": "<p>Dear Muhammad Salman Siddiqui,</p><br><p>Thank you for reaching out to QuantumAI! We understand you're interested in an AI chatbot specifically for managing FAQs, and we're excited to discuss how we can help your company, siddiquiandcompany, with this.</p><br><p>An AI-powered FAQ chatbot can significantly enhance your customer service by providing instant, accurate answers 24/7, reducing the workload on your team, and improving overall customer satisfaction. We specialize in developing custom AI solutions tailored to specific business needs.</p><br><p>We'd love to learn more about your specific requirements and show you how a QuantumAI chatbot can be implemented to streamline your FAQ process. Would you be available for a brief call sometime next week to explore this further?</p><br><p>Best regards,</p><p><strong>The QuantumAI Team</strong></p>",
             "ai_status": "AI Evaluated (gemini-2.5-flash)"
-        }
+        },
+        "read": true
     },
     {
         "id": "20260622214745204666",
@@ -105,7 +125,8 @@
             "summary": "- Moaz Kashif from Quantum AI is interested in email automation solutions.- Specifically needs automation for client confirmations.- Has a flexible timeline of one week.",
             "draft_reply": "<p>Dear Moaz,</p><p>Thank you for reaching out to QuantumAI! We understand you're looking for email automation to streamline your client confirmation process, and we're confident we can help.</p><p>Automating client confirmations can significantly improve efficiency and client experience. We'd love to learn more about your specific requirements and how we can tailor a solution that best fits your needs at Quantum AI.</p><p>Would you be available for a brief call sometime next week to discuss this further? Please let us know what time works best for you, or feel free to suggest an alternative.</p><p>We look forward to connecting with you.</p><p>Best regards,<br><strong>The QuantumAI Team</strong></p>",
             "ai_status": "AI Evaluated (gemini-2.5-flash)"
-        }
+        },
+        "read": true
     },
     {
         "id": "20260618173949573720",
@@ -123,7 +144,8 @@
             "summary": "Client Alex Hughes from TRIM is urgently seeking an AI voice receptionist for their barber shop.The primary motivation is to avoid missing clients during peak rush hours.They are requesting the solution to be implemented as soon as possible.",
             "draft_reply": "Subject: Re: Urgent AI Voice Receptionist Inquiry for TRIM Barber Shop - Alex Hughes\n\nDear Alex Hughes,\n\nThank you for reaching out to us regarding an AI voice receptionist for your barber shop, TRIM. We understand the urgency of your situation, especially with missing clients during rush hours, and we appreciate you bringing this to our attention.\n\nAn AI voice receptionist can indeed be a game-changer for managing calls and ensuring you don't miss out on valuable business. We're confident we can help you implement a solution that addresses your specific needs.\n\nTo discuss your requirements in more detail and explore how we can get this set up for you as quickly as possible, would you be available for a brief call sometime this week? Please let us know what time works best for you, or feel free to suggest an alternative.\n\nWe look forward to helping you streamline your operations.\n\nBest regards,\n\n[Your Name/Agency Name]\nAI Sales Assistant",
             "ai_status": "AI Evaluated"
-        }
+        },
+        "read": true
     },
     {
         "id": "20260618171321139087",
@@ -141,7 +163,8 @@
             "summary": "Client Elon Musk is inquiring about: 'Need an AI receptionist for Starbase tours ASAP, call my sec...'",
             "draft_reply": "Hi Elon Musk,\n\nThank you for reaching out from SpaceX. We received your inquiry about our services and would love to chat further. Let's schedule a call.\n\nBest,\nThe Sales Team",
             "ai_status": "Mock Evaluated (No API Key)"
-        }
+        },
+        "read": true
     },
     {
         "id": "20260618120000000001",
@@ -159,7 +182,8 @@
             "summary": "Jenkins Dental Care wants an AI voice receptionist to handle after-hours booking and FAQs to stop losing patients to voicemail. Requested an immediate callback.",
             "draft_reply": "Hi Dr. Sarah Jenkins,\n\nThank you for reaching out to QuantumAI!\n\nIt sounds like you're losing valuable client bookings, and we can absolutely help you solve this. Our AI Voice Receptionists are designed specifically to answer after-hours calls, answer patient queries, and sync directly with dental scheduling systems (like Dentrix, Open Dental, or Google Calendar) to book appointments in real time.\n\nI will give you a call at +1 415 555 2671 in the next hour to discuss how we can implement this for Jenkins Dental Care. Alternatively, if you want to test our voice agent right away, you can schedule a slot directly through our booking chatbot on our dashboard.\n\nLooking forward to speaking with you!\n\nBest regards,\nQuantumAI Integration Team",
             "ai_status": "AI Evaluated"
-        }
+        },
+        "read": true
     },
     {
         "id": "20260618113000000002",
@@ -177,7 +201,8 @@
             "summary": "Real estate business Stoic Properties wants to automate Facebook/Zillow lead syncing into HubSpot and auto-draft initial follow-up emails to save agent time.",
             "draft_reply": "Hi Marcus,\n\nThanks for contacting QuantumAI!\n\nWe specialize in setting up direct lead sync and email drafting automations using tools like Make.com, HubSpot API, and OpenAI/Gemini APIs. This exact workflow is a standard automation we build: it will pull the Facebook/Zillow lead instantaneously, create the contact in HubSpot, write a customized introduction draft based on the property they clicked, and notify your agents via Slack or email.\n\nRegarding pricing, our CRM integration projects typically range from $1,500 to $2,500 for full setup and 3 months of maintenance, which usually pays for itself in saved staff hours in the first month.\n\nLet's schedule a brief 10-minute demo this week to show you a working template. Do you have availability on Thursday afternoon?\n\nWarm regards,\nThe QuantumAI Sales Team",
             "ai_status": "AI Evaluated"
-        }
+        },
+        "read": true
     },
     {
         "id": "20260618090000000003",
@@ -195,6 +220,7 @@
             "summary": "Unsolicited cold sales pitch offering SEO optimization services for Google search ranking.",
             "draft_reply": "[Spam Detected] No reply drafted.",
             "ai_status": "AI Evaluated"
-        }
+        },
+        "read": true
     }
 ]
