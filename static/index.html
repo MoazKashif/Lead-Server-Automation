@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="/static/styles.css?v=1.2">
     <!-- Lucide Icons for premium micro-icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -28,10 +28,15 @@
                 <a href="#" class="nav-item" id="nav-leads">
                     <i data-lucide="users"></i>
                     <span>Leads Console</span>
+                    <span class="nav-badge hidden" id="unread-count-badge">0</span>
                 </a>
                 <a href="#" class="nav-item" id="nav-settings">
                     <i data-lucide="settings"></i>
                     <span>API Config</span>
+                </a>
+                <a href="#" class="nav-item" id="nav-logout" onclick="logoutUser(event)">
+                    <i data-lucide="log-out"></i>
+                    <span>Logout</span>
                 </a>
             </nav>
 
@@ -413,9 +418,24 @@
                 updateStatsUI(stats);
                 updateRecentLeadsFeed();
                 updateLeadsTable();
+                updateUnreadBadge();
                 lucide.createIcons(); // Refresh icons
             } catch (err) {
                 console.error("Error syncing data:", err);
+            }
+        }
+
+        // Calculate and update the unread leads sidebar badge (displays total non-spam leads)
+        function updateUnreadBadge() {
+            const count = leadsData.filter(l => l.ai_analysis?.category !== 'Spam').length;
+            const badge = document.getElementById('unread-count-badge');
+            if (badge) {
+                if (count > 0) {
+                    badge.innerText = count;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
             }
         }
 
@@ -430,7 +450,11 @@
         // Render Recent Leads Feed (Dashboard Tab)
         function updateRecentLeadsFeed() {
             const listEl = document.getElementById('recent-leads-list');
-            if (leadsData.length === 0) {
+            
+            // Ignore spam leads!
+            const nonSpamLeads = leadsData.filter(l => l.ai_analysis?.category !== 'Spam');
+            
+            if (nonSpamLeads.length === 0) {
                 listEl.innerHTML = `
                     <div class="empty-state">
                         <i data-lucide="inbox"></i>
@@ -440,16 +464,17 @@
                 return;
             }
 
-            const itemsHtml = leadsData.slice(0, 5).map(lead => {
+            const itemsHtml = nonSpamLeads.slice(0, 5).map(lead => {
                 const analysis = lead.ai_analysis || {};
                 const urgency = analysis.urgency || "Low";
                 const category = analysis.category || "Inquiry";
                 const summary = analysis.summary || lead.message;
+                const isUnread = lead.read !== true;
                 
                 return `
-                    <div class="lead-item-compact" onclick="viewLeadDetail('${lead.id}')">
+                    <div class="lead-item-compact ${isUnread ? 'unread-highlight' : ''}" onclick="viewLeadDetail('${lead.id}')">
                         <div class="lead-header-row">
-                            <span class="lead-name-badge">${lead.name}</span>
+                            <span class="lead-name-badge">${lead.name}${isUnread ? '<span class="unread-dot-badge"></span>' : ''}</span>
                             <span class="badge badge-urgency-${urgency.toLowerCase()}">${urgency}</span>
                         </div>
                         <div class="lead-meta-row">
@@ -512,12 +537,13 @@
                 const category = analysis.category || "Inquiry";
                 const aiStatus = analysis.ai_status || "Standard Evaluation";
                 const isRealAI = aiStatus.startsWith("AI");
+                const isUnread = lead.read !== true;
 
                 return `
-                    <tr>
+                    <tr class="${isUnread ? 'table-row-unread' : ''}" onclick="viewLeadDetail('${lead.id}')" style="cursor: pointer;">
                         <td>
                             <div class="table-lead-info">
-                                <span class="name">${lead.name}</span>
+                                <span class="name">${lead.name}${isUnread ? '<span class="unread-dot-badge"></span>' : ''}</span>
                                 <span class="company-email">${lead.company ? lead.company + ' • ' : ''}${lead.email}</span>
                             </div>
                         </td>
@@ -531,7 +557,7 @@
                             </span>
                         </td>
                         <td>
-                            <div class="table-actions">
+                            <div class="table-actions" onclick="event.stopPropagation();">
                                 <button class="btn btn-sm btn-icon" onclick="viewLeadDetail('${lead.id}')" title="View details">
                                     <i data-lucide="eye"></i>
                                 </button>
@@ -551,6 +577,17 @@
         function viewLeadDetail(leadId) {
             const lead = leadsData.find(l => l.id === leadId);
             if (!lead) return;
+
+            // Mark lead as read if unread
+            if (lead.read !== true) {
+                lead.read = true;
+                updateRecentLeadsFeed();
+                updateLeadsTable();
+                updateUnreadBadge();
+                
+                fetch(`/api/leads/${leadId}/read`, { method: 'POST' })
+                    .catch(err => console.error("Error marking lead as read:", err));
+            }
 
             const modal = document.getElementById('lead-modal');
             const content = document.getElementById('lead-modal-content');
@@ -816,6 +853,22 @@
                 toast.classList.remove('visible');
                 setTimeout(() => toast.classList.add('hidden'), 300);
             }, 2500);
+        }
+
+        // Logout User function
+        async function logoutUser(event) {
+            event.preventDefault();
+            if (!confirm("Are you sure you want to logout?")) return;
+            try {
+                const res = await fetch('/api/auth/logout', { method: 'POST' });
+                if (res.ok) {
+                    window.location.href = '/login';
+                } else {
+                    alert("Logout failed");
+                }
+            } catch (err) {
+                console.error("Logout error:", err);
+            }
         }
     </script>
 </body>

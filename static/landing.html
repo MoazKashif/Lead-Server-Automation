@@ -1283,7 +1283,7 @@
             <div class="genesis-story">
                 <div class="story-badge">Narrative Origin</div>
                 <h3>Born in 2026. Forged in Data. Built for Scale.</h3>
-                <p>Quantum AI was founded by Chaudary Moaz Kashif, who envisioned a borderless automated ecosystem where daily repetitive administrative burdens simply cease to exist. Drawing inspiration from modern AI architectures, he pitched this automation roadmap to co-founder Umer Siddique. Together, they established Quantum AI to enable global enterprises to run on pure, high-availability autonomous intelligence.</p>
+                <p>Quantum AI was founded by Chaudary Moaz Kashif, who envisioned a borderless automated ecosystem where daily repetitive administrative burdens simply cease to exist. Drawing inspiration from modern AI architectures, he pitched this automation roadmap to co-founder Umer Siddiqui. Together, they established Quantum AI to enable global enterprises to run on pure, high-availability autonomous intelligence.</p>
             </div>
 
             <!-- Executive Leadership duel-blocks -->
@@ -1306,7 +1306,7 @@
                         <div class="team-avatar-inner">US</div>
                     </div>
                     <div class="team-details">
-                        <h4>Umer Siddique</h4>
+                        <h4>Umer Siddiqui</h4>
                         <div class="team-role">Co-Founder & Systems Lead</div>
                         <p class="team-bio">Currently mastering software architectures and heavy distributed frameworks at UMT (BS Computer Science). Engineering high-availability execution pipelines.</p>
                     </div>
@@ -1421,8 +1421,13 @@
                     <i data-lucide="check-circle" size="44"></i>
                 </div>
                 <h2 style="margin-bottom: 1rem;">Intake Initiated</h2>
-                <p style="color:var(--text-secondary); max-width: 500px; margin-bottom: 2rem;">Chaudary Moaz Kashif and Umer Siddique will review your business bottlenecks. A custom proposal draft has been saved to the Admin console.</p>
-                <button class="btn btn-secondary" onclick="resetLeadForm()">Submit Another Inquiry</button>
+                <p style="color:var(--text-secondary); max-width: 500px; margin-bottom: 2rem;">Chaudary Moaz Kashif and Umer Siddiqui will review your business bottlenecks. A custom proposal draft has been saved to the Admin console.</p>
+                <div class="countdown-container" style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem; margin-top: 1rem;">
+                    <span id="countdown-text" style="color: var(--holographic-cyan); font-size: 0.95rem; font-weight: 500; letter-spacing: 0.05em;">Restoring form in 5s...</span>
+                    <div style="width: 140px; height: 3px; background: rgba(255, 255, 255, 0.1); border-radius: 2px; overflow: hidden; position: relative;">
+                        <div id="countdown-bar" style="position: absolute; top: 0; left: 0; height: 100%; width: 100%; background: linear-gradient(90deg, var(--holographic-cyan), var(--electric-violet));"></div>
+                    </div>
+                </div>
             </div>
 
             <div class="lead-funnel-content">
@@ -2120,7 +2125,36 @@
 
                 if (res.ok) {
                     launchSuccessConfetti();
-                    document.getElementById('funnel-success-screen').classList.add('visible');
+                    const successScreen = document.getElementById('funnel-success-screen');
+                    successScreen.classList.add('visible');
+
+                    // Reset and trigger countdown visual progress
+                    const countdownText = document.getElementById('countdown-text');
+                    const countdownBar = document.getElementById('countdown-bar');
+                    if (countdownText) countdownText.innerText = "Restoring form in 5s...";
+                    if (countdownBar) {
+                        countdownBar.style.transition = 'none';
+                        countdownBar.style.width = '100%';
+                        // force reflow
+                        countdownBar.offsetHeight;
+                        countdownBar.style.transition = 'width 5s linear';
+                        countdownBar.style.width = '0%';
+                    }
+
+                    let countdownVal = 5;
+                    if (window.leadFormIntervalId) {
+                        clearInterval(window.leadFormIntervalId);
+                    }
+                    window.leadFormIntervalId = setInterval(() => {
+                        countdownVal--;
+                        if (countdownText) {
+                            countdownText.innerText = `Restoring form in ${countdownVal}s...`;
+                        }
+                        if (countdownVal <= 0) {
+                            clearInterval(window.leadFormIntervalId);
+                            resetLeadForm();
+                        }
+                    }, 1000);
                 } else {
                     alert("Analysis server could not accept lead. Ensure FastAPI app is running.");
                 }
@@ -2134,6 +2168,10 @@
         }
 
         function resetLeadForm() {
+            if (window.leadFormIntervalId) {
+                clearInterval(window.leadFormIntervalId);
+                window.leadFormIntervalId = null;
+            }
             document.getElementById('funnel-success-screen').classList.remove('visible');
             document.getElementById('lead-name').value = '';
             document.getElementById('lead-email').value = '';
@@ -2178,7 +2216,7 @@
                     closeAppointmentModal();
                     
                     // Show confirmation overlay message at bottom funnel
-                    alert(`Genesis Session Requested!\nThank you, ${name}. Umer Siddique & Chaudary Moaz Kashif's team will contact you at ${email} shortly.`);
+                    alert(`Genesis Session Requested!\nThank you, ${name}. Umer Siddiqui & Chaudary Moaz Kashif's team will contact you at ${email} shortly.`);
                     
                     // Reset fields
                     document.getElementById('appt-name').value = '';

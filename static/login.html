@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantumAI | Admin Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-dark: #0a0914;
+            --bg-card: rgba(20, 19, 36, 0.65);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --accent-indigo: #6366f1;
+            --accent-blue: #0ea5e9;
+            --color-high: #ef4444;
+            --transition-speed: 0.3s;
+            --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 10% 10%, rgba(99, 102, 241, 0.06) 0px, transparent 50%),
+                radial-gradient(at 90% 90%, rgba(14, 165, 233, 0.06) 0px, transparent 50%);
+            color: var(--text-primary);
+            font-family: var(--font-family);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            line-height: 1.5;
+        }
+
+        .login-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 440px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 25px rgba(99, 102, 241, 0.05);
+            backdrop-filter: blur(16px);
+            transition: all var(--transition-speed);
+        }
+
+        .brand-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .brand-logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-indigo), var(--accent-blue));
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            margin: 0 auto 1rem;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .brand-header h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .brand-header h2 span {
+            color: var(--accent-indigo);
+            background: linear-gradient(135deg, var(--accent-indigo), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-header p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            width: 18px;
+            height: 18px;
+            pointer-events: none;
+            transition: color var(--transition-speed);
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.75rem 1rem 0.75rem 2.7rem;
+            color: white;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: all var(--transition-speed);
+        }
+
+        .form-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--accent-indigo);
+            box-shadow: 0 0 12px rgba(99, 102, 241, 0.25);
+        }
+
+        .form-input:focus + i {
+            color: var(--accent-indigo);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-indigo), var(--accent-blue));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 0.85rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            transition: all var(--transition-speed);
+            margin-top: 1.5rem;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(99, 102, 241, 0.45);
+        }
+
+        .btn-submit:disabled {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-secondary);
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            margin-bottom: 1.25rem;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-message {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            margin-bottom: 1.25rem;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .attempts-tracker {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+        }
+
+        .attempts-number {
+            color: var(--color-high);
+            font-weight: 700;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="brand-header">
+            <div class="brand-logo">Q</div>
+            <h2>Quantum<span>AI</span></h2>
+            <p id="sub-title">Admin Dashboard Authorization</p>
+        </div>
+
+        <div id="error-box" class="error-message">
+            <i data-lucide="alert-circle" style="width: 18px; height: 18px;"></i>
+            <span id="error-text">Incorrect credentials</span>
+        </div>
+
+        <div id="info-box" class="info-message">
+            <i data-lucide="check-circle" style="width: 18px; height: 18px;"></i>
+            <span id="info-text">2FA code generated</span>
+        </div>
+
+        <!-- STEP 1: Email and Password Form -->
+        <form id="login-form" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label>Email Address</label>
+                <div class="input-wrapper">
+                    <input type="email" id="email" class="form-input" required placeholder="name@company.com">
+                    <i data-lucide="mail"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <div class="input-wrapper">
+                    <input type="password" id="password" class="form-input" required placeholder="••••••••">
+                    <i data-lucide="lock"></i>
+                </div>
+            </div>
+
+            <button type="submit" id="btn-login-submit" class="btn-submit">
+                <span>Request Verification</span>
+                <i data-lucide="arrow-right"></i>
+            </button>
+        </form>
+
+        <!-- STEP 2: 2FA Code Form -->
+        <form id="2fa-form" class="hidden fade-in" onsubmit="handle2FAVerify(event)">
+            <div class="form-group">
+                <label>Two-Factor Verification Code</label>
+                <div class="input-wrapper">
+                    <input type="text" id="2fa-code" class="form-input" required placeholder="123456" pattern="[0-9]{6}" maxlength="6" style="text-align: center; letter-spacing: 0.5em; font-size: 1.2rem; padding-left: 1rem;">
+                    <i data-lucide="shield-check" style="display: none;"></i>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.75rem; text-align: center; margin-top: 0.5rem;">
+                    Enter the 6-digit code sent to your email. Check your spam or server log files if SMTP isn't configured.
+                </p>
+            </div>
+
+            <button type="submit" id="btn-2fa-submit" class="btn-submit">
+                <span>Verify & Enter Console</span>
+                <i data-lucide="log-in"></i>
+            </button>
+
+            <button type="button" class="btn-submit" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); box-shadow: none; margin-top: 0.75rem;" onclick="goBackToLogin()">
+                <span>Back to Login</span>
+            </button>
+        </form>
+
+        <div class="attempts-tracker" id="attempts-container">
+            Attempts remaining: <span class="attempts-number" id="attempts-count">5</span>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let currentEmail = "";
+        let lockoutTimer = null;
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('btn-login-submit');
+            const errorBox = document.getElementById('error-box');
+            const infoBox = document.getElementById('info-box');
+
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner"></span> <span>Checking...</span>`;
+            errorBox.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    currentEmail = email;
+                    infoBox.querySelector('#info-text').innerText = "Security code sent! Check your inbox/logs.";
+                    infoBox.style.display = 'flex';
+                    
+                    // Show 2FA Form
+                    document.getElementById('login-form').classList.add('hidden');
+                    document.getElementById('2fa-form').classList.remove('hidden');
+                    document.getElementById('sub-title').innerText = "Enter Two-Factor Verification";
+                    document.getElementById('attempts-count').innerText = "5"; // Reset visual counter
+                } else {
+                    showError(data.detail || "Authentication request failed.");
+                    if (data.detail && data.detail.includes("locked")) {
+                        startLockoutCountdown(900); // 15 mins lock
+                    } else if (res.status === 401) {
+                        // Extract attempts
+                        const matches = data.detail.match(/(\d+) attempts remaining/);
+                        if (matches) {
+                            document.getElementById('attempts-count').innerText = matches[1];
+                        }
+                    }
+                }
+            } catch (err) {
+                showError("Network error contacting security service.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<span>Request Verification</span><i data-lucide="arrow-right"></i>`;
+                lucide.createIcons();
+            }
+        }
+
+        async function handle2FAVerify(event) {
+            event.preventDefault();
+            const code = document.getElementById('2fa-code').value.trim();
+            const btn = document.getElementById('btn-2fa-submit');
+            const errorBox = document.getElementById('error-box');
+            const infoBox = document.getElementById('info-box');
+
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner"></span> <span>Verifying...</span>`;
+            errorBox.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/auth/verify-2fa', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: currentEmail, code })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    infoBox.querySelector('#info-text').innerText = "Access granted. Launching console...";
+                    infoBox.style.display = 'flex';
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 1000);
+                } else {
+                    showError(data.detail || "Failed to verify 2FA code.");
+                    if (data.detail && data.detail.includes("locked")) {
+                        startLockoutCountdown(900);
+                    } else if (res.status === 401) {
+                        const matches = data.detail.match(/(\d+) attempts remaining/);
+                        if (matches) {
+                            document.getElementById('attempts-count').innerText = matches[1];
+                        }
+                    }
+                }
+            } catch (err) {
+                showError("Network error during verification.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<span>Verify & Enter Console</span><i data-lucide="log-in"></i>`;
+                lucide.createIcons();
+            }
+        }
+
+        function goBackToLogin() {
+            document.getElementById('2fa-form').classList.add('hidden');
+            document.getElementById('login-form').classList.remove('hidden');
+            document.getElementById('sub-title').innerText = "Admin Dashboard Authorization";
+            document.getElementById('info-box').style.display = 'none';
+            document.getElementById('error-box').style.display = 'none';
+        }
+
+        function showError(message) {
+            const errorBox = document.getElementById('error-box');
+            errorBox.querySelector('#error-text').innerText = message;
+            errorBox.style.display = 'flex';
+        }
+
+        function startLockoutCountdown(seconds) {
+            const btnLogin = document.getElementById('btn-login-submit');
+            const btn2fa = document.getElementById('btn-2fa-submit');
+            btnLogin.disabled = true;
+            btn2fa.disabled = true;
+            document.getElementById('attempts-count').innerText = "0";
+
+            if (lockoutTimer) clearInterval(lockoutTimer);
+
+            let timeLeft = seconds;
+            lockoutTimer = setInterval(() => {
+                timeLeft--;
+                const mins = Math.floor(timeLeft / 60);
+                const secs = timeLeft % 60;
+                showError(`Too many failed attempts. Locked for ${mins}m ${secs}s.`);
+
+                if (timeLeft <= 0) {
+                    clearInterval(lockoutTimer);
+                    btnLogin.disabled = false;
+                    btn2fa.disabled = false;
+                    document.getElementById('attempts-count').innerText = "5";
+                    document.getElementById('error-box').style.display = 'none';
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
