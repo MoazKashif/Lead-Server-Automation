@@ -2192,18 +2192,16 @@
             const time = document.getElementById('appt-time').value;
             const scope = document.getElementById('appt-scope').value;
 
-            // Combine booking details into the message field for our Pydantic webhook
             const payload = {
                 name: name,
                 email: email,
-                company: "Appointment Lead",
-                phone: "None Provided",
-                message: `Booking Request Details:\n- Proposed Date: ${date}\n- Preferred Time Window: ${time}\n- Scope of Discussion: ${scope}`,
-                source: "Appointment Booking Form"
+                appointment_date: date,
+                time_window: time,
+                automation_goal: scope,
             };
 
             try {
-                const res = await fetch('/webhook', {
+                const res = await fetch('/api/appointments', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

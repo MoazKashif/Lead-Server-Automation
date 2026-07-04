@@ -30,6 +30,11 @@
                     <span>Leads Console</span>
                     <span class="nav-badge hidden" id="unread-count-badge">0</span>
                 </a>
+                <a href="#" class="nav-item" id="nav-appointments">
+                    <i data-lucide="calendar-check"></i>
+                    <span>Appointments</span>
+                    <span class="nav-badge hidden" id="appt-unread-badge">0</span>
+                </a>
                 <a href="#" class="nav-item" id="nav-settings">
                     <i data-lucide="settings"></i>
                     <span>API Config</span>
@@ -126,6 +131,17 @@
                         <h3 id="stat-spam" class="stat-value">0</h3>
                         <p class="stat-footer">Filtered out by AI auto-scorer</p>
                     </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Appointments</span>
+                            <div class="stat-icon-wrapper purple">
+                                <i data-lucide="calendar-check"></i>
+                            </div>
+                        </div>
+                        <h3 id="stat-appointments" class="stat-value">0</h3>
+                        <p class="stat-footer">Booked discovery sessions</p>
+                    </div>
                 </div>
 
                 <!-- Main Layout Grid: Leads Overview and Quick Stats -->
@@ -215,7 +231,52 @@
                 </div>
             </section>
 
-            <!-- Page 3: API Config & System Settings -->
+            <!-- Page 3: Appointments Console -->
+            <section id="section-appointments" class="tab-section">
+                <div class="card console-card">
+                    <div class="console-toolbar">
+                        <div class="search-wrapper">
+                            <i data-lucide="search"></i>
+                            <input type="text" id="appt-search-input" placeholder="Search appointments by name or email..." oninput="filterAppointments()">
+                        </div>
+                        <div class="filter-group">
+                            <select id="appt-time-filter" onchange="filterAppointments()">
+                                <option value="all">All Windows</option>
+                                <option value="09:00 AM - 12:00 PM">Morning</option>
+                                <option value="12:00 PM - 03:00 PM">Midday</option>
+                                <option value="03:00 PM - 06:00 PM">Afternoon</option>
+                                <option value="06:00 PM - 09:00 PM">Evening</option>
+                            </select>
+                            <button class="btn btn-sm btn-secondary" onclick="fetchAppointmentsData()">
+                                <i data-lucide="refresh-cw"></i>
+                                <span>Refresh</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="leads-full-table-container">
+                        <table class="leads-table">
+                            <thead>
+                                <tr>
+                                    <th>Client Info</th>
+                                    <th>Date</th>
+                                    <th>Time Window</th>
+                                    <th>Goal</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="appointments-table-body">
+                                <tr>
+                                    <td colspan="6" class="table-empty">No appointments found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Page 4: API Config & System Settings -->
             <section id="section-settings" class="tab-section">
                 <div class="card settings-card">
                     <div class="card-header">
@@ -263,6 +324,19 @@
                 <button class="btn-close" onclick="closeLeadModal()">×</button>
             </div>
             <div class="modal-body" id="lead-modal-content">
+                <!-- Rendered dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Appointment Detail Modal -->
+    <div class="modal-backdrop" id="appointment-modal">
+        <div class="modal-card modal-large">
+            <div class="modal-header">
+                <h3>Appointment Details</h3>
+                <button class="btn-close" onclick="closeAppointmentModal()">×</button>
+            </div>
+            <div class="modal-body" id="appointment-modal-content">
                 <!-- Rendered dynamically -->
             </div>
         </div>
@@ -325,6 +399,7 @@
     <script>
         // State variables
         let leadsData = [];
+        let appointmentsData = [];
         let apiConfigured = false;
         let activeTab = 'dashboard';
 
@@ -336,14 +411,17 @@
             // Register navigation listeners
             document.getElementById('nav-dashboard').addEventListener('click', (e) => { e.preventDefault(); switchTab('dashboard'); });
             document.getElementById('nav-leads').addEventListener('click', (e) => { e.preventDefault(); switchTab('leads'); });
+            document.getElementById('nav-appointments').addEventListener('click', (e) => { e.preventDefault(); switchTab('appointments'); });
             document.getElementById('nav-settings').addEventListener('click', (e) => { e.preventDefault(); switchTab('settings'); });
 
             // Fetch initial status and data
             checkApiConfig();
             fetchLeadsData();
+            fetchAppointmentsData();
 
-            // Refresh leads periodically
+            // Refresh data periodically
             setInterval(fetchLeadsData, 8000);
+            setInterval(fetchAppointmentsData, 10000);
         });
 
         // Tab Switcher
@@ -353,6 +431,7 @@
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             if (tabId === 'dashboard') document.getElementById('nav-dashboard').classList.add('active');
             if (tabId === 'leads') document.getElementById('nav-leads').classList.add('active');
+            if (tabId === 'appointments') document.getElementById('nav-appointments').classList.add('active');
             if (tabId === 'settings') document.getElementById('nav-settings').classList.add('active');
 
             // Toggle Page Section Visibility
@@ -369,6 +448,10 @@
                 titleEl.innerText = "Leads Console";
                 descEl.innerText = "Review lead message history, priorities, and detailed AI analysis.";
                 filterLeads();
+            } else if (tabId === 'appointments') {
+                titleEl.innerText = "Appointments";
+                descEl.innerText = "Manage booked discovery and consultation sessions.";
+                fetchAppointmentsData();
             } else if (tabId === 'settings') {
                 titleEl.innerText = "API Configuration";
                 descEl.innerText = "Manage your backend keys and LLM settings.";
@@ -868,6 +951,184 @@
                 }
             } catch (err) {
                 console.error("Logout error:", err);
+            }
+        }
+
+        // ═══════════════════════════════════════════
+        // APPOINTMENTS FUNCTIONS
+        // ═══════════════════════════════════════════
+
+        async function fetchAppointmentsData() {
+            try {
+                const res = await fetch('/api/appointments');
+                appointmentsData = await res.json();
+                updateAppointmentStats();
+                updateAppointmentsTable();
+                updateApptUnreadBadge();
+                lucide.createIcons();
+            } catch (err) {
+                console.error("Error fetching appointments:", err);
+            }
+        }
+
+        function updateApptUnreadBadge() {
+            const count = appointmentsData.filter(a => a.read !== true).length;
+            const badge = document.getElementById('appt-unread-badge');
+            if (badge) {
+                if (count > 0) {
+                    badge.innerText = count;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+            }
+        }
+
+        function updateAppointmentStats() {
+            const total = appointmentsData.length;
+            document.getElementById('stat-appointments').innerText = total;
+        }
+
+        function updateAppointmentsTable() {
+            const tableBody = document.getElementById('appointments-table-body');
+            if (appointmentsData.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="table-empty">No appointments found.</td>
+                    </tr>
+                `;
+                return;
+            }
+            filterAppointments();
+        }
+
+        function filterAppointments() {
+            const query = document.getElementById('appt-search-input').value.toLowerCase();
+            const timeFilter = document.getElementById('appt-time-filter').value;
+            const tableBody = document.getElementById('appointments-table-body');
+
+            const filtered = appointmentsData.filter(a => {
+                const nameMatch = a.name.toLowerCase().includes(query);
+                const emailMatch = a.email.toLowerCase().includes(query);
+                const searchMatch = nameMatch || emailMatch;
+                const timeMatch = timeFilter === 'all' || a.time_window === timeFilter;
+                return searchMatch && timeMatch;
+            });
+
+            if (filtered.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="table-empty">No appointments match the filters.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tableBody.innerHTML = filtered.map(a => {
+                const isUnread = a.read !== true;
+                const statusLabel = a.read ? 'Read' : 'New';
+                return `
+                    <tr class="${isUnread ? 'table-row-unread' : ''}" onclick="viewAppointmentDetail('${a.id}')" style="cursor: pointer;">
+                        <td>
+                            <div class="table-lead-info">
+                                <span class="name">${a.name}${isUnread ? '<span class="unread-dot-badge"></span>' : ''}</span>
+                                <span class="company-email">${a.email}</span>
+                            </div>
+                        </td>
+                        <td>${a.appointment_date}</td>
+                        <td>${a.time_window}</td>
+                        <td>${a.automation_goal || 'Not specified'}</td>
+                        <td><span class="badge ${isUnread ? 'badge-urgency-high' : 'badge-urgency-low'}">${statusLabel}</span></td>
+                        <td>
+                            <div class="table-actions" onclick="event.stopPropagation();">
+                                <button class="btn btn-sm btn-icon" onclick="viewAppointmentDetail('${a.id}')" title="View details">
+                                    <i data-lucide="eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-icon btn-danger" onclick="deleteAppointment('${a.id}', event)" title="Delete Appointment">
+                                    <i data-lucide="trash-2"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        function viewAppointmentDetail(appointmentId) {
+            const appt = appointmentsData.find(a => a.id === appointmentId);
+            if (!appt) return;
+
+            if (appt.read !== true) {
+                appt.read = true;
+                updateAppointmentsTable();
+                updateApptUnreadBadge();
+                fetch(`/api/appointments/${appointmentId}/read`, { method: 'POST' })
+                    .catch(err => console.error("Error marking appointment as read:", err));
+            }
+
+            const modal = document.getElementById('appointment-modal');
+            const content = document.getElementById('appointment-modal-content');
+
+            content.innerHTML = `
+                <div class="lead-detail-grid">
+                    <div class="lead-profile-pane">
+                        <h3>Client Information</h3>
+                        <div class="profile-field">
+                            <span class="label">Name</span>
+                            <span class="value">${appt.name}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="label">Email</span>
+                            <span class="value"><a href="mailto:${appt.email}">${appt.email}</a></span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="label">Phone</span>
+                            <span class="value">${appt.phone || 'Not provided'}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="label">Appointment Date</span>
+                            <span class="value">${appt.appointment_date}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="label">Time Window</span>
+                            <span class="value">${appt.time_window}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="label">Automation Goal</span>
+                            <span class="value">${appt.automation_goal || 'Not specified'}</span>
+                        </div>
+                        <div class="profile-field">
+                            <span class="label">Submitted</span>
+                            <span class="value">${new Date(appt.created_at || appt.timestamp).toLocaleString()}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.add('visible');
+            lucide.createIcons();
+        }
+
+        function closeAppointmentModal() {
+            document.getElementById('appointment-modal').classList.remove('visible');
+        }
+
+        async function deleteAppointment(appointmentId, event) {
+            event.stopPropagation();
+            if (!confirm("Are you sure you want to delete this appointment?")) return;
+
+            try {
+                const res = await fetch(`/api/appointments/${appointmentId}`, { method: 'DELETE' });
+                if (res.ok) {
+                    showToast("Appointment deleted successfully");
+                    fetchAppointmentsData();
+                } else {
+                    alert("Failed to delete appointment");
+                }
+            } catch (err) {
+                alert("Error deleting appointment: " + err.message);
             }
         }
     </script>

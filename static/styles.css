@@ -431,6 +431,7 @@ body {
 .stat-icon-wrapper.red { background: rgba(239, 68, 68, 0.1); color: var(--color-high); }
 .stat-icon-wrapper.orange { background: rgba(245, 158, 11, 0.1); color: var(--color-medium); }
 .stat-icon-wrapper.green { background: rgba(16, 185, 129, 0.1); color: var(--color-low); }
+.stat-icon-wrapper.purple { background: rgba(168, 85, 247, 0.1); color: var(--accent-purple); }
 
 .stat-value {
     font-size: 2rem;
