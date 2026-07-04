@@ -1,32 +1,46 @@
-CREATE DATABASE lead_server;
-SHOW DATABASES;
-USE lead_server;
-CREATE USER 'moaz'@'localhost' IDENTIFIED BY '1234';
-SELECT USER();
+-- PostgreSQL schema for QuantumAI Lead Management (Supabase)
+-- Run this in your Supabase SQL editor to set up the database.
 
-CREATE TABLE leads (
+CREATE TABLE IF NOT EXISTS leads (
     id VARCHAR(30) PRIMARY KEY,
-    timestamp TIMESTAMP NOT NULL,
-    name VARCHAR(255),
-    email VARCHAR(255),
-    phone VARCHAR(50),
-    company VARCHAR(255),
-    message TEXT,
-    source VARCHAR(100)
+    timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(50) DEFAULT '',
+    company VARCHAR(255) DEFAULT '',
+    message TEXT NOT NULL,
+    source VARCHAR(100) DEFAULT 'Web Form',
+    ai_analysis JSONB DEFAULT '{}'::jsonb,
+    read BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-CREATE TABLE lead_ai_analysis (
-    lead_id VARCHAR(30) PRIMARY KEY,
-    urgency VARCHAR(20),
-    urgency_rationale TEXT,
-    category VARCHAR(100),
-    summary TEXT,
-    draft_reply TEXT,
-    ai_status VARCHAR(100),
 
-    CONSTRAINT fk_lead
-        FOREIGN KEY (lead_id)
-        REFERENCES leads(id)
-        ON DELETE CASCADE
+-- Indexes for common query patterns
+CREATE INDEX IF NOT EXISTS idx_leads_timestamp ON leads(timestamp DESC);
+CREATE INDEX IF NOT EXISTS idx_leads_email ON leads(email);
+CREATE INDEX IF NOT EXISTS idx_leads_read ON leads(read);
+CREATE INDEX IF NOT EXISTS idx_leads_source ON leads(source);
+
+-- GIN index for JSONB queries on ai_analysis fields
+CREATE INDEX IF NOT EXISTS idx_leads_ai_analysis ON leads USING GIN (ai_analysis);
+
+-- ============================================================
+-- Appointments table for "Book an Appointment" feature
+-- ============================================================
+CREATE TABLE IF NOT EXISTS appointments (
+    id VARCHAR(30) PRIMARY KEY,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    appointment_date DATE NOT NULL,
+    time_window VARCHAR(100) NOT NULL,
+    automation_goal TEXT NOT NULL DEFAULT '',
+    read BOOLEAN DEFAULT FALSE,
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-SELECT* FROM leads;
-select from* leads 
+
+CREATE INDEX IF NOT EXISTS idx_appointments_created_at ON appointments(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_appointments_email ON appointments(email);
+CREATE INDEX IF NOT EXISTS idx_appointments_date ON appointments(appointment_date);
+CREATE INDEX IF NOT EXISTS idx_appointments_read ON appointments(read);

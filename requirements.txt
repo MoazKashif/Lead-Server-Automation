@@ -3,9 +3,6 @@ uvicorn[standard]
 python-dotenv
 pydantic
 google-genai
-sqlalchemy
-pymysql
-alembic
-cryptography
+supabase
 bcrypt
 python-multipart

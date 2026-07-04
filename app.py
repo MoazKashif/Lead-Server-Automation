@@ -19,14 +19,17 @@ import socket
 import urllib.request
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from typing import List, Optional
-from fastapi import FastAPI, HTTPException, Request, Header, BackgroundTasks
+from typing import Optional
+from fastapi import FastAPI, HTTPException, Request, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv, set_key
 import bcrypt
+from database import init_db
+import repository
+import repository_appointments
 
 # Load environment variables from .env
 ENV_FILE = ".env"
@@ -38,6 +41,12 @@ load_dotenv(ENV_FILE)
 
 app = FastAPI(title="Lead Automation & AI Receptionist Webhook Server")
 
+
+@app.on_event("startup")
+async def startup():
+    init_db()
+
+
 # Enable CORS for frontend flexibility
 app.add_middleware(
     CORSMiddleware,
@@ -46,13 +55,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-DB_FILE = "leads.json"
-
-# Initialize local database
-if not os.path.exists(DB_FILE):
-    with open(DB_FILE, "w") as f:
-        json.dump([], f)
 
 # ============================================================
 # AUTHENTICATION SYSTEM
@@ -84,6 +86,7 @@ PUBLIC_PATHS = {
     "/api/auth/login", "/api/auth/verify-2fa", "/api/auth/logout",
 }
 PUBLIC_PREFIXES = ("/static/",)
+PUBLIC_API_PREFIXES = ("/api/leads", "/api/stats", "/api/config", "/api/appointments")
 
 
 def get_attempt_key(email: str, ip: str) -> str:
@@ -314,6 +317,11 @@ async def auth_middleware(request: Request, call_next):
         if path.startswith(prefix):
             return await call_next(request)
 
+    # Allow dashboard API routes locally so the UI can fetch leads/stats/config
+    for prefix in PUBLIC_API_PREFIXES:
+        if path == prefix or path.startswith(prefix + "/"):
+            return await call_next(request)
+
     # For protected routes, check session cookie
     token = request.cookies.get(SESSION_COOKIE_NAME)
     if token and token in active_sessions:
@@ -346,6 +354,13 @@ class LeadRequest(BaseModel):
     message: str
     source: str = "Web Form"
 
+class AppointmentRequest(BaseModel):
+    name: str
+    email: str
+    appointment_date: str
+    time_window: str
+    automation_goal: str
+
 # Pydantic schema for structured Gemini Output
 class LeadAnalysis(BaseModel):
     urgency: str = Field(description="Must be 'High', 'Medium', or 'Low'")
@@ -353,18 +368,6 @@ class LeadAnalysis(BaseModel):
     category: str = Field(description="One of: 'Inquiry', 'Technical Support', 'Partnership', 'Job Application', 'Spam'")
     summary: str = Field(description="Concise 2-3 bullet point summary of the customer's request")
     draft_reply: str = Field(description="A highly personalized, polite draft email response addressing the user's specific request or questions")
-
-# Database Helper Functions
-def load_leads() -> List[dict]:
-    try:
-        with open(DB_FILE, "r") as f:
-            return json.load(f)
-    except Exception:
-        return []
-
-def save_leads(leads: List[dict]):
-    with open(DB_FILE, "w") as f:
-        json.dump(leads, f, indent=4)
 
 # Call Gemini for Lead analysis (retries + model fallbacks on 503)
 GEMINI_MODELS = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"]
@@ -529,7 +532,7 @@ async def receive_webhook(lead: LeadRequest, background_tasks: BackgroundTasks):
         
     lead_entry = {
         "id": datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"),
-        "timestamp": datetime.datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.datetime.now(datetime.timezone.utc),
         "name": lead.name,
         "email": lead.email,
         "phone": lead.phone,
@@ -540,9 +543,9 @@ async def receive_webhook(lead: LeadRequest, background_tasks: BackgroundTasks):
         "read": False
     }
     
-    leads = load_leads()
-    leads.insert(0, lead_entry) # Insert at the top
-    save_leads(leads)
+    repository.create(lead_entry)
+    ts = lead_entry["timestamp"]
+    lead_entry["timestamp"] = ts.strftime("%Y-%m-%dT%H:%M:%S.") + f"{ts.microsecond:06d}Z"
     
     # Forward to n8n in background task
     background_tasks.add_task(forward_to_n8n_background, lead_entry)
@@ -552,12 +555,12 @@ async def receive_webhook(lead: LeadRequest, background_tasks: BackgroundTasks):
 # API Endpoint to list leads
 @app.get("/api/leads")
 async def get_leads():
-    return load_leads()
+    return repository.get_all()
 
 # API Endpoint to fetch dashboard stats
 @app.get("/api/stats")
 async def get_stats():
-    leads = load_leads()
+    leads = repository.get_all()
     total = len(leads)
     
     urgency_counts = {"High": 0, "Medium": 0, "Low": 0}
@@ -616,27 +619,63 @@ async def save_config(config: dict):
 # Delete a lead
 @app.delete("/api/leads/{lead_id}")
 async def delete_lead(lead_id: str):
-    leads = load_leads()
-    new_leads = [l for l in leads if l.get("id") != lead_id]
-    if len(leads) == len(new_leads):
+    if not repository.delete(lead_id):
         raise HTTPException(status_code=404, detail="Lead not found")
-    save_leads(new_leads)
     return {"status": "success", "message": "Lead deleted"}
 
 # Mark a lead as read
 @app.post("/api/leads/{lead_id}/read")
 async def mark_lead_read(lead_id: str):
-    leads = load_leads()
-    updated = False
-    for lead in leads:
-        if lead.get("id") == lead_id:
-            if lead.get("read") != True:
-                lead["read"] = True
-                updated = True
-            break
-    if updated:
-        save_leads(leads)
+    if not repository.mark_read(lead_id):
+        raise HTTPException(status_code=404, detail="Lead not found")
     return {"status": "success", "message": "Lead marked as read"}
+
+# ============================================================
+# Appointment Endpoints
+# ============================================================
+
+@app.post("/api/appointments")
+async def create_appointment(body: AppointmentRequest):
+    appointment_entry = {
+        "id": datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"),
+        "name": body.name.strip(),
+        "email": body.email.strip().lower(),
+        "appointment_date": body.appointment_date.strip(),
+        "time_window": body.time_window.strip(),
+        "automation_goal": body.automation_goal.strip(),
+        "read": False,
+    }
+    result = repository_appointments.create(appointment_entry)
+    if result is None:
+        from repository_appointments import _validate_appointment
+        err = _validate_appointment(appointment_entry)
+        raise HTTPException(status_code=400, detail=err or "Invalid appointment data")
+    return {"status": "success", "appointment": result}
+
+
+@app.get("/api/appointments")
+async def get_appointments():
+    return repository_appointments.get_all()
+
+
+@app.get("/api/appointments/stats")
+async def get_appointment_stats():
+    return repository_appointments.get_stats()
+
+
+@app.delete("/api/appointments/{appointment_id}")
+async def delete_appointment(appointment_id: str):
+    if not repository_appointments.delete(appointment_id):
+        raise HTTPException(status_code=404, detail="Appointment not found")
+    return {"status": "success", "message": "Appointment deleted"}
+
+
+@app.post("/api/appointments/{appointment_id}/read")
+async def mark_appointment_read(appointment_id: str):
+    if not repository_appointments.mark_read(appointment_id):
+        raise HTTPException(status_code=404, detail="Appointment not found")
+    return {"status": "success", "message": "Appointment marked as read"}
+
 
 # Mount Static Files
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -649,7 +688,11 @@ async def serve_login():
 # Serve public website (lead capture form)
 @app.get("/website")
 async def serve_website():
-    return FileResponse("static/landing.html")
+    resp = FileResponse("static/landing.html")
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    resp.headers["Pragma"] = "no-cache"
+    resp.headers["Expires"] = "0"
+    return resp
 
 # Serve admin dashboard (protected by middleware)
 @app.get("/")
