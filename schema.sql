@@ -1,4 +1,4 @@
--- PostgreSQL schema for QuantumAI Lead Management (Supabase)
+-- PostgreSQL schema for FantomAI Lead Management (Supabase)
 -- Run this in your Supabase SQL editor to set up the database.
 
 CREATE TABLE IF NOT EXISTS leads (

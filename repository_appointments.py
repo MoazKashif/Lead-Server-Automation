@@ -1,11 +1,16 @@
 """Database repository layer for appointment operations with a JSON fallback."""
 
+import os
 import json
+import logging
 import re
 from datetime import datetime
 from pathlib import Path
 from typing import List, Optional
 from database import supabase
+
+logger = logging.getLogger(__name__)
+_IS_PRODUCTION = os.getenv("ENVIRONMENT", "production").lower() == "production"
 
 STORAGE_FILE = Path(__file__).with_name("appointments.json")
 
@@ -72,6 +77,9 @@ def _append_json_appointment(appointment: dict) -> None:
 def get_all() -> List[dict]:
     """Fetch all appointments ordered by created_at descending (newest first)."""
     if not supabase:
+        if _IS_PRODUCTION:
+            logger.critical("Supabase not configured in production! Cannot retrieve appointments.")
+            return []
         return _load_json_appointments()
     try:
         response = (
@@ -82,7 +90,10 @@ def get_all() -> List[dict]:
         )
         return [_normalize_appointment(item) for item in response.data]
     except Exception as exc:
-        print(f"[repo-appointments] Database unavailable, using JSON fallback: {exc}")
+        logger.error(f"Database error fetching appointments: {exc}")
+        if _IS_PRODUCTION:
+            return []
+        logger.warning("Falling back to JSON (development mode)")
         return _load_json_appointments()
 
 
@@ -94,15 +105,20 @@ def create(data: dict) -> dict:
 
     appointment_data = _normalize_appointment(data)
     if not supabase:
+        if _IS_PRODUCTION:
+            logger.critical("Supabase not configured in production! Cannot create appointment.")
+            return {}
         _append_json_appointment(appointment_data)
         return appointment_data
     try:
         response = supabase.table("appointments").insert(appointment_data).execute()
         created = response.data[0] if response.data else appointment_data
-        _append_json_appointment(created)
         return _normalize_appointment(created)
     except Exception as exc:
-        print(f"[repo-appointments] Database unavailable, storing in JSON fallback: {exc}")
+        logger.error(f"Database error creating appointment: {exc}")
+        if _IS_PRODUCTION:
+            return {}
+        logger.warning("Falling back to JSON (development mode)")
         _append_json_appointment(appointment_data)
         return appointment_data
 
@@ -110,6 +126,9 @@ def create(data: dict) -> dict:
 def delete(appointment_id: str) -> bool:
     """Delete an appointment by ID. Returns True if deleted, False if not found."""
     if not supabase:
+        if _IS_PRODUCTION:
+            logger.critical("Supabase not configured in production! Cannot delete appointment.")
+            return False
         appointments = _load_json_appointments()
         updated = [a for a in appointments if a.get("id") != appointment_id]
         if len(updated) == len(appointments):
@@ -127,7 +146,10 @@ def delete(appointment_id: str) -> bool:
             return True
         return False
     except Exception as exc:
-        print(f"[repo-appointments] Database unavailable, deleting from JSON fallback: {exc}")
+        logger.error(f"Database error deleting appointment: {exc}")
+        if _IS_PRODUCTION:
+            return False
+        logger.warning("Falling back to JSON (development mode)")
         appointments = _load_json_appointments()
         updated = [a for a in appointments if a.get("id") != appointment_id]
         if len(updated) == len(appointments):
@@ -139,6 +161,9 @@ def delete(appointment_id: str) -> bool:
 def mark_read(appointment_id: str) -> bool:
     """Mark an appointment as read. Returns True if updated, False if not found."""
     if not supabase:
+        if _IS_PRODUCTION:
+            logger.critical("Supabase not configured in production! Cannot update appointment.")
+            return False
         appointments = _load_json_appointments()
         for a in appointments:
             if a.get("id") == appointment_id:
@@ -157,7 +182,10 @@ def mark_read(appointment_id: str) -> bool:
             return True
         return False
     except Exception as exc:
-        print(f"[repo-appointments] Database unavailable, updating JSON fallback: {exc}")
+        logger.error(f"Database error updating appointment: {exc}")
+        if _IS_PRODUCTION:
+            return False
+        logger.warning("Falling back to JSON (development mode)")
         appointments = _load_json_appointments()
         for a in appointments:
             if a.get("id") == appointment_id:

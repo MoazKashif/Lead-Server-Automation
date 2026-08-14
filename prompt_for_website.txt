@@ -1,9 +1,9 @@
 Role: You are an elite Web3/AI Creative Director and Expert Frontend Developer specializing in high-end Three.js, React Three Fiber, and Tailwind CSS interactive architectures.
 
-Task: Generate a comprehensive UI/UX layout, copywriting architecture, and animation system for a next-generation AI Automation Startup website named "Quantum AI". 
+Task: Generate a comprehensive UI/UX layout, copywriting architecture, and animation system for a next-generation AI Automation Startup website named "Fantom AI". 
 
 Global Theme & Aesthetics:
-- Deep, immersive dark mode space/quantum background (#03030A to #0B0B1E).
+- Deep, immersive dark mode space/fantom background (#03030A to #0B0B1E).
 - Accents of holographic cyan, electric violet, and glowing neon light highlights.
 - Futuristic, ultra-premium, high-converting tech aesthetic (similar to Linear or Stripe's premium design languages).
 - Micro-interactions: Subtle floating 3D particle fields representing data lines moving dynamically based on mouse movement.
@@ -12,18 +12,18 @@ Global Theme & Aesthetics:
 
 ### SECTION 1: GLOBAL LAYOUT & NAVIGATION
 1. Pre-loader Scene (Instant Hook): 
-   - No white screens or blank states allowed. Upon URL execution, render a 3D morphing Quantum Core node animation that dynamically loads. 
+   - No white screens or blank states allowed. Upon URL execution, render a 3D morphing Fantom Core node animation that dynamically loads. 
    - Text overlay: "Initializing Neural Pipelines..." with a sleek percentage indicator matching the asset load state. Once 100%, the core collapses into the background particle field.
 2. Navigation Bar:
-   - Left: Minimalist futuristic Logo (a 3D rotating metallic/neon letter "Q" intersecting with an infinity symbol) + Brand Name "Quantum AI".
-   - Center: Dynamic Links -> [ Nexus (Home) | Genesis (About) | Ecosystem (Services) | The Edge (Why Quantum AI) ].
+   - Left: Minimalist futuristic Logo (a 3D rotating metallic/neon letter "Q" intersecting with an infinity symbol) + Brand Name "Fantom AI".
+   - Center: Dynamic Links -> [ Nexus (Home) | Genesis (About) | Ecosystem (Services) | The Edge (Why Fantom AI) ].
    - Right: "Book An Appointment" CTA button wrapped in a persistent Cyber-Neon pulse glow (Border-radius: 50px, Box-shadow: 0 0 15px #00F2FE).
 3. Footer (Universal):
    - Left side: 3D Miniature logo asset, Company name, and tagline: "Architecting the Autonomous Frontier."
    - Right side Contact Grid: 
-     * Support Email: support@quantumai.biz 
+     * Support Email: support@fantomai.biz 
      * WhatsApp / Phone: +92 336 4656329
-   - Copyright © 2026 Quantum AI. All Rights Reserved.
+   - Copyright © 2026 Fantom AI. All Rights Reserved.
 
 ---
 
@@ -36,7 +36,7 @@ Global Theme & Aesthetics:
   3. Desired Appointment Day (Date Picker - themed dark)
   4. Preferred Time Window (Time Picker)
   5. Automation Goals / Discussion Scope (Text Area)
-- Action Button: "Deploy Request" button that triggers an API webhook transmitting form data to support@quantumai.biz with an instantaneous success confetti animation.
+- Action Button: "Deploy Request" button that triggers an API webhook transmitting form data to support@fantomai.biz with an instantaneous success confetti animation.
 
 ---
 
@@ -50,9 +50,9 @@ Global Theme & Aesthetics:
 
 #### PAGE 2: GENESIS (ABOUT)
 - Narrative Hook: "Born in 2026. Forged in Data. Built for Scale."
-- Origin Story Block: Describe the inception of Quantum AI. Founded by Chaudary Moaz Kashif, who conceptualized a borderless automated ecosystem, pitching the vision to co-founder Umer Siddique to eliminate manual operations globally.
+- Origin Story Block: Describe the inception of Fantom AI. Founded by Chaudary Moaz Kashif, who conceptualized a borderless automated ecosystem, pitching the vision to co-founder Umer Siddique to eliminate manual operations globally.
 - Executive Leadership Duel-Blocks: Side-by-side futuristic ID card layouts:
-  * Founder Card (Left): "Chaudary Moaz Kashif — Founder & Chief AI Architect". Subtext: "Currently spearheading advanced data patterns and predictive modeling at FAST-NUCES (BS Data Science). Architect of the Quantum AI ecosystem core framework."
+  * Founder Card (Left): "Chaudary Moaz Kashif — Founder & Chief AI Architect". Subtext: "Currently spearheading advanced data patterns and predictive modeling at FAST-NUCES (BS Data Science). Architect of the Fantom AI ecosystem core framework."
   * Co-Founder Card (Right): "Umer Siddique — Co-Founder & Systems Lead". Subtext: "Currently mastering software architectures and heavy distributed frameworks at UMT (BS Computer Science). Engineering high-availability execution pipelines."
 
 #### PAGE 4: THE EDGE (WHY QUANTUM AI)

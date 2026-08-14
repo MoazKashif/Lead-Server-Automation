@@ -1,50 +1,28 @@
-### 🔗 How to Connect Your n8n Workflow                                               
-                                                                                        
-  Here is how you can set up n8n to send the email using this project:                  
-                                                                                        
-  #### 1. In n8n: Configure the Webhook Trigger                                         
-                                                                                        
-  1. Add a Webhook node to your n8n workflow.                                           
-  2. Set the HTTP Method to  POST .                                                     
-  3. Copy the Production URL of your n8n Webhook.                                       
-                                                                                        
-  #### 2. In Your Dashboard: Link the URL                                               
-                                                                                        
-  1. Go to your Admin Dashboard: http://127.0.0.1:8000/.                                
-  2. Click API Config in the left sidebar.                                              
-  3. Paste your n8n URL into the n8n Webhook URL input box and click Save Configuration.
-                                                                                        
-  #### 3. In n8n: Configure the Email Node                                              
-                                                                                        
-  When a lead submits a form on your site, our server will analyze it and send this     
-  structured JSON payload to n8n:                                                       
-                                                                                        
-    { 
-      "name": "Arthur Dent",
-      "email": "arthur@guide.com",
-      "message": "We need an Excel automation...",
-      "ai_analysis": {
-        "urgency": "High",
-        "category": "Inquiry",
-        "summary": "Wants Excel form automation to save 4 hours of weekly work.",
-        "draft_reply": "Dear Arthur, Thank you for reaching out to QuantumAI..."        
-      }                                                                                 
-    }   
-      
-  In your n8n email node (SMTP, Gmail, or Resend), set the following parameters
-  dynamically using the incoming webhook data (fields are under `body`):
+### 🔗 Email Delivery via Direct SMTP (Zoho Mail)
 
-  • To:  {{ $json.body.to_email }}
-  • Subject:  {{ $json.body.email_subject }}
-  • Email Body:  {{ $json.body.email_html }}  (HTML draft from Gemini or smart fallback)      
-  
-  
-  Website: http://localhost:8000/website 
-  Dashboard: http://localhost:8000/
-  
-  
-  
-  
-  umer siddiqui
-  automatic restoration of form
-  a dot/highlight with unread messages
+Emails are now sent directly from the FastAPI backend via SMTP — no n8n required.
+
+  #### Email triggers
+
+  1. Lead form submission (`POST /webhook`) → AI-drafted reply is emailed to the lead
+     - Subject:  FantomAI | Lead Intake Proposal & Next Steps
+     - Sender:    Fantom AI <team@fantomai.site>
+  2. Appointment booking (`POST /api/appointments`) → confirmation email to the requester
+     - Subject:  FantomAI | Genesis Session Confirmation
+  3. Admin login → 2FA code email
+
+  #### Configuration (.env / Render env vars)
+
+    SMTP_HOST=smtp.zoho.com
+    SMTP_PORT=587
+    SMTP_USERNAME=team@fantomai.site
+    SMTP_PASSWORD=your_app_password
+    SMTP_FROM_EMAIL=team@fantomai.site
+    SMTP_FROM_NAME='Fantom AI'
+    SMTP_USE_TLS=true
+    CALENDAR_URL=https://cal.com/moaz-kashif-ovkhut/30min   # used in AI email replies
+
+  Note: Free-plan Zoho Mail accounts must use smtp.zoho.com (not
+  smtppro.zoho.com, which is for paid plans). SMTP access must be enabled
+  in the mailbox, and an app-specific password is required if the account
+  has two-factor authentication enabled.

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quantum AI | Architecting the Autonomous Frontier</title>
+    <title>Fantom AI | Architecting the Autonomous Frontier</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -616,7 +616,7 @@
             line-height: 1.5;
         }
 
-        /* WHY QUANTUM AI / THE EDGE SECTION */
+        /* WHY FANTOM AI / THE EDGE SECTION */
         .edge-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -1230,7 +1230,7 @@
         <header class="navbar" id="global-nav">
             <a href="#" class="brand-logo-container">
                 <div class="logo-q-infinity" id="nav-q-logo"></div>
-                <h2 class="brand" style="margin-bottom: 0;">Quantum<span>AI</span></h2>
+                        <h2 class="brand" style="margin-bottom: 0;">Fantom<span>AI</span></h2>
             </a>
             <nav class="nav-links">
                 <a href="#nexus">Nexus</a>
@@ -1283,7 +1283,7 @@
             <div class="genesis-story">
                 <div class="story-badge">Narrative Origin</div>
                 <h3>Born in 2026. Forged in Data. Built for Scale.</h3>
-                <p>Quantum AI was founded by Chaudary Moaz Kashif, who envisioned a borderless automated ecosystem where daily repetitive administrative burdens simply cease to exist. Drawing inspiration from modern AI architectures, he pitched this automation roadmap to co-founder Umer Siddiqui. Together, they established Quantum AI to enable global enterprises to run on pure, high-availability autonomous intelligence.</p>
+                <p>Fantom AI was founded by Chaudary Moaz Kashif, who envisioned a borderless automated ecosystem where daily repetitive administrative burdens simply cease to exist. Drawing inspiration from modern AI architectures, he pitched this automation roadmap to co-founder Umer Siddiqui. Together, they established Fantom AI to enable global enterprises to run on pure, high-availability autonomous intelligence.</p>
             </div>
 
             <!-- Executive Leadership duel-blocks -->
@@ -1296,7 +1296,7 @@
                     <div class="team-details">
                         <h4>Chaudary Moaz Kashif</h4>
                         <div class="team-role">Founder & Chief AI Architect</div>
-                        <p class="team-bio">Currently spearheading advanced data patterns and predictive modeling at FAST-NUCES (BS Data Science). Architect of the Quantum AI ecosystem core framework.</p>
+                        <p class="team-bio">Currently spearheading advanced data patterns and predictive modeling at FAST-NUCES (BS Data Science). Architect of the Fantom AI ecosystem core framework.</p>
                     </div>
                 </div>
                 
@@ -1391,7 +1391,7 @@
         <!-- PAGE 4: THE EDGE (WHY QUANTUM AI) -->
         <section id="edge" class="gs-reveal">
             <div class="section-header">
-                <h2>The Quantum Edge</h2>
+                <h2>The Fantom Edge</h2>
                 <p>How we measure visual success and operational expansion for high-growth enterprises.</p>
             </div>
             
@@ -1476,14 +1476,14 @@
                 <div class="footer-brand">
                     <div class="footer-logo-row">
                         <div class="footer-q-logo" id="footer-q-logo"></div>
-                        <h2 class="brand" style="margin-bottom: 0;">Quantum<span>AI</span></h2>
+                <h2 class="brand" style="margin-bottom: 0;">Fantom<span>AI</span></h2>
                     </div>
                     <div class="footer-tagline">Architecting the Autonomous Frontier.</div>
                 </div>
                 <div class="footer-contacts">
-                    <a href="mailto:support@quantumai.biz" class="footer-contact-item">
+                    <a href="mailto:contact@fantomai.site" class="footer-contact-item">
                         <i data-lucide="mail"></i>
-                        <span>support@quantumai.biz</span>
+                        <span>contact@fantomai.site</span>
                     </a>
                     <a href="https://wa.me/923364656329" class="footer-contact-item" target="_blank">
                         <i data-lucide="phone"></i>
@@ -1493,7 +1493,7 @@
             </div>
             
             <div class="footer-bottom">
-                <div>&copy; 2026 Quantum AI. All Rights Reserved.</div>
+                <div>&copy; 2026 Fantom AI. All Rights Reserved.</div>
                 <div>Engineered for Scalability</div>
             </div>
         </footer>
@@ -1681,7 +1681,7 @@
         bgScene.add(particleSystem);
         bgCamera.position.z = 15;
 
-        // Line connections between near particles for Quantum Core network look
+        // Line connections between near particles for Core network look
         const lineMat = new THREE.LineBasicMaterial({ color: 0x7F00FF, transparent: true, opacity: 0.12 });
         let lineMesh = null;
 
@@ -1763,8 +1763,8 @@
         }
         animateBg();
 
-        // 3D Metallic/Neon Q-Logo rendering in Navbar & Footer
-        function buildQLogo(containerId) {
+        // 3D Metallic/Neon F-Logo rendering in Navbar & Footer
+        function buildFLogo(containerId) {
             const container = document.getElementById(containerId);
             if (!container) return;
             
@@ -1777,32 +1777,38 @@
             renderer.setSize(w, h);
             container.appendChild(renderer.domElement);
             
-            const torusGeo = new THREE.TorusGeometry(1, 0.28, 16, 100);
-            const torusMat = new THREE.MeshBasicMaterial({ color: 0x00F2FE, wireframe: true });
-            const torus = new THREE.Mesh(torusGeo, torusMat);
-            scene.add(torus);
+            // Vertical stem of F
+            const stemGeo = new THREE.BoxGeometry(0.35, 2.4, 0.35);
+            const stemMat = new THREE.MeshBasicMaterial({ color: 0x00F2FE, wireframe: true });
+            const stem = new THREE.Mesh(stemGeo, stemMat);
+            scene.add(stem);
             
-            const tailGeo = new THREE.CylinderGeometry(0.1, 0.1, 1.2, 8);
-            const tail = new THREE.Mesh(tailGeo, torusMat);
-            tail.position.set(0.7, -0.7, 0);
-            tail.rotation.z = -Math.PI / 4;
-            scene.add(tail);
+            // Top horizontal bar of F
+            const topBarGeo = new THREE.BoxGeometry(1.6, 0.3, 0.3);
+            const topBar = new THREE.Mesh(topBarGeo, stemMat);
+            topBar.position.set(0.7, 1.05, 0);
+            scene.add(topBar);
+            
+            // Middle horizontal bar of F
+            const midBarGeo = new THREE.BoxGeometry(1.2, 0.3, 0.3);
+            const midBar = new THREE.Mesh(midBarGeo, stemMat);
+            midBar.position.set(0.5, 0, 0);
+            scene.add(midBar);
             
             camera.position.z = 3.5;
             
             function anim() {
                 requestAnimationFrame(anim);
-                torus.rotation.y += 0.015;
-                torus.rotation.x += 0.008;
-                tail.rotation.y += 0.015;
-                tail.rotation.x += 0.008;
+                stem.rotation.y += 0.015;
+                topBar.rotation.y += 0.015;
+                midBar.rotation.y += 0.015;
                 renderer.render(scene, camera);
             }
             anim();
         }
 
-        buildQLogo('nav-q-logo');
-        buildQLogo('footer-q-logo');
+        buildFLogo('nav-q-logo');
+        buildFLogo('footer-q-logo');
 
         // Navbar scrolled layout shift
         window.addEventListener('scroll', () => {
@@ -1898,7 +1904,7 @@
             { text: '> Intent detected: Pricing request. Checking CRM...', class: '' },
             { text: '> CRM Query completed. Slot suggested: 04:00 PM Monday.', class: '' },
             { text: '> Call finished successfully. Sending calendar lock...', class: 'success' },
-            { text: '> Webhook forwarder triggered (N8N webhook node)...', class: '' },
+            { text: '> Confirmation email sent via SMTP (Zoho)...', class: '' },
             { text: '> Sync completed successfully.', class: 'success' }
         ];
 
@@ -2214,7 +2220,7 @@
                     closeAppointmentModal();
                     
                     // Show confirmation overlay message at bottom funnel
-                    alert(`Genesis Session Requested!\nThank you, ${name}. Umer Siddiqui & Chaudary Moaz Kashif's team will contact you at ${email} shortly.`);
+                    alert(`Genesis Session Requested!\nThank you, ${name}. A confirmation email has been sent to ${email}. Umer Siddiqui & Chaudary Moaz Kashif's team will contact you shortly.`);
                     
                     // Reset fields
                     document.getElementById('appt-name').value = '';
