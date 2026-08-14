@@ -1,0 +1,68 @@
+[
+  {
+    "id": "20260704160536695770",
+    "created_at": "2026-07-04T11:05:36.729988+00:00",
+    "name": "Appointment User",
+    "email": "appt@test.com",
+    "appointment_date": "2026-07-20",
+    "time_window": "12:00 PM - 03:00 PM",
+    "automation_goal": "I need voice agent and CRM automation",
+    "read": false,
+    "updated_at": "2026-07-04T11:05:36.729988+00:00"
+  },
+  {
+    "id": "test_162041190235",
+    "created_at": "2026-07-04T11:20:41.31886+00:00",
+    "name": "Test Debug",
+    "email": "debug@test.com",
+    "appointment_date": "2026-07-20",
+    "time_window": "09:00 AM - 12:00 PM",
+    "automation_goal": "Testing storage location",
+    "read": false,
+    "updated_at": "2026-07-04T11:20:41.31886+00:00"
+  },
+  {
+    "id": "20260704163053303551",
+    "created_at": "2026-07-04T11:30:53.442392+00:00",
+    "name": "Babar Azam",
+    "email": "babar.azam@gmail.com",
+    "appointment_date": "2026-07-10",
+    "time_window": "12:00 PM - 03:00 PM",
+    "automation_goal": "i want to build and automation for my brand to help increase leads",
+    "read": false,
+    "updated_at": "2026-07-04T11:30:53.442392+00:00"
+  },
+  {
+    "id": "20260704163543970003",
+    "created_at": "2026-07-04T11:35:44.041285+00:00",
+    "name": "Dashboard Test",
+    "email": "dash@test.com",
+    "appointment_date": "2026-08-01",
+    "time_window": "09:00 AM - 12:00 PM",
+    "automation_goal": "Testing dashboard visibility",
+    "read": false,
+    "updated_at": "2026-07-04T11:35:44.041285+00:00"
+  },
+  {
+    "id": "20260704173419570890",
+    "created_at": "2026-07-04T12:34:20.601428+00:00",
+    "name": "Kane",
+    "email": "kane@gmail.com",
+    "appointment_date": "2026-07-07",
+    "time_window": "06:00 PM - 09:00 PM",
+    "automation_goal": "I want to build an ai frontier automation for my bookstore",
+    "read": false,
+    "updated_at": "2026-07-04T12:34:20.601428+00:00"
+  },
+  {
+    "id": "20260808162910819010",
+    "created_at": "2026-08-08T11:29:10.876203+00:00",
+    "name": "Andrew Karpathy",
+    "email": "andrew.kick@gmail.com",
+    "appointment_date": "2026-08-10",
+    "time_window": "12:00 PM - 03:00 PM",
+    "automation_goal": "i want to make an automation for my startup which can handle clients automatically via whatsapp and slcak and send confirmation emails on their own so that i can work on other things to boost the progress",
+    "read": false,
+    "updated_at": "2026-08-08T11:29:10.876203+00:00"
+  }
+]
