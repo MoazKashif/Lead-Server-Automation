@@ -1,0 +1,114 @@
+Role: You are an elite Web3/AI Creative Director and Expert Frontend Developer specializing in high-end Three.js, React Three Fiber, and Tailwind CSS interactive architectures.
+
+Task: Generate a comprehensive UI/UX layout, copywriting architecture, and animation system for a next-generation AI Automation Startup website named "Fantom AI". 
+
+Global Theme & Aesthetics:
+- Deep, immersive dark mode space/fantom background (#03030A to #0B0B1E).
+- Accents of holographic cyan, electric violet, and glowing neon light highlights.
+- Futuristic, ultra-premium, high-converting tech aesthetic (similar to Linear or Stripe's premium design languages).
+- Micro-interactions: Subtle floating 3D particle fields representing data lines moving dynamically based on mouse movement.
+
+---
+
+### SECTION 1: GLOBAL LAYOUT & NAVIGATION
+1. Pre-loader Scene (Instant Hook): 
+   - No white screens or blank states allowed. Upon URL execution, render a 3D morphing Fantom Core node animation that dynamically loads. 
+   - Text overlay: "Initializing Neural Pipelines..." with a sleek percentage indicator matching the asset load state. Once 100%, the core collapses into the background particle field.
+2. Navigation Bar:
+   - Left: Minimalist futuristic Logo (a 3D rotating metallic/neon letter "Q" intersecting with an infinity symbol) + Brand Name "Fantom AI".
+   - Center: Dynamic Links -> [ Nexus (Home) | Genesis (About) | Ecosystem (Services) | The Edge (Why Fantom AI) ].
+   - Right: "Book An Appointment" CTA button wrapped in a persistent Cyber-Neon pulse glow (Border-radius: 50px, Box-shadow: 0 0 15px #00F2FE).
+3. Footer (Universal):
+   - Left side: 3D Miniature logo asset, Company name, and tagline: "Architecting the Autonomous Frontier."
+   - Right side Contact Grid: 
+     * Support Email: support@fantomai.biz 
+     * WhatsApp / Phone: +92 336 4656329
+   - Copyright © 2026 Fantom AI. All Rights Reserved.
+
+---
+
+### SECTION 2: INTERACTIVE MODAL (BOOK AN APPOINTMENT)
+- Trigger: Clicking the Neon Top-Right Navigation Button triggers a smooth overlay blur.
+- Design: A floating frosted glass (Glassmorphism) modal centered on screen.
+- Form Fields:
+  1. Full Name (Text input)
+  2. Corporate Email Address (Email input)
+  3. Desired Appointment Day (Date Picker - themed dark)
+  4. Preferred Time Window (Time Picker)
+  5. Automation Goals / Discussion Scope (Text Area)
+- Action Button: "Deploy Request" button that triggers an API webhook transmitting form data to support@fantomai.biz with an instantaneous success confetti animation.
+
+---
+
+### SECTION 3: CORE PAGES & CONTENT ARCHITECTURE
+
+#### PAGE 1: NEXUS (HOME)
+- Hero Section: 
+  * Left: Bold, punchy typography: "Scale Your Business With Autonomous AI". Subtext: "We build intelligent voice receptionists, automated follow-up workflows, and custom CRM integrations that save you hundreds of hours and close more customers on autopilot."
+  * Right: A live-updating terminal widget simulation titled "Live AI Agent Status". It outputs faux runtime scripts smoothly: `$ python3 agent.py --status=active`, `> Initializing speech models... Done.`, `> Listening on inbound SIP trunk...`.
+- Call To Action: Neon blue gradient button: "Build Your Automation →".
+
+#### PAGE 2: GENESIS (ABOUT)
+- Narrative Hook: "Born in 2026. Forged in Data. Built for Scale."
+- Origin Story Block: Describe the inception of Fantom AI. Founded by Chaudary Moaz Kashif, who conceptualized a borderless automated ecosystem, pitching the vision to co-founder Umer Siddique to eliminate manual operations globally.
+- Executive Leadership Duel-Blocks: Side-by-side futuristic ID card layouts:
+  * Founder Card (Left): "Chaudary Moaz Kashif — Founder & Chief AI Architect". Subtext: "Currently spearheading advanced data patterns and predictive modeling at FAST-NUCES (BS Data Science). Architect of the Fantom AI ecosystem core framework."
+  * Co-Founder Card (Right): "Umer Siddique — Co-Founder & Systems Lead". Subtext: "Currently mastering software architectures and heavy distributed frameworks at UMT (BS Computer Science). Engineering high-availability execution pipelines."
+
+#### PAGE 4: THE EDGE (WHY QUANTUM AI)
+- Feature a premium 3D grid outlining performance comparisons: 
+  * 0ms Missed Communication rates.
+  * 70%+ Overhead operational cost reduction.
+  * Instantaneous scale without human headcount dependencies.
+
+#### PAGE 3: ECOSYSTEM (SERVICES & DEDICATED SUB-PAGES)
+Provide structural deep-dives when a user interacts with one of the 4 primary services.
+
+[SERVICE 1: 📞 AI Voice Receptionist]
+- Subpage Title: "24/7 Smart Call Handling Infrastructure"
+- Key Pitch Content (Persuasion Architecture):
+  * Instant Answering: Operates at sub-millisecond response latency, handling infinite concurrent lines 24/7/365.
+  * Human Cognition: Advanced speech voice modeling processing natural intent, accents, and interruptions seamlessly in multiple brand tones.
+  * CRM & Calendar Autonomous Link: Scans live availability (Google/Outlook/CRMs), books slots, locks confirmations, and updates pipeline pipelines instantly.
+  * Lead Qualification Protocol: Pre-qualifies prospects dynamically on budget, urgency, and requirement parameters before routing warm data transfers.
+- Integrations: Native support for HubSpot, Salesforce, Zoho, n8n, Zapier, and custom Webhooks.
+
+[SERVICE 2: 🔗 CRM Sync & Pipeline Rules]
+- Subpage Title: "End-to-End Data Harmonization"
+- Key Pitch Content:
+  * Eradicate Copy-Paste Inertia: Instantly unify ad campaigns, web hooks, form capture structures, and native lead engines.
+  * Live Sync Engines: Move inbound user profiles directly into active databases (HubSalesforce, HubSpot, Airtable) instantly with zero information loss.
+  * Intelligent Automation Triggers: Fire instant internal notifications, label leads automatically, and pipeline stages based on customer intent.
+
+[SERVICE 3: ✉️ Auto Draft Replies]
+- Subpage Title: "AI-Powered Conversational Accelerators"
+- Key Pitch Content:
+  * Inbound Scoring: Advanced semantic parsers scan incoming support queues or sales pitches, analyzing sentiment and dollar intent score.
+  * Instant Draft Composition: The system builds complete proposal outlines, technical email responses, or quotes immediately.
+  * Human-in-the-Loop Velocity: Ready for staff review to copy, tweak, and fire away in 2 seconds flat.
+
+[SERVICE 4: 💻 Custom Full-Stack Website Development]
+- Subpage Title: "High-Performance Digital Architecture"
+- Key Pitch Content:
+  * Immersive Web Graphics: Tailor-made web experiences built using Three.js, React, and GSAP frameworks.
+  * Optimized Core Vitals: Blazing fast server-side processing ensures flawless page loading speeds, SEO dominance, and visual retention.
+  * Native Automation Layering: Every site is engineered from inception to natively speak to backend LLMs, customer databases, and automated workflows.
+
+---
+
+### SECTION 4: THE SIGNATURE LEAD FORM (REQUEST CUSTOM AUTOMATION)
+- Placement: Bottom of the home funnel.
+- Style: Contained inside a glowing premium border container.
+- Inputs Configuration:
+  * Input 1: Your Name* (e.g. Richard Hendricks)
+  * Input 2: Email Address* (e.g. richard@piedpiper.com)
+  * Input 3: Company Name (e.g. Pied Piper)
+  * Input 4: Phone Number (e.g. +1 (555) 890-4321)
+  * Large Text Box: What automation needs or bottlenecks does your business have?* (Placeholder: Detail the manual tasks you do daily...)
+- Primary Action Trigger: Large glowing blue gradient submit bar "Submit Inquiry".
+
+---
+
+### SECTION 5: ANIMATION ENGINE CONFIGURATION
+- Scroll-Reveal: Configure GSAP ScrollTrigger to hook into layout blocks. Elements must fade up and blur out smoothly ($y: 50 \rightarrow 0$, $opacity: 0 \rightarrow 1$, $blur: 10px \rightarrow 0px$) sequentially as the viewport rolls downwards.
+- Card Interaction: Service cards feature a 3D parallax tilt effect relative to the user's cursor axis.

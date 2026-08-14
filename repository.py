@@ -1,9 +1,14 @@
 """Database repository layer for lead operations with a JSON fallback."""
 
+import os
 import json
+import logging
 from pathlib import Path
 from typing import List
 from database import supabase
+
+logger = logging.getLogger(__name__)
+_IS_PRODUCTION = os.getenv("ENVIRONMENT", "production").lower() == "production"
 
 STORAGE_FILE = Path(__file__).with_name("leads.json")
 
@@ -46,12 +51,18 @@ def _append_json_lead(lead: dict) -> None:
 def get_all() -> List[dict]:
     """Fetch all leads ordered by timestamp descending (newest first)."""
     if not supabase:
+        if _IS_PRODUCTION:
+            logger.critical("Supabase not configured in production! Cannot retrieve leads.")
+            return []
         return _load_json_leads()
     try:
         response = supabase.table("leads").select("*").order("timestamp", desc=True).execute()
         return [_normalize_lead(item) for item in response.data]
     except Exception as exc:
-        print(f"[repo] Database unavailable, using JSON fallback: {exc}")
+        logger.error(f"Database error fetching leads: {exc}")
+        if _IS_PRODUCTION:
+            return []
+        logger.warning("Falling back to JSON (development mode)")
         return _load_json_leads()
 
 
@@ -59,15 +70,20 @@ def create(data: dict) -> dict:
     """Create a new lead and return it as a dict."""
     lead_data = _normalize_lead(data)
     if not supabase:
+        if _IS_PRODUCTION:
+            logger.critical("Supabase not configured in production! Cannot create lead.")
+            return {}
         _append_json_lead(lead_data)
         return lead_data
     try:
         response = supabase.table("leads").insert(lead_data).execute()
         created = response.data[0] if response.data else lead_data
-        _append_json_lead(created)
         return _normalize_lead(created)
     except Exception as exc:
-        print(f"[repo] Database unavailable, storing lead in JSON fallback: {exc}")
+        logger.error(f"Database error creating lead: {exc}")
+        if _IS_PRODUCTION:
+            return {}
+        logger.warning("Falling back to JSON (development mode)")
         _append_json_lead(lead_data)
         return lead_data
 
@@ -75,6 +91,9 @@ def create(data: dict) -> dict:
 def delete(lead_id: str) -> bool:
     """Delete a lead by ID. Returns True if deleted, False if not found."""
     if not supabase:
+        if _IS_PRODUCTION:
+            logger.critical("Supabase not configured in production! Cannot delete lead.")
+            return False
         leads = _load_json_leads()
         updated = [lead for lead in leads if lead.get("id") != lead_id]
         if len(updated) == len(leads):
@@ -87,7 +106,10 @@ def delete(lead_id: str) -> bool:
             return True
         return False
     except Exception as exc:
-        print(f"[repo] Database unavailable, deleting from JSON fallback: {exc}")
+        logger.error(f"Database error deleting lead: {exc}")
+        if _IS_PRODUCTION:
+            return False
+        logger.warning("Falling back to JSON (development mode)")
         leads = _load_json_leads()
         updated = [lead for lead in leads if lead.get("id") != lead_id]
         if len(updated) == len(leads):
@@ -99,6 +121,9 @@ def delete(lead_id: str) -> bool:
 def mark_read(lead_id: str) -> bool:
     """Mark a lead as read. Returns True if updated, False if not found."""
     if not supabase:
+        if _IS_PRODUCTION:
+            logger.critical("Supabase not configured in production! Cannot update lead.")
+            return False
         leads = _load_json_leads()
         for lead in leads:
             if lead.get("id") == lead_id:
@@ -112,7 +137,10 @@ def mark_read(lead_id: str) -> bool:
             return True
         return False
     except Exception as exc:
-        print(f"[repo] Database unavailable, updating JSON fallback: {exc}")
+        logger.error(f"Database error updating lead: {exc}")
+        if _IS_PRODUCTION:
+            return False
+        logger.warning("Falling back to JSON (development mode)")
         leads = _load_json_leads()
         for lead in leads:
             if lead.get("id") == lead_id:

@@ -12,45 +12,62 @@ import os
 import json
 import datetime
 import time
-import random
 import secrets
-import smtplib
 import socket
-import urllib.request
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 from typing import Optional
 from fastapi import FastAPI, HTTPException, Request, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
+import sys
 from pydantic import BaseModel, Field
-from dotenv import load_dotenv, set_key
+from dotenv import load_dotenv
 import bcrypt
+
+# Environment mode. Production is the default.
+# Load .env for local development only. load_dotenv never overrides existing
+# environment variables, so Render environment variables remain the source of
+# truth in production.
+ENV_FILE = ".env"
+if os.path.exists(ENV_FILE):
+    load_dotenv(ENV_FILE)
+
+IS_PRODUCTION = os.getenv("ENVIRONMENT", "production").lower() == "production"
+
 from database import init_db
 import repository
 import repository_appointments
-
-# Load environment variables from .env
-ENV_FILE = ".env"
-if not os.path.exists(ENV_FILE):
-    with open(ENV_FILE, "w") as f:
-        f.write("# Gemini API Configuration\nGEMINI_API_KEY=\n# n8n Webhook Configuration\nN8N_WEBHOOK_URL=\n")
-
-load_dotenv(ENV_FILE)
+import email_service
 
 app = FastAPI(title="Lead Automation & AI Receptionist Webhook Server")
 
 
 @app.on_event("startup")
 async def startup():
+    if not ADMIN_ACCOUNTS:
+        if IS_PRODUCTION:
+            raise RuntimeError(
+                "[SECURITY] FATAL: No admin accounts configured. "
+                "Set ADMIN_EMAIL_1/ADMIN_PASSWORD_1 environment variables. Refusing to start."
+            )
+        print("[SECURITY] WARNING: No admin accounts configured. Login will not work.", file=sys.stderr)
+    if IS_PRODUCTION and not email_service.is_smtp_configured():
+        print(
+            "[SECURITY] WARNING: SMTP is not configured in production. "
+            "Two-factor login codes cannot be delivered. Set SMTP_HOST/SMTP_USERNAME/SMTP_PASSWORD/SMTP_FROM_EMAIL.",
+            file=sys.stderr,
+        )
     init_db()
 
 
 # Enable CORS for frontend flexibility
+_allowed_origins = ["https://fantomai.site", "https://www.fantomai.site"]
+if not IS_PRODUCTION:
+    _allowed_origins.extend(["http://localhost:8000", "http://127.0.0.1:8000"])
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=_allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -61,10 +78,21 @@ app.add_middleware(
 # ============================================================
 
 # Allowlisted admin accounts with bcrypt-hashed passwords
-ADMIN_ACCOUNTS = {
-    "moazkashif96@gmail.com": bcrypt.hashpw(b"Moaz@Fast2027", bcrypt.gensalt()).decode(),
-    "umersiddiqui614@gmail.com": bcrypt.hashpw(b"Umer@Umt2027", bcrypt.gensalt()).decode(),
-}
+def _load_admin_accounts() -> dict:
+    accounts = {}
+    i = 1
+    while True:
+        email = os.getenv(f"ADMIN_EMAIL_{i}")
+        password = os.getenv(f"ADMIN_PASSWORD_{i}")
+        if not email or not password:
+            break
+        accounts[email.strip().lower()] = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+        i += 1
+    return accounts
+
+ADMIN_ACCOUNTS = _load_admin_accounts()
+if not ADMIN_ACCOUNTS:
+    print("[SECURITY] FATAL: No admin accounts configured. Set ADMIN_EMAIL_1/ADMIN_PASSWORD_1 environment variables.", file=sys.stderr)
 
 # In-memory session store: { session_token: { email, created_at } }
 active_sessions = {}
@@ -78,15 +106,14 @@ login_attempts = {}
 MAX_ATTEMPTS = 5
 LOCKOUT_SECONDS = 15 * 60  # 15 minutes
 CODE_EXPIRY_SECONDS = 5 * 60  # 2FA codes expire after 5 minutes
-SESSION_COOKIE_NAME = "qai_session"
+SESSION_COOKIE_NAME = "fai_session"
 
 # Public paths that don't require authentication
 PUBLIC_PATHS = {
-    "/login", "/website", "/webhook", "/docs", "/openapi.json", "/redoc",
+    "/login", "/website", "/webhook", "/docs", "/openapi.json", "/redoc", "/health",
     "/api/auth/login", "/api/auth/verify-2fa", "/api/auth/logout",
 }
 PUBLIC_PREFIXES = ("/static/",)
-PUBLIC_API_PREFIXES = ("/api/leads", "/api/stats", "/api/config", "/api/appointments")
 
 
 def get_attempt_key(email: str, ip: str) -> str:
@@ -140,51 +167,52 @@ def generate_2fa_code() -> str:
     return f"{secrets.randbelow(900000) + 100000}"
 
 
-def send_2fa_email(email: str, code: str):
+def send_2fa_email(email: str, code: str) -> bool:
     """
     Send the 2FA code to the user's email via SMTP.
-    If SMTP is not configured, falls back to printing to the server console.
+    In development, prints the code to the console for testing.
+    Returns True if the code was delivered (or printed in dev), False otherwise.
     """
-    smtp_host = os.getenv("SMTP_HOST", "")
-    smtp_port = int(os.getenv("SMTP_PORT", "587"))
-    smtp_user = os.getenv("SMTP_USER", "")
-    smtp_pass = os.getenv("SMTP_PASS", "")
+    html_body = f"""
+    <div style="font-family: 'Segoe UI', sans-serif; max-width: 480px; margin: auto; padding: 24px; background: #0a0914; color: #f3f4f6; border-radius: 12px;">
+        <h2 style="text-align: center; margin-bottom: 8px;">Fantom<span style="color: #6366f1;">AI</span></h2>
+        <p style="text-align: center; color: #9ca3af; font-size: 14px;">Admin Dashboard Two-Factor Verification</p>
+        <div style="text-align: center; margin: 32px 0;">
+            <span style="font-size: 36px; font-weight: 800; letter-spacing: 8px; color: #6366f1;">{code}</span>
+        </div>
+        <p style="text-align: center; color: #9ca3af; font-size: 13px;">This code expires in 5 minutes. If you didn't request this, ignore this email.</p>
+    </div>
+    """
 
-    if smtp_host and smtp_user and smtp_pass:
-        try:
-            msg = MIMEMultipart("alternative")
-            msg["Subject"] = f"QuantumAI Admin Login – Your 2FA Code: {code}"
-            msg["From"] = smtp_user
-            msg["To"] = email
-
-            html_body = f"""
-            <div style="font-family: 'Segoe UI', sans-serif; max-width: 480px; margin: auto; padding: 24px; background: #0a0914; color: #f3f4f6; border-radius: 12px;">
-                <h2 style="text-align: center; margin-bottom: 8px;">Quantum<span style="color: #6366f1;">AI</span></h2>
-                <p style="text-align: center; color: #9ca3af; font-size: 14px;">Admin Dashboard Two-Factor Verification</p>
-                <div style="text-align: center; margin: 32px 0;">
-                    <span style="font-size: 36px; font-weight: 800; letter-spacing: 8px; color: #6366f1;">{code}</span>
-                </div>
-                <p style="text-align: center; color: #9ca3af; font-size: 13px;">This code expires in 5 minutes. If you didn't request this, ignore this email.</p>
-            </div>
-            """
-            msg.attach(MIMEText(html_body, "html"))
-
-            with smtplib.SMTP(smtp_host, smtp_port) as server:
-                server.starttls()
-                server.login(smtp_user, smtp_pass)
-                server.sendmail(smtp_user, email, msg.as_string())
-
-            print(f"[2FA] Email sent to {email}")
-        except Exception as e:
-            print(f"[2FA] SMTP send failed ({e}). Falling back to console.")
-            print(f"\n{'='*50}")
-            print(f"  2FA CODE for {email}: {code}")
-            print(f"{'='*50}\n")
-    else:
-        # No SMTP configured — print to console for local dev
+    try:
+        email_service.send_email(
+            to=email,
+            subject=f"FantomAI Admin Login – Your 2FA Code: {code}",
+            html_body=html_body,
+        )
+        print(f"[2FA] Email sent to {email}")
+        return True
+    except email_service.EmailConfigError as e:
+        if IS_PRODUCTION:
+            print(f"[2FA] ERROR: {e}", file=sys.stderr)
+            return False
         print(f"\n{'='*50}")
         print(f"  2FA CODE for {email}: {code}")
         print(f"{'='*50}\n")
+        return True
+    except email_service.EmailDeliveryError as e:
+        print(f"[2FA] SMTP send failed ({e}).")
+        if IS_PRODUCTION:
+            print(
+                "[2FA] ERROR: SMTP delivery failed in production and the 2FA code "
+                "cannot be delivered. Check SMTP_HOST/SMTP_USERNAME/SMTP_PASSWORD/SMTP_FROM_EMAIL.",
+                file=sys.stderr,
+            )
+        else:
+            print(f"\n{'='*50}")
+            print(f"  2FA CODE for {email}: {code}")
+            print(f"{'='*50}\n")
+        return False
 
 
 # Auth Pydantic models
@@ -228,14 +256,37 @@ async def auth_login(body: LoginRequest, request: Request):
 
     # Password correct — generate 2FA code and send it
     code = generate_2fa_code()
+
+    if not IS_PRODUCTION:
+        # Development: print the code to the console (no SMTP required)
+        pending_2fa[email] = {
+            "code": code,
+            "created_at": time.time(),
+            "attempts": 0,
+        }
+        send_2fa_email(email, code)
+        return {"status": "2fa_required", "message": "Verification code sent to your email."}
+
+    # Production: the code must be delivered via SMTP.
+    if not email_service.is_smtp_configured():
+        raise HTTPException(
+            status_code=503,
+            detail="Two-factor email cannot be sent because SMTP is not configured. "
+                   "Contact your administrator to configure SMTP_HOST, SMTP_USERNAME, SMTP_PASSWORD, and SMTP_FROM_EMAIL.",
+        )
+
+    delivered = send_2fa_email(email, code)
+    if not delivered:
+        raise HTTPException(
+            status_code=503,
+            detail="Failed to deliver the two-factor verification code. Please try again or contact your administrator.",
+        )
+
     pending_2fa[email] = {
         "code": code,
         "created_at": time.time(),
         "attempts": 0,
     }
-
-    send_2fa_email(email, code)
-
     return {"status": "2fa_required", "message": "Verification code sent to your email."}
 
 
@@ -280,10 +331,12 @@ async def auth_verify_2fa(body: Verify2FARequest, request: Request):
     }
 
     response = JSONResponse({"status": "success", "message": "Authentication successful."})
+    is_production = IS_PRODUCTION
     response.set_cookie(
         key=SESSION_COOKIE_NAME,
         value=session_token,
         httponly=True,
+        secure=is_production,
         samesite="lax",
         max_age=24 * 60 * 60,  # 24 hours
         path="/",
@@ -317,10 +370,9 @@ async def auth_middleware(request: Request, call_next):
         if path.startswith(prefix):
             return await call_next(request)
 
-    # Allow dashboard API routes locally so the UI can fetch leads/stats/config
-    for prefix in PUBLIC_API_PREFIXES:
-        if path == prefix or path.startswith(prefix + "/"):
-            return await call_next(request)
+    # Allow public appointment booking from landing page
+    if request.method == "POST" and path == "/api/appointments":
+        return await call_next(request)
 
     # For protected routes, check session cookie
     token = request.cookies.get(SESSION_COOKIE_NAME)
@@ -341,6 +393,15 @@ async def auth_middleware(request: Request, call_next):
         )
 
     return RedirectResponse(url="/login", status_code=302)
+
+
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    return response
 
 
 # ============================================================
@@ -379,7 +440,7 @@ def build_fallback_analysis(lead: LeadRequest, error: str = "") -> dict:
     msg_preview = lead.message[:200] + ("..." if len(lead.message) > 200 else "")
     mock["draft_reply"] = (
         f"<p>Dear {lead.name},</p>"
-        f"<p>Thank you for reaching out to <strong>QuantumAI</strong>. "
+        f"<p>Thank you for reaching out to <strong>FantomAI</strong>. "
         f"We received your inquiry from {company} regarding:</p>"
         f"<p><em>\"{msg_preview}\"</em></p>"
         f"<p>Our team specializes in AI automation — including email workflows, "
@@ -387,7 +448,7 @@ def build_fallback_analysis(lead: LeadRequest, error: str = "") -> dict:
         f"We'd love to learn more about your requirements and timeline.</p>"
         f"<p>We'll review your message and follow up within one business day "
         f"to discuss next steps and schedule a brief discovery call.</p>"
-        f"<p>Best regards,<br><strong>The QuantumAI Team</strong></p>"
+        f"<p>Best regards,<br><strong>The FantomAI Team</strong></p>"
     )
     if error:
         mock["urgency_rationale"] = f"Gemini temporarily unavailable; used smart fallback. ({error[:120]})"
@@ -400,8 +461,10 @@ def analyze_lead_with_ai(lead: LeadRequest, api_key: str) -> dict:
 
     client = genai.Client(api_key=api_key)
 
+    calendar_url = os.getenv("CALENDAR_URL", "").strip()
+
     prompt = f"""
-    You are an AI Sales Assistant working for QuantumAI — an AI Automation Agency. 
+    You are an AI Sales Assistant working for FantomAI — an AI Automation Agency. 
     Analyze the following incoming lead submission and classify/summarize it.
     
     Lead Info:
@@ -417,8 +480,9 @@ def analyze_lead_with_ai(lead: LeadRequest, api_key: str) -> dict:
     IMPORTANT for the draft_reply field:
     - Write a highly personalized, professional email reply addressing the lead's specific request.
     - Format the reply as clean HTML using <p>, <br>, and <strong> tags for readability.
-    - Sign off as "The QuantumAI Team" — never use placeholders like [Your Name] or [Agency Name].
+    - Sign off as "The FantomAI Team" — never use placeholders like [Your Name] or [Agency Name].
     - Do NOT include a subject line in the body.
+    - If you invite the lead to book a call, embed this booking link directly (as an anchor tag or plain URL) instead of using a placeholder like [link to calendar]: {calendar_url}
     """
 
     last_error = ""
@@ -485,36 +549,27 @@ def get_mock_analysis(lead: LeadRequest) -> dict:
         "draft_reply": draft
     }
 
-# Helper to forward analyzed leads to n8n in the background
-def build_n8n_payload(lead_entry: dict) -> dict:
-    """Flat email fields so n8n Gmail node can use simple expressions."""
+# Helper to email the AI-drafted reply to the lead directly via SMTP
+def send_lead_reply_email(lead_entry: dict):
+    """Background task: send the AI-drafted reply to the lead via SMTP."""
+    email = lead_entry.get("email", "")
+    if not email:
+        print("[EMAIL] Lead reply skipped: no recipient email.")
+        return
     analysis = lead_entry.get("ai_analysis", {})
     draft = analysis.get("draft_reply", "")
-    return {
-        **lead_entry,
-        "to_email": lead_entry.get("email", ""),
-        "email_subject": "QuantumAI | Lead Intake Proposal & Next Steps",
-        "email_html": draft,
-    }
-
-def forward_to_n8n_background(payload: dict):
-    n8n_url = os.getenv("N8N_WEBHOOK_URL")
-    if not n8n_url or not n8n_url.strip():
-        print("n8n forwarding skipped: N8N_WEBHOOK_URL is not configured.")
+    if not draft:
+        print(f"[EMAIL] Lead reply skipped for {email}: no draft reply generated.")
         return
-    
     try:
-        req = urllib.request.Request(
-            n8n_url.strip(),
-            data=json.dumps(build_n8n_payload(payload)).encode('utf-8'),
-            headers={'Content-Type': 'application/json'},
-            method='POST'
+        email_service.send_email(
+            to=email,
+            subject="FantomAI | Lead Intake Proposal & Next Steps",
+            html_body=draft,
         )
-        with urllib.request.urlopen(req, timeout=10) as response:
-            res_data = response.read().decode('utf-8')
-            print(f"n8n Webhook triggered successfully. Status: {response.status}, Response: {res_data}")
-    except Exception as e:
-        print(f"Error calling n8n webhook: {e}")
+        print(f"[EMAIL] Lead reply sent to {email}")
+    except email_service.EmailError as e:
+        print(f"[EMAIL] Failed to send lead reply to {email}: {e}")
 
 # Webhook Endpoint (Receives leads from forms/bots)
 @app.post("/webhook")
@@ -543,12 +598,14 @@ async def receive_webhook(lead: LeadRequest, background_tasks: BackgroundTasks):
         "read": False
     }
     
-    repository.create(lead_entry)
+    created = repository.create(lead_entry)
+    if not created:
+        raise HTTPException(status_code=500, detail="Failed to persist lead to the database. Please try again.")
     ts = lead_entry["timestamp"]
     lead_entry["timestamp"] = ts.strftime("%Y-%m-%dT%H:%M:%S.") + f"{ts.microsecond:06d}Z"
     
-    # Forward to n8n in background task
-    background_tasks.add_task(forward_to_n8n_background, lead_entry)
+    # Email the AI-drafted reply to the lead via SMTP in the background
+    background_tasks.add_task(send_lead_reply_email, lead_entry)
     
     return {"status": "success", "lead": lead_entry}
 
@@ -590,31 +647,18 @@ async def get_stats():
 async def get_config():
     api_key = os.getenv("GEMINI_API_KEY")
     has_key = api_key is not None and len(api_key.strip()) > 0
-    n8n_url = os.getenv("N8N_WEBHOOK_URL", "")
     return {
         "configured": has_key,
-        "n8n_configured": len(n8n_url.strip()) > 0,
-        "n8n_url": n8n_url
+        "email_configured": email_service.is_smtp_configured()
     }
 
-# Endpoint to save config (API key and optional n8n URL)
+# Endpoint to save config (API key and SMTP settings)
 @app.post("/api/config")
 async def save_config(config: dict):
-    new_key = config.get("api_key", "").strip()
-    n8n_url = config.get("n8n_url", "").strip()
-    
-    try:
-        if new_key:
-            set_key(ENV_FILE, "GEMINI_API_KEY", new_key)
-            os.environ["GEMINI_API_KEY"] = new_key
-        
-        # Save n8n webhook URL
-        set_key(ENV_FILE, "N8N_WEBHOOK_URL", n8n_url)
-        os.environ["N8N_WEBHOOK_URL"] = n8n_url
-        
-        return {"status": "success", "message": "Configuration updated successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to update env file: {str(e)}")
+    raise HTTPException(
+        status_code=403,
+        detail="Configuration changes are not allowed via API. Use environment variables."
+    )
 
 # Delete a lead
 @app.delete("/api/leads/{lead_id}")
@@ -634,8 +678,47 @@ async def mark_lead_read(lead_id: str):
 # Appointment Endpoints
 # ============================================================
 
+# Helper to email appointment confirmation to the booker via SMTP
+def send_appointment_confirmation_email(appointment: dict):
+    """Background task: send a booking confirmation to the requester via SMTP."""
+    email = appointment.get("email", "")
+    if not email:
+        print("[EMAIL] Appointment confirmation skipped: no recipient email.")
+        return
+    name = appointment.get("name", "there")
+    date = appointment.get("appointment_date", "")
+    time_window = appointment.get("time_window", "")
+    goal = appointment.get("automation_goal", "")
+
+    html_body = f"""
+    <div style="font-family: 'Segoe UI', sans-serif; max-width: 520px; margin: auto; padding: 24px; background: #0a0914; color: #f3f4f6; border-radius: 12px;">
+        <h2 style="text-align: center; margin-bottom: 8px;">Fantom<span style="color: #6366f1;">AI</span></h2>
+        <p style="text-align: center; color: #9ca3af; font-size: 14px;">Genesis Session Request Confirmed</p>
+        <p>Hi {name},</p>
+        <p>Thank you for booking a <strong>Genesis Session</strong> with the FantomAI team. Here are your details:</p>
+        <div style="background: rgba(99, 102, 241, 0.12); border: 1px solid rgba(99, 102, 241, 0.35); border-radius: 10px; padding: 16px; margin: 16px 0;">
+            <p style="margin: 4px 0;"><strong>Date:</strong> {date}</p>
+            <p style="margin: 4px 0;"><strong>Time window:</strong> {time_window}</p>
+            <p style="margin: 4px 0;"><strong>Automation goal:</strong> {goal}</p>
+        </div>
+        <p>Our team will contact you shortly to confirm the session and discuss your automation goals.</p>
+        <p style="color: #9ca3af; font-size: 13px;">Best regards,<br><strong>The FantomAI Team</strong></p>
+    </div>
+    """
+
+    try:
+        email_service.send_email(
+            to=email,
+            subject="FantomAI | Genesis Session Confirmation",
+            html_body=html_body,
+        )
+        print(f"[EMAIL] Appointment confirmation sent to {email}")
+    except email_service.EmailError as e:
+        print(f"[EMAIL] Failed to send appointment confirmation to {email}: {e}")
+
+
 @app.post("/api/appointments")
-async def create_appointment(body: AppointmentRequest):
+async def create_appointment(body: AppointmentRequest, background_tasks: BackgroundTasks):
     appointment_entry = {
         "id": datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"),
         "name": body.name.strip(),
@@ -650,6 +733,12 @@ async def create_appointment(body: AppointmentRequest):
         from repository_appointments import _validate_appointment
         err = _validate_appointment(appointment_entry)
         raise HTTPException(status_code=400, detail=err or "Invalid appointment data")
+    if result == {}:
+        raise HTTPException(status_code=500, detail="Failed to persist appointment to the database. Please try again.")
+
+    # Email the confirmation to the booker via SMTP in the background
+    background_tasks.add_task(send_appointment_confirmation_email, result)
+
     return {"status": "success", "appointment": result}
 
 
@@ -675,6 +764,11 @@ async def mark_appointment_read(appointment_id: str):
     if not repository_appointments.mark_read(appointment_id):
         raise HTTPException(status_code=404, detail="Appointment not found")
     return {"status": "success", "message": "Appointment marked as read"}
+
+
+@app.get("/health")
+async def health_check():
+    return {"status": "ok"}
 
 
 # Mount Static Files

@@ -1,14 +1,14 @@
 <div align="center">
 
-<img src="https://img.shields.io/badge/QuantumAI-Lead%20Automation-6C63FF?style=for-the-badge&logoColor=white" />
+<img src="https://img.shields.io/badge/FantomAI-Lead%20Automation-6C63FF?style=for-the-badge&logoColor=white" />
 
 # 🤖 Lead Server Automation
-### *AI-Powered Lead Intake, Triage & Auto-Reply Engine for QuantumAI*
+### *AI-Powered Lead Intake, Triage & Auto-Reply Engine for FantomAI*
 
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Gemini AI](https://img.shields.io/badge/Google%20Gemini-2.5%20Flash-4285F4?style=flat-square&logo=google&logoColor=white)](https://ai.google.dev)
-[![n8n](https://img.shields.io/badge/n8n-Workflow-EA4B71?style=flat-square&logo=n8n&logoColor=white)](https://n8n.io)
+[![SMTP](https://img.shields.io/badge/SMTP-Zoho%20Mail-4A154B?style=flat-square&logo=gmail&logoColor=white)](https://www.zoho.com/mail/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 
 > **Stop manually replying to every lead. Let AI do it — instantly.**  
@@ -27,7 +27,7 @@
 - [Project Structure](#-project-structure)
 - [Getting Started](#-getting-started)
 - [API Reference](#-api-reference)
-- [n8n Workflow Integration](#-n8n-workflow-integration)
+- [SMTP Email Delivery](#-smtp-email-delivery)
 - [Admin Dashboard](#-admin-dashboard)
 - [Configuration](#️-configuration)
 - [Deployment](#-deployment)
@@ -40,12 +40,12 @@
 
 Running a startup means every lead matters — but manually reading, categorizing, and replying to every form submission is a time sink. Leads go cold. Replies get delayed. High-priority prospects don't get the urgency they deserve.
 
-**Lead Server Automation** fixes this for QuantumAI by creating a fully automated pipeline:
+**Lead Server Automation** fixes this for FantomAI by creating a fully automated pipeline:
 
-1. A visitor fills out the **lead capture form** on the QuantumAI website
+1. A visitor fills out the **lead capture form** on the FantomAI website
 2. The server **instantly triages** the lead using Google Gemini AI — scoring urgency, classifying intent, and generating a personalized email draft
 3. The lead is **stored in the dashboard** with full AI analysis so nothing falls through the cracks
-4. A **personalized reply email is automatically sent** via n8n + Gmail — without anyone lifting a finger
+4. A **personalized reply email is automatically sent** via SMTP (Zoho Mail) — without anyone lifting a finger
 
 ---
 
@@ -53,7 +53,7 @@ Running a startup means every lead matters — but manually reading, categorizin
 
 ```
 ┌─────────────────────┐
-│   QuantumAI Website  │  ← Lead fills the contact/booking form
+│   FantomAI Website  │  ← Lead fills the contact/booking form
 │   (landing.html)     │
 └────────┬────────────┘
          │ POST /webhook
@@ -68,18 +68,18 @@ Running a startup means every lead matters — but manually reading, categorizin
 │     ├── 2-3 Bullet Summary of the request          │
 │     └── Personalized HTML Email Draft              │
 │  3. Save enriched lead to local database            │
-│  4. Fire background task → n8n Webhook             │
+│  4. Fire background task → direct SMTP email       │
 └───────────┬─────────────────────────────────────────┘
             │
     ┌───────┴────────┐
     │                │
     ▼                ▼
 ┌────────┐    ┌──────────────────────────────┐
-│leads.  │    │  n8n Automation Workflow     │
-│json    │    │  └── Gmail Node              │
-│(local  │    │       └── Sends personalized │
-│  DB)   │    │           reply to the lead  │
-└────────┘    └──────────────────────────────┘
+│leads.  │    │  SMTP (Zoho Mail)            │
+│json    │    │  └── Sends personalized      │
+│(local  │    │      HTML reply to the lead  │
+│  DB)   │    └──────────────────────────────┘
+└────────┘
     │
     ▼
 ┌─────────────────────┐
@@ -102,10 +102,11 @@ Running a startup means every lead matters — but manually reading, categorizin
 - If Gemini is overloaded (503) or rate-limited (429), the system automatically **retries with exponential backoff** and **falls back through model tiers**: `gemini-2.5-flash → gemini-2.0-flash → gemini-1.5-flash`
 - If no API key is configured at all, a **rule-based mock analyzer** kicks in so the server still runs and classifies leads intelligently in offline/demo mode
 
-### 📬 Automated Email via n8n
-- Analyzed leads are forwarded to an **n8n webhook** in a background task (non-blocking)
-- The included `My workflow.json` can be imported directly into n8n — it picks up the AI-generated HTML email and fires it to the lead via Gmail
-- The email body is the AI's personalized draft — signed as *The QuantumAI Team*
+### 📬 Automated Email via SMTP
+- Analyzed leads get a personalized HTML reply sent **directly from the backend** via SMTP (Zoho Mail) in a background task (non-blocking)
+- Appointment bookings also trigger a confirmation email to the requester
+- The email body is the AI's personalized draft — signed as *The FantomAI Team*
+- The sender name/address are set via `SMTP_FROM_NAME` and `SMTP_FROM_EMAIL`
 
 ### 📊 Admin Dashboard
 - A clean, real-time dashboard at `/` shows all incoming leads
@@ -114,7 +115,7 @@ Running a startup means every lead matters — but manually reading, categorizin
 - Leads can be deleted individually
 
 ### 🔧 Zero-Restart Config
-- API keys and n8n webhook URLs can be updated via the `/api/config` endpoint — no server restart needed
+- API keys and SMTP settings can be updated via environment variables — no server restart needed
 - All config is persisted to `.env` automatically
 
 ---
@@ -126,7 +127,7 @@ Running a startup means every lead matters — but manually reading, categorizin
 | **Backend** | Python 3.10+, FastAPI, Uvicorn |
 | **AI Engine** | Google Gemini (`google-genai` SDK) — `gemini-2.5-flash` |
 | **Data Validation** | Pydantic v2 |
-| **Automation** | n8n (self-hosted or cloud), Gmail node |
+| **Email Delivery** | Direct SMTP (Zoho Mail) via `smtplib` |
 | **Storage** | JSON flat-file (local, zero-dependency) |
 | **Frontend** | Vanilla HTML/CSS/JS (served as static files) |
 | **Deployment** | Procfile-ready (Railway / Render / Heroku compatible) |
@@ -140,10 +141,10 @@ Running a startup means every lead matters — but manually reading, categorizin
 Lead-Server-Automation/
 │
 ├── app.py                  # Core FastAPI application — all routes & logic
+├── email_service.py        # Central SMTP email service (send_email)
 ├── leads.json              # Local lead database (auto-created on first run)
 ├── requirements.txt        # Python dependencies
 ├── Procfile                # Deployment entry point (Railway/Render/Heroku)
-├── My workflow.json        # Importable n8n automation workflow
 ├── README_DEPLOY.md        # Deployment-specific notes
 ├── .gitignore
 │
@@ -160,7 +161,7 @@ Lead-Server-Automation/
 
 - Python 3.10+
 - A [Google AI Studio](https://aistudio.google.com/) account for a free Gemini API key
-- (Optional) [n8n](https://n8n.io) instance for email automation
+- A Zoho Mail account with SMTP access enabled (for auto-reply and appointment emails)
 
 ### 1. Clone the Repository
 
@@ -177,14 +178,21 @@ pip install -r requirements.txt
 
 ### 3. Configure Environment
 
-Create a `.env` file in the project root (the server will auto-create one on first run, but you can do it manually):
+Create a `.env` file in the project root for **local development only** (production uses Render environment variables):
 
 ```env
 GEMINI_API_KEY=your_gemini_api_key_here
-N8N_WEBHOOK_URL=your_n8n_webhook_url_here
+
+SMTP_HOST=smtp.zoho.com
+SMTP_PORT=587
+SMTP_USERNAME=team@yourdomain.com
+SMTP_PASSWORD=your_smtp_app_password
+SMTP_FROM_EMAIL=team@yourdomain.com
+SMTP_FROM_NAME=Fantom AI
+SMTP_USE_TLS=true
 ```
 
-Or configure it live through the admin dashboard after starting the server.
+The server never creates or modifies `.env` at runtime. Configuration is read from environment variables at startup.
 
 ### 4. Run the Server
 
@@ -211,7 +219,7 @@ uvicorn app:app --host 0.0.0.0 --port 8000 --reload
 ## 📡 API Reference
 
 ### `POST /webhook`
-Receives a new lead, runs AI analysis, saves it, and triggers the n8n email workflow.
+Receives a new lead, runs AI analysis, saves it, and emails the AI-drafted reply to the lead via SMTP.
 
 **Request Body:**
 ```json
@@ -238,7 +246,7 @@ Receives a new lead, runs AI analysis, saves it, and triggers the n8n email work
       "urgency": "Medium",
       "urgency_rationale": "Pricing/solution inquiry — important but not time-critical.",
       "category": "Inquiry",
-      "summary": "• Client is exploring AI automation for their sales pipeline\n• Wants to understand QuantumAI's service offerings\n• Likely evaluating multiple vendors",
+      "summary": "• Client is exploring AI automation for their sales pipeline\n• Wants to understand FantomAI's service offerings\n• Likely evaluating multiple vendors",
       "draft_reply": "<p>Dear Sarah,</p><p>Thank you for reaching out...</p>",
       "ai_status": "AI Evaluated (gemini-2.5-flash)"
     }
@@ -267,37 +275,29 @@ Returns aggregate dashboard statistics.
 ```
 
 ### `GET /api/config`
-Returns current configuration status (key presence only, never the key itself).
-
-### `POST /api/config`
-Updates the Gemini API key and/or n8n webhook URL at runtime without restarting the server.
+Returns current configuration status (presence only — never returns keys, URLs, or secrets).
 
 ```json
 {
-  "api_key": "AIza...",
-  "n8n_url": "https://your-n8n.instance/webhook/xyz"
+  "configured": true,
+  "email_configured": true
 }
 ```
 
+### `POST /api/config`
+**Disabled for security.** Configuration cannot be changed through an HTTP endpoint. Update `GEMINI_API_KEY`, `SMTP_*`, and other settings via environment variables instead. This endpoint always returns `403 Forbidden`.
+
 ---
 
-## 🔗 n8n Workflow Integration
+## 📬 SMTP Email Delivery
 
-The repo includes `My workflow.json` — a pre-built n8n workflow you can import in two steps:
+All transactional email is sent directly from the FastAPI backend via SMTP (`smtplib`) — no n8n, no external workflow. This covers:
 
-1. In your n8n instance, go to **Workflows → Import from File**
-2. Select `My workflow.json`
+- **Lead auto-replies** — when a lead submits the web form, the AI-generated personalized draft is emailed to the lead (subject: *FantomAI | Lead Intake Proposal & Next Steps*)
+- **Appointment confirmations** — when a visitor books a Genesis Session, a confirmation email is sent to them (subject: *FantomAI | Genesis Session Confirmation*)
+- **2FA login codes** — sent to the admin's email on dashboard login
 
-The workflow listens for the webhook payload from this server and uses the `email_html` field (the AI-generated reply) to send a personalized email to the lead via Gmail.
-
-**Payload fields the n8n workflow uses:**
-
-| Field | Description |
-|-------|-------------|
-| `to_email` | Lead's email address |
-| `email_subject` | Pre-set subject line |
-| `email_html` | AI-generated personalized HTML email body |
-| `name`, `company` | For workflow conditions/logging |
+Emails are delivered as HTML with a plain-text fallback, sent from `SMTP_FROM_NAME <SMTP_FROM_EMAIL>`, and failures are logged server-side without exposing raw SMTP errors to users.
 
 ---
 
@@ -308,64 +308,74 @@ The dashboard (served at `/`) gives a full CRM-style view of all incoming leads:
 - **Stats cards** — total leads, urgency breakdown, category distribution
 - **Lead cards** — each showing name, company, source, urgency badge (color-coded), AI category tag, AI summary bullets, and the full draft reply
 - **Delete** — remove leads you've handled or marked as spam
-- **Config panel** — update your Gemini API key and n8n URL without touching `.env`
+- **Config panel** — read-only status indicator for Gemini and SMTP email. Secrets are managed via environment variables only.
 
 ---
 
 ## 🗂️ Configuration
 
+All configuration is read from environment variables. Nothing is stored in `.env` at runtime.
+
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `GEMINI_API_KEY` | Recommended | Google Gemini API key. Without it, the server uses a rule-based mock analyzer. |
-| `N8N_WEBHOOK_URL` | Optional | Your n8n webhook endpoint. Without it, leads are stored but emails are not sent automatically. |
+| `ENVIRONMENT` | Optional | `production` (default) or `development`. Development enables the local JSON fallback and localhost CORS. |
+| `SUPABASE_URL` | Production | Your Supabase project URL. |
+| `SUPABASE_SERVICE_KEY` | Production | Supabase service-role key (server-side only, never exposed to the browser). |
+| `GEMINI_API_KEY` | Recommended | Google Gemini API key. Without it, the server uses a rule-based fallback analyzer. |
+| `ADMIN_EMAIL_1` / `ADMIN_PASSWORD_1` | Production | First admin account for the dashboard (hashed with bcrypt in memory). |
+| `ADMIN_EMAIL_2` / `ADMIN_PASSWORD_2` | Optional | Second admin account. |
+| `SMTP_HOST` | Production | SMTP server host. Use `smtp.zoho.com` for free Zoho Mail plans, `smtppro.zoho.com` for paid plans. |
+| `SMTP_PORT` | Optional | SMTP port (default `587`). |
+| `SMTP_USERNAME` | Production | SMTP username (full email address, e.g. `team@fantomai.site`). |
+| `SMTP_PASSWORD` | Production | SMTP password or app-specific password. |
+| `SMTP_FROM_EMAIL` | Production | "From" address. Defaults to `SMTP_USERNAME` if not set. |
+| `SMTP_FROM_NAME` | Optional | "From" display name (default `Fantom AI`). |
+| `SMTP_USE_TLS` | Optional | `true` for STARTTLS (default), `false` for implicit SSL. |
+| `SMTP_TIMEOUT` | Optional | SMTP connection timeout in seconds (default `20`). |
+| `CALENDAR_URL` | Optional | Cal.com (or other) booking link injected into AI-generated email replies in place of a calendar placeholder. |
 
-Both can be set in `.env` or updated live via `POST /api/config`.
+Never commit real values for these variables. Set them in the Render dashboard under **Environment**.
+
+Never commit real values for these variables. Set them in the Render dashboard under **Environment**.
 
 ---
 
 ## ☁️ Deployment
 
-The project includes a `Procfile` making it ready to deploy on:
+Deployment target: **Render Web Service**.
 
-- **[Railway](https://railway.app)** — connect repo, add env vars, deploy
-- **[Render](https://render.com)** — add as a Web Service, set `GEMINI_API_KEY` in environment
-- **[Heroku](https://heroku.com)** — `git push heroku main`
+1. Create a Supabase project and run `schema.sql` in the **Supabase SQL Editor**.
+2. Deploy this repo to Render as a Web Service with:
+   - **Build Command:** `pip install -r requirements.txt`
+   - **Start Command:** `uvicorn app:app --host 0.0.0.0 --port $PORT`
+3. Add all configuration variables from the table above in Render **Environment**.
+4. Point the custom domain (`https://fantomai.site`) at the Render service.
 
 The Procfile starts the server with:
 ```
 web: uvicorn app:app --host 0.0.0.0 --port $PORT
 ```
 
-> ⚠️ **Note:** When deploying, `leads.json` lives on the ephemeral filesystem. Your data will reset on each redeploy. See the [Future Roadmap](#-future-roadmap) for the recommended upgrade path.
+> ⚠️ **Migrating existing data:** the app previously stored leads/appointments in `leads.json` and `appointments.json`. Run `python migrate_json_to_supabase.py` (with `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` set) to copy that data into Supabase. It is idempotent and will not delete the JSON files.
+
+> ⚠️ **Sessions:** authentication sessions are stored in memory on a single instance. This works for a single Render Web Service but is **not** suitable for multi-instance scaling — restarting the service logs all users out.
+
+> ⚠️ **2FA delivery:** two-factor codes are sent via SMTP and are **never** logged in production. If SMTP is not configured (`SMTP_HOST`/`SMTP_USERNAME`/`SMTP_PASSWORD`/`SMTP_FROM_EMAIL`), the login endpoint returns an error and no code is delivered — the dashboard cannot be accessed until SMTP is set up. In development mode the code is printed to the server console.
 
 ---
 
 ## 🛣 Future Roadmap
 
-This project is intentionally lean for a solo startup context. As QuantumAI scales, here are the natural evolution points:
-
-### 🗄️ Database — Replace `leads.json` with a Real Database
-The current flat-file approach works perfectly for low-to-medium traffic. However, concurrent webhook hits (multiple form submissions at the same time) can cause a race condition where two writes happen simultaneously and one overwrites the other.
-
-**Recommended upgrades by scale:**
-
-| Traffic Level | Recommendation |
-|--------------|----------------|
-| Low-Medium (< 100 leads/day) | SQLite via `aiosqlite` — zero-infrastructure, just swap the file |
-| Medium (100–1000 leads/day) | **Supabase** (hosted Postgres) — free tier, real-time dashboard, REST API out of the box, zero DevOps |
-| High (1000+ leads/day) | Dedicated PostgreSQL (via Railway, Render, or Neon) with async SQLAlchemy |
-
-Supabase is the sweet spot: you get a proper relational database, a built-in dashboard to view leads without the custom frontend, Row Level Security, and webhook support — all free up to 50,000 rows.
+This project is intentionally lean for a solo startup context. As FantomAI scales, here are the natural evolution points:
 
 ### 🔐 Security Hardening
-- Add API key authentication on `/api/config` (currently unprotected — anyone with the URL can overwrite your Gemini key)
-- Restrict CORS from `allow_origins=["*"]` to your actual frontend domain in production
+- Move sessions from in-memory storage to a persistent store (e.g., Redis) to support multi-instance scaling
 - Add rate limiting on `/webhook` to prevent spam submissions
 
 ### 🧠 AI Enhancements
 - **Lead scoring** — a numerical score (0–100) in addition to urgency tier, based on company size signals, message specificity, and intent keywords
 - **Duplicate detection** — flag leads from the same email address
-- **Follow-up scheduling** — if a High urgency lead hasn't been responded to in 2 hours, trigger a Slack/email alert via n8n
+- **Follow-up scheduling** — if a High urgency lead hasn't been responded to in 2 hours, trigger a Slack/email alert
 
 ### 📧 Email Improvements
 - **Human-in-the-loop mode** — instead of auto-sending, send the draft to your own inbox first for one-click approval
@@ -380,7 +390,7 @@ Supabase is the sweet spot: you get a proper relational database, a built-in das
 
 ## 🤝 Contributing
 
-This is an internal QuantumAI project, but contributions, suggestions, and issue reports are welcome.
+This is an internal FantomAI project, but contributions, suggestions, and issue reports are welcome.
 
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/your-feature-name`
@@ -397,7 +407,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 <div align="center">
 
-Built with ⚡ by **[Moaz Kashif](https://github.com/MoazKashif)** for **QuantumAI**
+Built with ⚡ by **[Moaz Kashif](https://github.com/MoazKashif)** for **FantomAI**
 
 *If this saved you time, consider giving the repo a ⭐*
 

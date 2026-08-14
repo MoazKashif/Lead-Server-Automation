@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuantumAI | Lead Automation Agent Dashboard</title>
+    <title>FantomAI | Lead Automation Agent Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,8 +16,8 @@
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
             <div class="brand">
-                <div class="logo">Q</div>
-                <h2>Quantum<span>AI</span></h2>
+                <div class="logo">F</div>
+                <h2>Fantom<span>AI</span></h2>
             </div>
             
             <nav class="nav-menu">
@@ -291,23 +291,23 @@
                             <div class="form-group">
                                 <label for="api-key-input">Gemini API Key</label>
                                 <div class="api-key-input-wrapper">
-                                    <input type="password" id="api-key-input" placeholder="AIzaSy...">
+                                    <input type="password" id="api-key-input" placeholder="AIzaSy..." disabled>
                                     <button type="button" class="btn-toggle-visibility" onclick="togglePasswordVisibility()">
                                         <i data-lucide="eye" id="eye-icon"></i>
                                     </button>
                                 </div>
-                                <span class="input-help">Get a free key from Google AI Studio. The key will be saved securely to your local <code>.env</code> file.</span>
+                                <span class="input-help">API keys are managed via server environment variables. Contact your administrator to update.</span>
                             </div>
 
                             <div class="form-group" style="margin-top: 1.5rem;">
-                                <label for="n8n-url-input">n8n Webhook URL (Optional Integration)</label>
-                                <input type="url" id="n8n-url-input" placeholder="https://your-n8n-instance.com/webhook/..." style="width: 100%;">
-                                <span class="input-help">Paste your n8n Production Webhook URL to automatically forward lead data and AI drafts to n8n workflows.</span>
+                                <label for="smtp-status-input">Email Delivery (SMTP / Zoho Mail)</label>
+                                <input type="text" id="smtp-status-input" placeholder="Checking configuration..." disabled>
+                                <span class="input-help">Emails are sent directly from the backend via SMTP. Managed via server environment variables.</span>
                             </div>
                             
                             <button type="submit" class="btn btn-primary" id="btn-save-config" style="margin-top: 1.5rem;">
-                                <i data-lucide="save"></i>
-                                <span>Save Configuration</span>
+                                <i data-lucide="info"></i>
+                                <span>Managed by Environment Variables</span>
                             </button>
                         </form>
                     </div>
@@ -480,8 +480,18 @@
                     alertEl.classList.remove('hidden');
                 }
 
-                if (data.n8n_url) {
-                    document.getElementById('n8n-url-input').value = data.n8n_url;
+                // SMTP email status (no credentials exposed)
+                const smtpInput = document.getElementById('smtp-status-input');
+                if (smtpInput) {
+                    if (data.email_configured) {
+                        smtpInput.value = "Configured";
+                        smtpInput.placeholder = "Configured (set via environment variable)";
+                        smtpInput.style.borderColor = "#22c55e";
+                    } else {
+                        smtpInput.value = "Not configured";
+                        smtpInput.placeholder = "Not configured (set SMTP_HOST/SMTP_USERNAME/SMTP_PASSWORD)";
+                        smtpInput.style.borderColor = "#ef4444";
+                    }
                 }
             } catch (err) {
                 console.error("Error checking configuration:", err);
@@ -842,40 +852,7 @@
         // Save Gemini API Key Configuration
         async function saveApiKey(event) {
             event.preventDefault();
-            const btn = document.getElementById('btn-save-config');
-            btn.disabled = true;
-            btn.innerHTML = `Saving...`;
-
-            const apiKey = document.getElementById('api-key-input').value.trim();
-            const n8nUrl = document.getElementById('n8n-url-input').value.trim();
-
-            try {
-                const res = await fetch('/api/config', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        api_key: apiKey,
-                        n8n_url: n8nUrl
-                    })
-                });
-
-                if (res.ok) {
-                    showToast("Configuration updated successfully!");
-                    document.getElementById('api-key-input').value = '';
-                    await checkApiConfig();
-                    await fetchLeadsData();
-                    switchTab('dashboard');
-                } else {
-                    const err = await res.json();
-                    alert("Error setting configuration: " + (err.detail || "Server error"));
-                }
-            } catch (err) {
-                alert("Network error: " + err.message);
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = `<i class="lucide lucide-save"></i> <span>Save Configuration</span>`;
-                lucide.createIcons();
-            }
+            alert('Configuration is managed via environment variables on the server. Please update GEMINI_API_KEY and SMTP settings in your Render environment settings.');
         }
 
         // Copy webhook URL

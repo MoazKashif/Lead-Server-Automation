@@ -1,1 +1,10 @@
 .env
+*.env
+__pycache__/
+*.pyc
+server.log
+.venv/
+
+# Lead/appointment data (personal data must not be committed)
+leads.json
+appointments.json

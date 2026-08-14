@@ -1,73 +1,51 @@
 import os
 import sys
+import logging
 from supabase import create_client, Client
+
+logger = logging.getLogger(__name__)
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 
-supabase: Client | None = (
-    create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
-    if SUPABASE_URL and SUPABASE_SERVICE_KEY
-    else None
-)
+_IS_PRODUCTION = os.getenv("ENVIRONMENT", "production").lower() == "production"
 
-APPOINTMENTS_DDL = """
-CREATE TABLE IF NOT EXISTS appointments (
-    id VARCHAR(30) PRIMARY KEY,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    appointment_date DATE NOT NULL,
-    time_window VARCHAR(100) NOT NULL,
-    automation_goal TEXT NOT NULL DEFAULT '',
-    read BOOLEAN DEFAULT FALSE,
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-CREATE INDEX IF NOT EXISTS idx_appointments_created_at ON appointments(created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_appointments_email ON appointments(email);
-CREATE INDEX IF NOT EXISTS idx_appointments_date ON appointments(appointment_date);
-CREATE INDEX IF NOT EXISTS idx_appointments_read ON appointments(read);
-"""
+supabase: Client | None = None
+if SUPABASE_URL and SUPABASE_SERVICE_KEY:
+    try:
+        supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+    except Exception as exc:
+        logger.error(f"Failed to create Supabase client: {exc}")
+        if _IS_PRODUCTION:
+            print(f"[db] FATAL: Cannot connect to Supabase in production: {exc}", file=sys.stderr)
+else:
+    if _IS_PRODUCTION:
+        print("[db] WARNING: Supabase credentials not configured in production!", file=sys.stderr)
+    else:
+        print("[db] Supabase not configured; JSON fallback will be used for development.")
 
 
 def init_db():
-    """Create tables if they don't exist. Tries psycopg2 first, falls back gracefully."""
-    sql = APPOINTMENTS_DDL
-    # Try direct psycopg2 connection first
-    try:
-        import psycopg2
-        db_url = os.getenv("SUPABASE_DATABASE_URL", "")
-        if db_url:
-            conn = psycopg2.connect(db_url, connect_timeout=5)
-            with conn.cursor() as cur:
-                cur.execute(sql)
-            conn.commit()
-            conn.close()
-            print("[db] Appointments table created via direct connection.")
-            return
-    except ImportError:
-        pass
-    except Exception as exc:
-        print(f"[db] Direct connection failed ({exc}); trying REST API...")
+    """Verify database connectivity. Tables must be created via Supabase SQL Editor."""
+    if not supabase:
+        if _IS_PRODUCTION:
+            raise RuntimeError(
+                "[db] FATAL: Supabase is not configured in production. "
+                "Set SUPABASE_URL and SUPABASE_SERVICE_KEY environment variables. "
+                "Refusing to start to prevent data loss."
+            )
+        logger.info("Running without Supabase (development mode with JSON fallback).")
+        return
 
-    # Fallback: try via supabase-py REST API (works over IPv4 HTTPS)
-    if supabase:
-        try:
-            resp = supabase.table("appointments").select("*").limit(1).execute()
-            print("[db] Appointments table already exists.")
-            return
-        except Exception:
-            pass
-        # Try creating the table via PostgREST schema endpoint
-        try:
-            client = supabase.postgrest
-            raw = client.request("POST", "/rpc/", json={})
-        except Exception:
-            pass
-        print(
-            "[db] Could not create appointments table via REST API.\n"
-            f"  Run this SQL in your Supabase Dashboard > SQL Editor:\n{APPOINTMENTS_DDL}",
-            file=sys.stderr,
-        )
-    else:
-        print("[db] No Supabase credentials configured; using JSON fallback for appointments.")
+    # Verify connectivity by checking if tables exist
+    try:
+        supabase.table("leads").select("id").limit(1).execute()
+        print("[db] Leads table verified.")
+    except Exception as exc:
+        print(f"[db] WARNING: Could not verify leads table: {exc}", file=sys.stderr)
+
+    try:
+        supabase.table("appointments").select("id").limit(1).execute()
+        print("[db] Appointments table verified.")
+    except Exception as exc:
+        print(f"[db] WARNING: Could not verify appointments table: {exc}", file=sys.stderr)
