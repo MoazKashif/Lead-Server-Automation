@@ -51,10 +51,10 @@ async def startup():
                 "Set ADMIN_EMAIL_1/ADMIN_PASSWORD_1 environment variables. Refusing to start."
             )
         print("[SECURITY] WARNING: No admin accounts configured. Login will not work.", file=sys.stderr)
-    if IS_PRODUCTION and not email_service.is_smtp_configured():
+    if IS_PRODUCTION and not email_service.is_email_configured():
         print(
-            "[SECURITY] WARNING: SMTP is not configured in production. "
-            "Two-factor login codes cannot be delivered. Set SMTP_HOST/SMTP_USERNAME/SMTP_PASSWORD/SMTP_FROM_EMAIL.",
+            "[SECURITY] WARNING: Resend email is not configured in production. "
+            "Two-factor login codes cannot be delivered. Set RESEND_API_KEY and RESEND_FROM_EMAIL.",
             file=sys.stderr,
         )
     init_db()
@@ -169,7 +169,7 @@ def generate_2fa_code() -> str:
 
 def send_2fa_email(email: str, code: str) -> bool:
     """
-    Send the 2FA code to the user's email via SMTP.
+    Send the 2FA code to the user's email via the Resend API.
     In development, prints the code to the console for testing.
     Returns True if the code was delivered (or printed in dev), False otherwise.
     """
@@ -201,11 +201,11 @@ def send_2fa_email(email: str, code: str) -> bool:
         print(f"{'='*50}\n")
         return True
     except email_service.EmailDeliveryError as e:
-        print(f"[2FA] SMTP send failed ({e}).")
+        print(f"[2FA] Email send failed ({e}).")
         if IS_PRODUCTION:
             print(
-                "[2FA] ERROR: SMTP delivery failed in production and the 2FA code "
-                "cannot be delivered. Check SMTP_HOST/SMTP_USERNAME/SMTP_PASSWORD/SMTP_FROM_EMAIL.",
+                "[2FA] ERROR: Resend delivery failed in production and the 2FA code "
+                "cannot be delivered. Check RESEND_API_KEY/RESEND_FROM_EMAIL.",
                 file=sys.stderr,
             )
         else:
@@ -258,7 +258,7 @@ async def auth_login(body: LoginRequest, request: Request):
     code = generate_2fa_code()
 
     if not IS_PRODUCTION:
-        # Development: print the code to the console (no SMTP required)
+        # Development: print the code to the console (no Resend API required)
         pending_2fa[email] = {
             "code": code,
             "created_at": time.time(),
@@ -267,12 +267,12 @@ async def auth_login(body: LoginRequest, request: Request):
         send_2fa_email(email, code)
         return {"status": "2fa_required", "message": "Verification code sent to your email."}
 
-    # Production: the code must be delivered via SMTP.
-    if not email_service.is_smtp_configured():
+    # Production: the code must be delivered via the Resend API.
+    if not email_service.is_email_configured():
         raise HTTPException(
             status_code=503,
-            detail="Two-factor email cannot be sent because SMTP is not configured. "
-                   "Contact your administrator to configure SMTP_HOST, SMTP_USERNAME, SMTP_PASSWORD, and SMTP_FROM_EMAIL.",
+            detail="Two-factor email cannot be sent because Resend is not configured. "
+                   "Contact your administrator to configure RESEND_API_KEY and RESEND_FROM_EMAIL.",
         )
 
     delivered = send_2fa_email(email, code)
@@ -549,9 +549,9 @@ def get_mock_analysis(lead: LeadRequest) -> dict:
         "draft_reply": draft
     }
 
-# Helper to email the AI-drafted reply to the lead directly via SMTP
+# Helper to email the AI-drafted reply to the lead directly via the Resend API
 def send_lead_reply_email(lead_entry: dict):
-    """Background task: send the AI-drafted reply to the lead via SMTP."""
+    """Background task: send the AI-drafted reply to the lead via the Resend API."""
     email = lead_entry.get("email", "")
     if not email:
         print("[EMAIL] Lead reply skipped: no recipient email.")
@@ -604,7 +604,7 @@ async def receive_webhook(lead: LeadRequest, background_tasks: BackgroundTasks):
     ts = lead_entry["timestamp"]
     lead_entry["timestamp"] = ts.strftime("%Y-%m-%dT%H:%M:%S.") + f"{ts.microsecond:06d}Z"
     
-    # Email the AI-drafted reply to the lead via SMTP in the background
+    # Email the AI-drafted reply to the lead via the Resend API in the background
     background_tasks.add_task(send_lead_reply_email, lead_entry)
     
     return {"status": "success", "lead": lead_entry}
@@ -649,10 +649,10 @@ async def get_config():
     has_key = api_key is not None and len(api_key.strip()) > 0
     return {
         "configured": has_key,
-        "email_configured": email_service.is_smtp_configured()
+        "email_configured": email_service.is_email_configured()
     }
 
-# Endpoint to save config (API key and SMTP settings)
+# Endpoint to save config (API key and email settings)
 @app.post("/api/config")
 async def save_config(config: dict):
     raise HTTPException(
@@ -678,9 +678,9 @@ async def mark_lead_read(lead_id: str):
 # Appointment Endpoints
 # ============================================================
 
-# Helper to email appointment confirmation to the booker via SMTP
+# Helper to email appointment confirmation to the booker via the Resend API
 def send_appointment_confirmation_email(appointment: dict):
-    """Background task: send a booking confirmation to the requester via SMTP."""
+    """Background task: send a booking confirmation to the requester via the Resend API."""
     email = appointment.get("email", "")
     if not email:
         print("[EMAIL] Appointment confirmation skipped: no recipient email.")
@@ -736,7 +736,7 @@ async def create_appointment(body: AppointmentRequest, background_tasks: Backgro
     if result == {}:
         raise HTTPException(status_code=500, detail="Failed to persist appointment to the database. Please try again.")
 
-    # Email the confirmation to the booker via SMTP in the background
+    # Email the confirmation to the booker via the Resend API in the background
     background_tasks.add_task(send_appointment_confirmation_email, result)
 
     return {"status": "success", "appointment": result}

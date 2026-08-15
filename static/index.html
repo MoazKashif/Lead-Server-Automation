@@ -300,9 +300,9 @@
                             </div>
 
                             <div class="form-group" style="margin-top: 1.5rem;">
-                                <label for="smtp-status-input">Email Delivery (SMTP / Resend)</label>
+                                <label for="smtp-status-input">Email Delivery (Resend API)</label>
                                 <input type="text" id="smtp-status-input" placeholder="Checking configuration..." disabled>
-                                <span class="input-help">Emails are sent directly from the backend via SMTP. Managed via server environment variables.</span>
+                                <span class="input-help">Emails are sent directly from the backend via the Resend API. Managed via server environment variables.</span>
                             </div>
                             
                             <button type="submit" class="btn btn-primary" id="btn-save-config" style="margin-top: 1.5rem;">
@@ -480,7 +480,7 @@
                     alertEl.classList.remove('hidden');
                 }
 
-                // SMTP email status (no credentials exposed)
+                // Email status (no credentials exposed)
                 const smtpInput = document.getElementById('smtp-status-input');
                 if (smtpInput) {
                     if (data.email_configured) {
@@ -489,7 +489,7 @@
                         smtpInput.style.borderColor = "#22c55e";
                     } else {
                         smtpInput.value = "Not configured";
-                        smtpInput.placeholder = "Not configured (set SMTP_HOST/SMTP_USERNAME/SMTP_PASSWORD)";
+                        smtpInput.placeholder = "Not configured (set RESEND_API_KEY/RESEND_FROM_EMAIL)";
                         smtpInput.style.borderColor = "#ef4444";
                     }
                 }
@@ -852,7 +852,7 @@
         // Save Gemini API Key Configuration
         async function saveApiKey(event) {
             event.preventDefault();
-            alert('Configuration is managed via environment variables on the server. Please update GEMINI_API_KEY and SMTP settings in your Render environment settings.');
+            alert('Configuration is managed via environment variables on the server. Please update GEMINI_API_KEY and Resend email settings in your Render environment settings.');
         }
 
         // Copy webhook URL
