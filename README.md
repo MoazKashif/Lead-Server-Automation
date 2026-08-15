@@ -8,7 +8,7 @@
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Gemini AI](https://img.shields.io/badge/Google%20Gemini-2.5%20Flash-4285F4?style=flat-square&logo=google&logoColor=white)](https://ai.google.dev)
-[![SMTP](https://img.shields.io/badge/SMTP-Zoho%20Mail-4A154B?style=flat-square&logo=gmail&logoColor=white)](https://www.zoho.com/mail/)
+[![SMTP](https://img.shields.io/badge/SMTP-Resend-000000?style=flat-square&logo=minutemailer&logoColor=white)](https://resend.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 
 > **Stop manually replying to every lead. Let AI do it — instantly.**  
@@ -45,7 +45,7 @@ Running a startup means every lead matters — but manually reading, categorizin
 1. A visitor fills out the **lead capture form** on the FantomAI website
 2. The server **instantly triages** the lead using Google Gemini AI — scoring urgency, classifying intent, and generating a personalized email draft
 3. The lead is **stored in the dashboard** with full AI analysis so nothing falls through the cracks
-4. A **personalized reply email is automatically sent** via SMTP (Zoho Mail) — without anyone lifting a finger
+4. A **personalized reply email is automatically sent** via SMTP (Resend) — without anyone lifting a finger
 
 ---
 
@@ -75,7 +75,7 @@ Running a startup means every lead matters — but manually reading, categorizin
     │                │
     ▼                ▼
 ┌────────┐    ┌──────────────────────────────┐
-│leads.  │    │  SMTP (Zoho Mail)            │
+│leads.  │    │  SMTP (Resend)               │
 │json    │    │  └── Sends personalized      │
 │(local  │    │      HTML reply to the lead  │
 │  DB)   │    └──────────────────────────────┘
@@ -103,7 +103,7 @@ Running a startup means every lead matters — but manually reading, categorizin
 - If no API key is configured at all, a **rule-based mock analyzer** kicks in so the server still runs and classifies leads intelligently in offline/demo mode
 
 ### 📬 Automated Email via SMTP
-- Analyzed leads get a personalized HTML reply sent **directly from the backend** via SMTP (Zoho Mail) in a background task (non-blocking)
+- Analyzed leads get a personalized HTML reply sent **directly from the backend** via SMTP (Resend) in a background task (non-blocking)
 - Appointment bookings also trigger a confirmation email to the requester
 - The email body is the AI's personalized draft — signed as *The FantomAI Team*
 - The sender name/address are set via `SMTP_FROM_NAME` and `SMTP_FROM_EMAIL`
@@ -127,7 +127,7 @@ Running a startup means every lead matters — but manually reading, categorizin
 | **Backend** | Python 3.10+, FastAPI, Uvicorn |
 | **AI Engine** | Google Gemini (`google-genai` SDK) — `gemini-2.5-flash` |
 | **Data Validation** | Pydantic v2 |
-| **Email Delivery** | Direct SMTP (Zoho Mail) via `smtplib` |
+| **Email Delivery** | Direct SMTP (Resend) via `smtplib` |
 | **Storage** | JSON flat-file (local, zero-dependency) |
 | **Frontend** | Vanilla HTML/CSS/JS (served as static files) |
 | **Deployment** | Procfile-ready (Railway / Render / Heroku compatible) |
@@ -141,7 +141,7 @@ Running a startup means every lead matters — but manually reading, categorizin
 Lead-Server-Automation/
 │
 ├── app.py                  # Core FastAPI application — all routes & logic
-├── email_service.py        # Central SMTP email service (send_email)
+├── email_service.py        # Central email service via Resend SMTP (send_email)
 ├── leads.json              # Local lead database (auto-created on first run)
 ├── requirements.txt        # Python dependencies
 ├── Procfile                # Deployment entry point (Railway/Render/Heroku)
@@ -161,7 +161,7 @@ Lead-Server-Automation/
 
 - Python 3.10+
 - A [Google AI Studio](https://aistudio.google.com/) account for a free Gemini API key
-- A Zoho Mail account with SMTP access enabled (for auto-reply and appointment emails)
+- A [Resend](https://resend.com) account with a verified sending domain (for auto-reply, appointment, and 2FA emails)
 
 ### 1. Clone the Repository
 
@@ -183,10 +183,10 @@ Create a `.env` file in the project root for **local development only** (product
 ```env
 GEMINI_API_KEY=your_gemini_api_key_here
 
-SMTP_HOST=smtp.zoho.com
+SMTP_HOST=smtp.resend.com
 SMTP_PORT=587
-SMTP_USERNAME=team@yourdomain.com
-SMTP_PASSWORD=your_smtp_app_password
+SMTP_USERNAME=resend
+SMTP_PASSWORD=your_resend_api_key
 SMTP_FROM_EMAIL=team@yourdomain.com
 SMTP_FROM_NAME=Fantom AI
 SMTP_USE_TLS=true
@@ -291,7 +291,7 @@ Returns current configuration status (presence only — never returns keys, URLs
 
 ## 📬 SMTP Email Delivery
 
-All transactional email is sent directly from the FastAPI backend via SMTP (`smtplib`) — no n8n, no external workflow. This covers:
+All transactional email is sent directly from the FastAPI backend via Resend SMTP (`smtplib`) — no n8n, no external workflow. This covers:
 
 - **Lead auto-replies** — when a lead submits the web form, the AI-generated personalized draft is emailed to the lead (subject: *FantomAI | Lead Intake Proposal & Next Steps*)
 - **Appointment confirmations** — when a visitor books a Genesis Session, a confirmation email is sent to them (subject: *FantomAI | Genesis Session Confirmation*)
@@ -324,10 +324,10 @@ All configuration is read from environment variables. Nothing is stored in `.env
 | `GEMINI_API_KEY` | Recommended | Google Gemini API key. Without it, the server uses a rule-based fallback analyzer. |
 | `ADMIN_EMAIL_1` / `ADMIN_PASSWORD_1` | Production | First admin account for the dashboard (hashed with bcrypt in memory). |
 | `ADMIN_EMAIL_2` / `ADMIN_PASSWORD_2` | Optional | Second admin account. |
-| `SMTP_HOST` | Production | SMTP server host. Use `smtp.zoho.com` for free Zoho Mail plans, `smtppro.zoho.com` for paid plans. |
+| `SMTP_HOST` | Production | SMTP server host. Use `smtp.resend.com` for Resend. |
 | `SMTP_PORT` | Optional | SMTP port (default `587`). |
-| `SMTP_USERNAME` | Production | SMTP username (full email address, e.g. `team@fantomai.site`). |
-| `SMTP_PASSWORD` | Production | SMTP password or app-specific password. |
+| `SMTP_USERNAME` | Production | SMTP username. Use `resend` for Resend SMTP. |
+| `SMTP_PASSWORD` | Production | Resend API key (used as the SMTP password). |
 | `SMTP_FROM_EMAIL` | Production | "From" address. Defaults to `SMTP_USERNAME` if not set. |
 | `SMTP_FROM_NAME` | Optional | "From" display name (default `Fantom AI`). |
 | `SMTP_USE_TLS` | Optional | `true` for STARTTLS (default), `false` for implicit SSL. |
@@ -360,7 +360,7 @@ web: uvicorn app:app --host 0.0.0.0 --port $PORT
 
 > ⚠️ **Sessions:** authentication sessions are stored in memory on a single instance. This works for a single Render Web Service but is **not** suitable for multi-instance scaling — restarting the service logs all users out.
 
-> ⚠️ **2FA delivery:** two-factor codes are sent via SMTP and are **never** logged in production. If SMTP is not configured (`SMTP_HOST`/`SMTP_USERNAME`/`SMTP_PASSWORD`/`SMTP_FROM_EMAIL`), the login endpoint returns an error and no code is delivered — the dashboard cannot be accessed until SMTP is set up. In development mode the code is printed to the server console.
+> ⚠️ **2FA delivery:** two-factor codes are sent via Resend SMTP and are **never** logged in production. If SMTP is not configured (`SMTP_HOST`/`SMTP_USERNAME`/`SMTP_PASSWORD`/`SMTP_FROM_EMAIL`), the login endpoint returns an error and no code is delivered — the dashboard cannot be accessed until SMTP is set up. In development mode the code is printed to the server console.
 
 ---
 
