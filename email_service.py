@@ -1,26 +1,26 @@
-"""Central SMTP email service for the Lead Server.
+"""Central email service for the Lead Server.
 
-Sends transactional emails directly from the FastAPI backend via Resend SMTP,
-replacing the previous n8n workflow (Backend -> n8n webhook -> n8n -> Email).
-Uses only the Python standard library (smtplib + email) with no extra deps.
+Sends transactional emails directly from the FastAPI backend via the
+Resend HTTP API (HTTPS), replacing the previous Resend SMTP delivery which
+timed out on Render (outbound SMTP connections blocked / slow). Uses only
+the Python standard library (urllib.request + json) with no extra
+dependencies, so no network ports other than 443 are required.
 
-Resend SMTP configuration:
-  SMTP_HOST=smtp.resend.com
-  SMTP_PORT=587
-  SMTP_USERNAME=resend
-  SMTP_PASSWORD=<your Resend API key>
-  SMTP_FROM_EMAIL=team@fantomai.site  (must be on a verified domain)
-  SMTP_FROM_NAME=Fantom AI
-  SMTP_USE_TLS=true
+Resend API configuration:
+  RESEND_API_KEY=<your Resend API key>  (starts with re_)
+  RESEND_FROM_EMAIL=team@fantomai.site  (must be on a verified domain)
+  RESEND_FROM_NAME=Fantom AI
 """
 
+import json
 import os
 import re
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+import urllib.error
+import urllib.request
 from email.utils import formataddr
 from typing import Optional
+
+RESEND_API_URL = "https://api.resend.com/emails"
 
 
 class EmailError(Exception):
@@ -28,41 +28,31 @@ class EmailError(Exception):
 
 
 class EmailConfigError(EmailError):
-    """Raised when SMTP is not configured."""
+    """Raised when Resend is not configured."""
 
 
 class EmailDeliveryError(EmailError):
-    """Raised when an email cannot be delivered via SMTP."""
+    """Raised when an email cannot be delivered via the Resend API."""
 
 
 def _env(name: str, default: str = "") -> str:
     return os.getenv(name, default).strip()
 
 
-def _is_truthy(value: str) -> bool:
-    return value.lower() in ("1", "true", "yes", "on")
-
-
-def smtp_config() -> dict:
-    """Return a normalized dict of SMTP settings from environment variables."""
-    username = _env("SMTP_USERNAME")
-    password = _env("SMTP_PASSWORD")
+def email_config() -> dict:
+    """Return a normalized dict of Resend API settings from environment variables."""
     return {
-        "host": _env("SMTP_HOST"),
-        "port": int(_env("SMTP_PORT", "587") or "587"),
-        "username": username,
-        "password": password,
-        "from_email": _env("SMTP_FROM_EMAIL") or username,
-        "from_name": _env("SMTP_FROM_NAME", "Fantom AI"),
-        "use_tls": _is_truthy(_env("SMTP_USE_TLS", "true") or "true"),
-        "timeout": int(_env("SMTP_TIMEOUT", "20") or "20"),
+        "api_key": _env("RESEND_API_KEY"),
+        "from_email": _env("RESEND_FROM_EMAIL"),
+        "from_name": _env("RESEND_FROM_NAME", "Fantom AI"),
+        "timeout": int(_env("RESEND_TIMEOUT", "20") or "20"),
     }
 
 
-def is_smtp_configured() -> bool:
+def is_email_configured() -> bool:
     """True only when all settings required to send email are present."""
-    cfg = smtp_config()
-    return bool(cfg["host"] and cfg["username"] and cfg["password"] and cfg["from_email"])
+    cfg = email_config()
+    return bool(cfg["api_key"] and cfg["from_email"])
 
 
 def html_to_text(html: str) -> str:
@@ -80,6 +70,22 @@ def html_to_text(html: str) -> str:
     return text.strip()
 
 
+def _post_resend(api_key: str, payload: dict, timeout: int) -> None:
+    """POST the payload to the Resend Emails API and raise on non-2xx."""
+    request = urllib.request.Request(
+        RESEND_API_URL,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+            "User-Agent": "FantomAI-LeadServer/1.0",
+        },
+        method="POST",
+    )
+    with urllib.request.urlopen(request, timeout=timeout) as response:
+        response.read()
+
+
 def send_email(
     to: str,
     subject: str,
@@ -87,50 +93,43 @@ def send_email(
     text_body: Optional[str] = None,
     reply_to: Optional[str] = None,
 ) -> bool:
-    """Send an email via SMTP.
+    """Send an email via the Resend HTTP API.
 
-    Supports HTML + plain-text fallback, UTF-8, TLS/SSL, timeout, optional
-    Reply-To, and proper connection cleanup.
-
-    Returns True on success. Raises EmailConfigError if SMTP is not
-    configured and EmailDeliveryError if delivery fails.
+    Supports HTML + plain-text fallback, UTF-8, optional Reply-To, and a
+    connection timeout. Returns True on a successful Resend API response.
+    Raises EmailConfigError if Resend is not configured and
+    EmailDeliveryError if the API call or network delivery fails.
     """
-    cfg = smtp_config()
-    if not is_smtp_configured():
+    cfg = email_config()
+    if not is_email_configured():
         raise EmailConfigError(
-            "SMTP is not configured. Set SMTP_HOST, SMTP_USERNAME, "
-            "SMTP_PASSWORD, and SMTP_FROM_EMAIL."
+            "Resend is not configured. Set RESEND_API_KEY and RESEND_FROM_EMAIL."
         )
-
-    from_header = formataddr((cfg["from_name"], cfg["from_email"]))
-
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = subject
-    msg["From"] = from_header
-    msg["To"] = to
-    if reply_to:
-        msg["Reply-To"] = reply_to
-    msg["X-Mailer"] = "FantomAI Lead Server"
 
     if text_body is None:
         text_body = html_to_text(html_body)
-    msg.attach(MIMEText(text_body, "plain", "utf-8"))
-    msg.attach(MIMEText(html_body, "html", "utf-8"))
+
+    payload = {
+        "from": formataddr((cfg["from_name"], cfg["from_email"])),
+        "to": [to],
+        "subject": subject,
+        "html": html_body,
+        "text": text_body,
+    }
+    if reply_to:
+        payload["reply_to"] = reply_to
 
     try:
-        if cfg["use_tls"]:
-            with smtplib.SMTP(cfg["host"], cfg["port"], timeout=cfg["timeout"]) as server:
-                server.ehlo()
-                server.starttls()
-                server.ehlo()
-                server.login(cfg["username"], cfg["password"])
-                server.sendmail(cfg["from_email"], [to], msg.as_string())
-        else:
-            with smtplib.SMTP_SSL(cfg["host"], cfg["port"], timeout=cfg["timeout"]) as server:
-                server.login(cfg["username"], cfg["password"])
-                server.sendmail(cfg["from_email"], [to], msg.as_string())
-    except smtplib.SMTPAuthenticationError as e:
-        raise EmailDeliveryError("SMTP authentication failed.") from e
+        _post_resend(cfg["api_key"], payload, timeout=cfg["timeout"])
+    except urllib.error.HTTPError as e:
+        detail = ""
+        try:
+            detail = json.loads(e.read().decode("utf-8")).get("message", "")
+        except Exception:
+            pass
+        raise EmailDeliveryError(
+            f"Resend API returned HTTP {e.code}: {detail or e.reason}"
+        ) from e
     except Exception as e:
-        raise EmailDeliveryError(f"SMTP delivery failed: {e}") from e
+        raise EmailDeliveryError(f"Resend delivery failed: {e}") from e
     return True
