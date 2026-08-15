@@ -110,7 +110,7 @@ SESSION_COOKIE_NAME = "fai_session"
 
 # Public paths that don't require authentication
 PUBLIC_PATHS = {
-    "/login", "/website", "/webhook", "/docs", "/openapi.json", "/redoc", "/health",
+    "/", "/login", "/website", "/webhook", "/docs", "/openapi.json", "/redoc", "/health",
     "/api/auth/login", "/api/auth/verify-2fa", "/api/auth/logout",
 }
 PUBLIC_PREFIXES = ("/static/",)
@@ -788,10 +788,21 @@ async def serve_website():
     resp.headers["Expires"] = "0"
     return resp
 
-# Serve admin dashboard (protected by middleware)
+# Serve admin dashboard (protected by middleware) when authenticated;
+# otherwise serve the public landing page (same as /website).
 @app.get("/")
-async def serve_index():
-    return FileResponse("static/index.html")
+async def serve_index(request: Request):
+    token = request.cookies.get(SESSION_COOKIE_NAME)
+    if token and token in active_sessions:
+        session = active_sessions[token]
+        if time.time() - session["created_at"] < 24 * 60 * 60:
+            return FileResponse("static/index.html")
+        del active_sessions[token]
+    resp = FileResponse("static/landing.html")
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    resp.headers["Pragma"] = "no-cache"
+    resp.headers["Expires"] = "0"
+    return resp
 
 def find_available_port(start_port: int = 8000) -> int:
     """Return the first available port starting from start_port."""
