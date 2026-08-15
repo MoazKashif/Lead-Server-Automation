@@ -1,4 +1,4 @@
-### 🔗 Email Delivery via Direct SMTP (Zoho Mail)
+### 🔗 Email Delivery via Direct SMTP (Resend)
 
 Emails are now sent directly from the FastAPI backend via SMTP — no n8n required.
 
@@ -13,16 +13,16 @@ Emails are now sent directly from the FastAPI backend via SMTP — no n8n requir
 
   #### Configuration (.env / Render env vars)
 
-    SMTP_HOST=smtp.zoho.com
+    SMTP_HOST=smtp.resend.com
     SMTP_PORT=587
-    SMTP_USERNAME=team@fantomai.site
-    SMTP_PASSWORD=your_app_password
+    SMTP_USERNAME=resend
+    SMTP_PASSWORD=<your Resend API key>
     SMTP_FROM_EMAIL=team@fantomai.site
     SMTP_FROM_NAME='Fantom AI'
     SMTP_USE_TLS=true
     CALENDAR_URL=https://cal.com/moaz-kashif-ovkhut/30min   # used in AI email replies
 
-  Note: Free-plan Zoho Mail accounts must use smtp.zoho.com (not
-  smtppro.zoho.com, which is for paid plans). SMTP access must be enabled
-  in the mailbox, and an app-specific password is required if the account
-  has two-factor authentication enabled.
+  Note: Resend requires a verified sending domain. The SMTP_USERNAME is
+  always the literal string "resend" and the SMTP_PASSWORD is your Resend
+  API key (starts with re_). Zoho is still used for receiving inbound mail;
+  only outbound sending goes through Resend.

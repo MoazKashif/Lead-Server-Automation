@@ -1,8 +1,17 @@
 """Central SMTP email service for the Lead Server.
 
-Sends transactional emails directly from the FastAPI backend via Zoho SMTP,
+Sends transactional emails directly from the FastAPI backend via Resend SMTP,
 replacing the previous n8n workflow (Backend -> n8n webhook -> n8n -> Email).
 Uses only the Python standard library (smtplib + email) with no extra deps.
+
+Resend SMTP configuration:
+  SMTP_HOST=smtp.resend.com
+  SMTP_PORT=587
+  SMTP_USERNAME=resend
+  SMTP_PASSWORD=<your Resend API key>
+  SMTP_FROM_EMAIL=team@fantomai.site  (must be on a verified domain)
+  SMTP_FROM_NAME=Fantom AI
+  SMTP_USE_TLS=true
 """
 
 import os
