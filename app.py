@@ -355,6 +355,18 @@ async def auth_logout(request: Request):
     return response
 
 
+@app.get("/api/auth/session")
+async def auth_session(request: Request):
+    """Lightweight session-validity check for client-side auth guards."""
+    token = request.cookies.get(SESSION_COOKIE_NAME)
+    if token and token in active_sessions:
+        session = active_sessions[token]
+        if time.time() - session["created_at"] < 24 * 60 * 60:
+            return {"status": "authenticated", "email": session["email"]}
+        del active_sessions[token]
+    return JSONResponse(status_code=401, content={"detail": "Not authenticated"})
+
+
 # ---- Authentication Middleware ----
 
 @app.middleware("http")
@@ -796,9 +808,23 @@ async def serve_index(request: Request):
     if token and token in active_sessions:
         session = active_sessions[token]
         if time.time() - session["created_at"] < 24 * 60 * 60:
-            return FileResponse("static/index.html")
+            resp = FileResponse("static/index.html")
+            resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+            resp.headers["Pragma"] = "no-cache"
+            resp.headers["Expires"] = "0"
+            return resp
         del active_sessions[token]
     resp = FileResponse("static/landing.html")
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    resp.headers["Pragma"] = "no-cache"
+    resp.headers["Expires"] = "0"
+    return resp
+
+
+# Serve admin dashboard at /home (protected by auth middleware — NOT in PUBLIC_PATHS)
+@app.get("/home")
+async def serve_home():
+    resp = FileResponse("static/index.html")
     resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     resp.headers["Pragma"] = "no-cache"
     resp.headers["Expires"] = "0"

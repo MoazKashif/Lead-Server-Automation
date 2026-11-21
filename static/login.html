@@ -394,7 +394,7 @@
                     infoBox.querySelector('#info-text').innerText = "Access granted. Launching console...";
                     infoBox.style.display = 'flex';
                     setTimeout(() => {
-                        window.location.href = '/';
+                        window.location.href = '/home';
                     }, 1000);
                 } else {
                     showError(data.detail || "Failed to verify 2FA code.");

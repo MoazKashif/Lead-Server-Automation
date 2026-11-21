@@ -402,9 +402,36 @@
         let appointmentsData = [];
         let apiConfigured = false;
         let activeTab = 'dashboard';
+        // ═══════════════════════════════════════════
+        // AUTH GUARD — verify session on every page load / bfcache restore
+        // ═══════════════════════════════════════════
+        async function verifyAuth() {
+            try {
+                const res = await fetch('/api/auth/session', { method: 'GET', credentials: 'same-origin' });
+                if (res.status === 401) {
+                    window.location.replace('/login');
+                    return false;
+                }
+                return true;
+            } catch (err) {
+                // Network error — assume offline, don't redirect
+                return true;
+            }
+        }
+
+        // Handle bfcache restores (back/forward navigation after logout)
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) {
+                verifyAuth();
+            }
+        });
 
         // Initialize Webpage
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Verify session is still valid before initializing dashboard
+            const isAuthed = await verifyAuth();
+            if (!isAuthed) return;
+
             // Set dynamic hostname for webhook url display
             document.getElementById('webhook-url').innerText = `${window.location.origin}/webhook`;
             
@@ -922,7 +949,8 @@
             try {
                 const res = await fetch('/api/auth/logout', { method: 'POST' });
                 if (res.ok) {
-                    window.location.href = '/login';
+                    // Use replace to remove dashboard from browser history
+                    window.location.replace('/login');
                 } else {
                     alert("Logout failed");
                 }
