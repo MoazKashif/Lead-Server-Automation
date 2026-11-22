@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Edge — Operational Benchmarks &amp; Performance | Fantom AI</title>
+    <meta name="description" content="Why enterprises choose Fantom AI: 0ms response latency, 70%+ overhead reduction, and infinite concurrency compared to legacy human operations.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/fantom-site.css">
+
+    <script src="/static/vendor/lucide.min.js"></script>
+    <script src="/static/vendor/three.min.js"></script>
+    <script src="/static/vendor/confetti.browser.min.js"></script>
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Global Navigation -->
+    <header class="navbar">
+        <a href="/nexus" class="brand-logo-container">
+            <div class="logo-q-infinity" id="nav-q-logo"></div>
+            <span class="brand-title">Fantom<span>AI</span></span>
+        </a>
+        <nav class="nav-links">
+            <a href="/nexus">Nexus</a>
+            <a href="/genesis">Genesis</a>
+            <a href="/ecosystem">Ecosystem</a>
+            <a href="/edge" class="active">The Edge</a>
+        </nav>
+        <div class="nav-actions">
+            <button class="btn-nav-appointment" onclick="openAppointmentModal()">
+                <i data-lucide="calendar"></i>
+                <span>Book Appointment</span>
+            </button>
+            <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-menu">
+        <a href="/nexus">Nexus</a>
+        <a href="/genesis">Genesis</a>
+        <a href="/ecosystem">Ecosystem</a>
+        <a href="/edge" class="active">The Edge</a>
+        <button class="btn-submit-glow" onclick="openAppointmentModal()" style="margin-top: 1rem;">Book An Appointment</button>
+    </div>
+
+    <!-- Main Page Wrapper -->
+    <main class="page-wrapper">
+        <div class="container">
+            <!-- Breadcrumbs -->
+            <div class="breadcrumbs">
+                <a href="/nexus">Nexus</a>
+                <span class="separator">/</span>
+                <span class="current">The Edge</span>
+            </div>
+
+            <!-- The Edge Hero Section -->
+            <section class="offering-hero">
+                <div class="badge-glow green">
+                    <span class="badge-dot"></span>
+                    <span>EMPIRICAL BENCHMARKS &amp; INFRASTRUCTURE</span>
+                </div>
+                <h1>The Fantom <span>Edge</span></h1>
+                <p class="lead-desc">
+                    How high-growth enterprises measure visual success, latency reduction, and operational expansion. We replace human bottlenecks with deterministic, sub-second execution.
+                </p>
+
+                <div class="hero-stats-row">
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number" style="color: var(--holographic-cyan);">0ms</span>
+                        <span class="hero-stat-label">Missed Call Latency</span>
+                    </div>
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number" style="color: #10b981;">70%+</span>
+                        <span class="hero-stat-label">Overhead Elimination</span>
+                    </div>
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number" style="color: #c084fc;">&infin;</span>
+                        <span class="hero-stat-label">Concurrent Call Lines</span>
+                    </div>
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number" style="color: #0082ff;">99.9%</span>
+                        <span class="hero-stat-label">SLA Availability</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Benchmark Matrix Graphic -->
+            <section class="diagram-section">
+                <div class="diagram-card">
+                    <div class="diagram-card-header">
+                        <div class="diagram-card-title">
+                            <h3>Operational Benchmark Matrix</h3>
+                            <p>Direct comparison of Fantom AI autonomous pipelines versus legacy human BPO / agency operations.</p>
+                        </div>
+                        <div class="diagram-badge">AUDITED PERFORMANCE</div>
+                    </div>
+                    <div class="diagram-frame">
+                        <img src="/static/images/edge-benchmarks.svg" alt="Fantom AI vs Legacy Human Operations Benchmark Matrix">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Core Edge Differentiators Grid -->
+            <section style="margin: 5rem 0;">
+                <div class="section-header">
+                    <h2>Four Pillars of <span>Superiority</span></h2>
+                    <p>Why modern operations leaders replace traditional customer call centers with Fantom AI.</p>
+                </div>
+
+                <div class="features-grid-2">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i data-lucide="timer" size="30"></i>
+                        </div>
+                        <h3>Zero Communication Latency</h3>
+                        <p>
+                            In customer acquisition, speed-to-lead is everything. Studies prove that contacting a prospect within 60 seconds yields a 391% increase in conversion over 30 minutes. Our voice agents answer calls on the first ring, checking calendar availability dynamically.
+                        </p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">First Engagement</span>
+                            <span class="metric-val">&lt; 1 Second vs. 42 Mins</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper" style="color: #10b981; border-color: rgba(16, 185, 129, 0.4);">
+                            <i data-lucide="trending-down" size="30"></i>
+                        </div>
+                        <h3>70%+ Overhead Reduction</h3>
+                        <p>
+                            Cut payroll waste and training attrition. Human receptionist turnover exceeds 35% annually. Fantom AI runs without sick days, holiday breaks, or fatigue, performing repetitive intake and database mapping with flawless execution.
+                        </p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Labor Efficiency</span>
+                            <span class="metric-val">Guaranteed Execution ROI</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper" style="color: #c084fc; border-color: rgba(127, 0, 255, 0.4);">
+                            <i data-lucide="cpu" size="30"></i>
+                        </div>
+                        <h3>Infinite Concurrency Scaling</h3>
+                        <p>
+                            Ad campaigns create unpredictable spikes in phone traffic. A human team can only answer one call per operator, leaving excess callers on hold or sent to voicemail. Fantom AI spawns virtual speech nodes instantaneously, scaling from 1 to 5,000 lines without a glitch.
+                        </p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Hold Times</span>
+                            <span class="metric-val">0 Seconds Guaranteed</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper" style="color: #0082ff; border-color: rgba(0, 130, 255, 0.4);">
+                            <i data-lucide="shield-check" size="30"></i>
+                        </div>
+                        <h3>Enterprise Data Governance</h3>
+                        <p>
+                            Manual lead intake is vulnerable to typos, missed fields, and lost notes. Every transaction through Fantom AI is authenticated, parsed via structured Pydantic schemas, and backed up in Supabase with full audit logs.
+                        </p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Data Error Rate</span>
+                            <span class="metric-val">0.00% Schema Validated</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Technical Specifications Table -->
+            <section class="spec-table-container">
+                <div class="spec-table-title">Fantom AI Operational SLA &amp; Specifications</div>
+                <table class="spec-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Fantom Autonomous Target</th>
+                            <th>Legacy Human Baseline</th>
+                            <th>Delta Advantage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="spec-name">First Ring Answer Rate</td>
+                            <td class="spec-val">99.8%</td>
+                            <td>64.2%</td>
+                            <td style="color: #10b981;">+35.6% Absolute</td>
+                        </tr>
+                        <tr>
+                            <td class="spec-name">Calendar Sync Latency</td>
+                            <td class="spec-val">&lt; 350ms</td>
+                            <td>4 - 8 Hours</td>
+                            <td style="color: #10b981;">Instantaneous</td>
+                        </tr>
+                        <tr>
+                            <td class="spec-name">Inbound Email Proposal Draft</td>
+                            <td class="spec-val">&lt; 30 Seconds</td>
+                            <td>3.5 Hours</td>
+                            <td style="color: #10b981;">420x Velocity</td>
+                        </tr>
+                        <tr>
+                            <td class="spec-name">Concurrent Telephony Lines</td>
+                            <td class="spec-val">Elastic &infin;</td>
+                            <td>Limited by Headcount</td>
+                            <td style="color: #10b981;">Zero Busy Signals</td>
+                        </tr>
+                        <tr>
+                            <td class="spec-name">Security Encryption Standard</td>
+                            <td class="spec-val">AES-256 / TLS 1.3</td>
+                            <td>Variable / Manual Files</td>
+                            <td style="color: #10b981;">Bank-Grade Guard</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Conversion CTA Banner -->
+            <section class="cta-banner">
+                <h2>Experience the <span>Fantom Edge</span></h2>
+                <p>Deploy our autonomous intelligence layer to outpace legacy competitors and scale your business without headcount friction.</p>
+                <div class="cta-banner-buttons">
+                    <button class="btn btn-cyber-primary" onclick="openAppointmentModal()">
+                        <span>Schedule Genesis Session</span>
+                        <i data-lucide="arrow-right"></i>
+                    </button>
+                    <a href="/offerings/voice" class="btn btn-cyber-secondary">
+                        <span>Inspect Voice Agent</span>
+                        <i data-lucide="phone-call"></i>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Appointment Modal -->
+    <div class="modal-overlay" id="appointment-modal-overlay" onclick="closeAppointmentModalOnOverlay(event)">
+        <div class="appointment-modal">
+            <button class="btn-close-modal" onclick="closeAppointmentModal()">
+                <i data-lucide="x"></i>
+            </button>
+            <h2>Secure Genesis Session</h2>
+            <p class="modal-sub">Schedule a direct architectural review of your custom requirements.</p>
+
+            <form id="appointment-form" onsubmit="handleAppointmentSubmit(event)">
+                <div class="form-group">
+                    <label>Full Name*</label>
+                    <input type="text" id="appt-name" required placeholder="e.g. Erlich Bachman">
+                </div>
+                <div class="form-group">
+                    <label>Corporate Email Address*</label>
+                    <input type="email" id="appt-email" required placeholder="e.g. erlich@raviga.com">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Desired Appointment Day*</label>
+                        <input type="date" id="appt-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Preferred Time Window*</label>
+                        <select id="appt-time" required>
+                            <option value="" disabled selected>Select window</option>
+                            <option value="09:00 AM - 12:00 PM">Morning (09:00 AM - 12:00 PM)</option>
+                            <option value="12:00 PM - 03:00 PM">Midday (12:00 PM - 03:00 PM)</option>
+                            <option value="03:00 PM - 06:00 PM">Afternoon (03:00 PM - 06:00 PM)</option>
+                            <option value="06:00 PM - 09:00 PM">Evening (06:00 PM - 09:00 PM)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Automation Goals / Discussion Scope*</label>
+                    <textarea id="appt-scope" rows="3" required placeholder="Outline what core pipelines you intend to deploy (e.g. voice agent handling, CRM sync rules...)"></textarea>
+                </div>
+                <button type="submit" class="btn-submit-glow" id="appt-submit-btn">
+                    <span>Deploy Request</span>
+                    <i data-lucide="send"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Global Cyber Footer -->
+    <footer class="cyber-footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h2>Fantom<span>AI</span></h2>
+                <p class="footer-tagline">Architecting the Autonomous Frontier. Elimination of operational latency through deterministic intelligence.</p>
+                <div class="badge-glow green" style="margin-bottom: 0;">
+                    <span class="badge-dot"></span>
+                    <span>ALL SYSTEMS OPERATIONAL</span>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="/nexus">Nexus Core</a></li>
+                    <li><a href="/genesis">Genesis Story</a></li>
+                    <li><a href="/ecosystem">Ecosystem Stack</a></li>
+                    <li><a href="/edge">The Fantom Edge</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Offerings</h4>
+                <ul class="footer-links">
+                    <li><a href="/offerings/voice">AI Voice Receptionist</a></li>
+                    <li><a href="/offerings/crm">CRM Sync Pipelines</a></li>
+                    <li><a href="/offerings/drafts">Auto-Draft Replies</a></li>
+                    <li><a href="/offerings/webdev">Custom Web Dev</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Direct Contact</h4>
+                <a href="mailto:contact@fantomai.site" class="footer-contact-item">
+                    <i data-lucide="mail"></i>
+                    <span>contact@fantomai.site</span>
+                </a>
+                <a href="https://wa.me/923364656329" class="footer-contact-item" target="_blank">
+                    <i data-lucide="phone"></i>
+                    <span>+92 336 4656329</span>
+                </a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>&copy; 2026 Fantom AI. All Rights Reserved. Engineered by Chaudary Moaz Kashif &amp; Umer Siddiqui.</div>
+            <div>Autonomous Architecture V2.4</div>
+        </div>
+    </footer>
+
+    <script src="/static/fantom-common.js"></script>
+</body>
+</html>

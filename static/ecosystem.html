@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecosystem — Autonomous Solutions Hub | Fantom AI</title>
+    <meta name="description" content="Explore the Fantom AI Ecosystem: AI Voice Receptionists, CRM Sync &amp; Pipeline Rules, Auto-Draft Replies, and Custom High-Performance Web Development.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/fantom-site.css">
+
+    <script src="/static/vendor/lucide.min.js"></script>
+    <script src="/static/vendor/three.min.js"></script>
+    <script src="/static/vendor/confetti.browser.min.js"></script>
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Global Navigation -->
+    <header class="navbar">
+        <a href="/nexus" class="brand-logo-container">
+            <div class="logo-q-infinity" id="nav-q-logo"></div>
+            <span class="brand-title">Fantom<span>AI</span></span>
+        </a>
+        <nav class="nav-links">
+            <a href="/nexus">Nexus</a>
+            <a href="/genesis">Genesis</a>
+            <a href="/ecosystem" class="active">Ecosystem</a>
+            <a href="/edge">The Edge</a>
+        </nav>
+        <div class="nav-actions">
+            <button class="btn-nav-appointment" onclick="openAppointmentModal()">
+                <i data-lucide="calendar"></i>
+                <span>Book Appointment</span>
+            </button>
+            <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-menu">
+        <a href="/nexus">Nexus</a>
+        <a href="/genesis">Genesis</a>
+        <a href="/ecosystem" class="active">Ecosystem</a>
+        <a href="/edge">The Edge</a>
+        <button class="btn-submit-glow" onclick="openAppointmentModal()" style="margin-top: 1rem;">Book An Appointment</button>
+    </div>
+
+    <!-- Main Page Wrapper -->
+    <main class="page-wrapper">
+        <div class="container">
+            <!-- Breadcrumbs -->
+            <div class="breadcrumbs">
+                <a href="/nexus">Nexus</a>
+                <span class="separator">/</span>
+                <span class="current">Ecosystem</span>
+            </div>
+
+            <!-- Ecosystem Hero Section -->
+            <section class="offering-hero">
+                <div class="badge-glow">
+                    <span class="badge-dot"></span>
+                    <span>ENTERPRISE AUTONOMOUS ARCHITECTURE</span>
+                </div>
+                <h1>The Autonomous <span>Ecosystem</span></h1>
+                <p class="lead-desc">
+                    Four interconnected operational pillars engineered to transform inbound leads, telephone calls, customer support, and digital front-ends into high-throughput revenue engines.
+                </p>
+
+                <div class="hero-stats-row">
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number">4</span>
+                        <span class="hero-stat-label">Core Pillars</span>
+                    </div>
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number">20+</span>
+                        <span class="hero-stat-label">Native Connectors</span>
+                    </div>
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number">100%</span>
+                        <span class="hero-stat-label">API Compatibility</span>
+                    </div>
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number">24/7/365</span>
+                        <span class="hero-stat-label">Continuous Operation</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- The 4 Offerings Cards Grid -->
+            <section style="margin: 4rem 0;">
+                <div class="section-header">
+                    <h2>Core <span>Offerings</span></h2>
+                    <p>Select any pillar below to inspect architectural diagrams, technical specifications, and live interactive simulators.</p>
+                </div>
+
+                <div class="features-grid-2">
+                    <!-- Pillar 1: AI Voice Receptionist -->
+                    <div class="feature-card" style="border-color: rgba(0, 242, 254, 0.35); cursor: pointer;" onclick="openDrawer('voice')">
+                        <div class="feature-icon-wrapper">
+                            <i data-lucide="phone-call" size="32"></i>
+                        </div>
+                        <div class="badge-glow" style="margin-bottom: 0.75rem;">PILLAR 01 &bull; TELEPHONY</div>
+                        <h3>AI Voice Receptionists</h3>
+                        <p>
+                            Deploy persistent low-latency speech agents that handle infinite inbound phone lines simultaneously, qualify prospects, check live calendar availability, and book appointments 24/7/365.
+                        </p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Latency / Protocol</span>
+                            <span class="metric-val">&lt; 280ms Roundtrip / SIP Trunk</span>
+                        </div>
+                        <div style="margin-top: 1.5rem;">
+                            <a href="/offerings/voice" class="btn btn-cyber-primary" style="width: 100%;" onclick="event.stopPropagation()">
+                                <span>Inspect Voice Architecture</span>
+                                <i data-lucide="arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Pillar 2: CRM Sync & Pipeline Rules -->
+                    <div class="feature-card" style="border-color: rgba(0, 130, 255, 0.35); cursor: pointer;" onclick="openDrawer('crm')">
+                        <div class="feature-icon-wrapper" style="color: #0082ff; border-color: rgba(0, 130, 255, 0.4);">
+                            <i data-lucide="git-merge" size="32"></i>
+                        </div>
+                        <div class="badge-glow" style="margin-bottom: 0.75rem; color: #60a5fa; border-color: rgba(0, 130, 255, 0.3);">PILLAR 02 &bull; DATA HARMONIZATION</div>
+                        <h3>CRM Sync &amp; Pipeline Rules</h3>
+                        <p>
+                            Banish manual data entry forever. Ingest webhook streams from Meta Ads, web intake forms, and call transcripts into unified production databases (HubSpot, Salesforce, Supabase) with zero data loss.
+                        </p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Sync Guarantee</span>
+                            <span class="metric-val">ACID / Multi-Table Bi-Directional</span>
+                        </div>
+                        <div style="margin-top: 1.5rem;">
+                            <a href="/offerings/crm" class="btn btn-cyber-primary" style="width: 100%; background: linear-gradient(135deg, #0082ff, var(--electric-violet));" onclick="event.stopPropagation()">
+                                <span>Inspect CRM Pipelines</span>
+                                <i data-lucide="arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Pillar 3: Auto-Draft Replies -->
+                    <div class="feature-card" style="border-color: rgba(127, 0, 255, 0.35); cursor: pointer;" onclick="openDrawer('drafts')">
+                        <div class="feature-icon-wrapper" style="color: #c084fc; border-color: rgba(127, 0, 255, 0.4);">
+                            <i data-lucide="mail-check" size="32"></i>
+                        </div>
+                        <div class="badge-glow violet" style="margin-bottom: 0.75rem;">PILLAR 03 &bull; CONVERSATIONAL ACCELERATORS</div>
+                        <h3>Auto-Draft Replies</h3>
+                        <p>
+                            Supercharge human follow-up velocity by 10x. Our localized cognitive engine scores incoming emails by urgency and intent, referencing company knowledge bases to prepare polished responses ready for 1-click review.
+                        </p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Inference Model</span>
+                            <span class="metric-val">Gemini 2.5 Structured Schema</span>
+                        </div>
+                        <div style="margin-top: 1.5rem;">
+                            <a href="/offerings/drafts" class="btn btn-cyber-primary" style="width: 100%; background: linear-gradient(135deg, var(--electric-violet), #ec4899);" onclick="event.stopPropagation()">
+                                <span>Inspect Draft Accelerators</span>
+                                <i data-lucide="arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Pillar 4: Custom Web Development -->
+                    <div class="feature-card" style="border-color: rgba(16, 185, 129, 0.35); cursor: pointer;" onclick="openDrawer('webdev')">
+                        <div class="feature-icon-wrapper" style="color: #10b981; border-color: rgba(16, 185, 129, 0.4);">
+                            <i data-lucide="code-2" size="32"></i>
+                        </div>
+                        <div class="badge-glow green" style="margin-bottom: 0.75rem;">PILLAR 04 &bull; DIGITAL ARCHITECTURE</div>
+                        <h3>Custom Web Development</h3>
+                        <p>
+                            We build immersive, high-performance web applications equipped with Three.js 3D shaders, GSAP kinetic scroll interactions, and direct native bindings to backend CRM pipelines and AI models.
+                        </p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Lighthouse Performance</span>
+                            <span class="metric-val">100 Score / 60FPS WebGL</span>
+                        </div>
+                        <div style="margin-top: 1.5rem;">
+                            <a href="/offerings/webdev" class="btn btn-cyber-primary" style="width: 100%; background: linear-gradient(135deg, #10b981, #0082ff);" onclick="event.stopPropagation()">
+                                <span>Inspect Web Architecture</span>
+                                <i data-lucide="arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interactive ROI Calculator Widget -->
+            <section class="simulator-section">
+                <div class="simulator-card">
+                    <div class="simulator-header">
+                        <div class="badge-glow">SIMULATE OPERATIONAL LEVERAGE</div>
+                        <h3>Interactive Throughput &amp; ROI Calculator</h3>
+                        <p>Estimate weekly hours recovered and financial upside by replacing manual ops with Fantom AI.</p>
+                    </div>
+
+                    <div class="simulator-body">
+                        <div class="simulator-controls">
+                            <div class="form-group">
+                                <label>Monthly Inbound Inquiries &amp; Calls: <span id="roi-leads-display" style="color: var(--holographic-cyan); font-weight: 700;">600 leads</span></label>
+                                <input type="range" id="roi-leads-range" min="100" max="5000" step="50" value="600" oninput="updateRoiCalc()">
+                            </div>
+                            <div class="form-group">
+                                <label>Average Hourly Operator Salary ($/hr): <span id="roi-rate-display" style="color: var(--holographic-cyan); font-weight: 700;">$32 / hr</span></label>
+                                <input type="range" id="roi-rate-range" min="15" max="90" step="1" value="32" oninput="updateRoiCalc()">
+                            </div>
+                            <div class="form-group">
+                                <label>Select Primary Bottlenecks:</label>
+                                <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.9rem;">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" id="chk-voice" checked onchange="updateRoiCalc()">
+                                        <span>Missed Phone Inquiries &amp; Call Queues</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" id="chk-crm" checked onchange="updateRoiCalc()">
+                                        <span>Manual Copy-Paste into CRM &amp; Spreadsheets</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" id="chk-drafts" checked onchange="updateRoiCalc()">
+                                        <span>Slow Inbound Email Follow-Up Latency</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="simulator-console">
+                            <div class="console-output-area" id="roi-output">
+                                <div style="color: var(--holographic-cyan); font-weight: 700; margin-bottom: 0.75rem;">--- FANTOM REVENUE GAIN PROJECTION ---</div>
+                                <div style="margin-bottom: 0.5rem;">Estimated Monthly Labor Hours Saved: <span id="calc-hours" style="color: #ffffff; font-weight: 700;">140 hrs</span></div>
+                                <div style="margin-bottom: 0.5rem;">Direct Monthly Payroll Saved: <span id="calc-dollars" style="color: #10b981; font-weight: 800; font-size: 1.25rem;">$4,480 / mo</span></div>
+                                <div style="margin-bottom: 0.5rem;">Recovered Missed Prospect Revenue: <span id="calc-recovery" style="color: var(--holographic-cyan); font-weight: 800; font-size: 1.15rem;">+$12,000 / mo</span></div>
+                                <div style="color: var(--text-muted); font-size: 0.8rem; margin-top: 1rem;">
+                                    *Based on typical 14-minute average lead intake + data entry overhead per manual operator.
+                                </div>
+                            </div>
+                            <div class="console-status-bar">
+                                <span>MODEL: Deterministic OpEx Calculator</span>
+                                <span style="color: #10b981;">STATUS: LIVE ESTIMATE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Native Integrations Ecosystem -->
+            <section class="integrations-box">
+                <div class="badge-glow violet">COMPATIBILITY FABRIC</div>
+                <h3>20+ Enterprise Connectors Ready Day One</h3>
+                <p>Deploy directly on top of your existing communication and CRM tools without data migration nightmares.</p>
+                <div class="integrations-grid">
+                    <div class="integration-tag"><i data-lucide="database"></i><span>HubSpot CRM</span></div>
+                    <div class="integration-tag"><i data-lucide="cloud"></i><span>Salesforce</span></div>
+                    <div class="integration-tag"><i data-lucide="table"></i><span>Airtable Bases</span></div>
+                    <div class="integration-tag"><i data-lucide="server"></i><span>Supabase Postgres</span></div>
+                    <div class="integration-tag"><i data-lucide="git-pull-request"></i><span>n8n Engine</span></div>
+                    <div class="integration-tag"><i data-lucide="workflow"></i><span>Zapier Webhooks</span></div>
+                    <div class="integration-tag"><i data-lucide="calendar"></i><span>Google Calendar</span></div>
+                    <div class="integration-tag"><i data-lucide="calendar-check"></i><span>Outlook 365</span></div>
+                    <div class="integration-tag"><i data-lucide="mail"></i><span>Gmail Node</span></div>
+                    <div class="integration-tag"><i data-lucide="send"></i><span>Resend API</span></div>
+                    <div class="integration-tag"><i data-lucide="life-buoy"></i><span>Zendesk Support</span></div>
+                    <div class="integration-tag"><i data-lucide="phone"></i><span>Twilio SIP</span></div>
+                    <div class="integration-tag"><i data-lucide="radio"></i><span>Vonage VoIP</span></div>
+                    <div class="integration-tag"><i data-lucide="bot"></i><span>Vapi &amp; Bland</span></div>
+                    <div class="integration-tag"><i data-lucide="credit-card"></i><span>Stripe Checkout</span></div>
+                </div>
+            </section>
+
+            <!-- Conversion CTA Banner -->
+            <section class="cta-banner">
+                <h2>Deploy the Complete <span>Autonomous Stack</span></h2>
+                <p>Schedule a Genesis Session to review your customized multi-channel architecture and view our live operational dashboard.</p>
+                <div class="cta-banner-buttons">
+                    <button class="btn btn-cyber-primary" onclick="openAppointmentModal()">
+                        <span>Book An Architecture Review</span>
+                        <i data-lucide="arrow-right"></i>
+                    </button>
+                    <a href="/edge" class="btn btn-cyber-secondary">
+                        <span>Compare Benchmarks</span>
+                        <i data-lucide="bar-chart-2"></i>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- INTERACTIVE DETAILS DRAWER -->
+    <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()">
+        <div class="drawer" id="details-drawer" onclick="event.stopPropagation()">
+            <button class="btn-close-drawer" onclick="closeDrawer()">
+                <i data-lucide="x"></i>
+            </button>
+
+            <div class="drawer-icon-wrapper" id="drawer-icon-container">
+                <i data-lucide="phone-call" size="36"></i>
+            </div>
+
+            <h2 id="drawer-title">Service Title</h2>
+            <div class="drawer-subtitle" id="drawer-subtitle">Subpage Title</div>
+
+            <div class="drawer-body" id="drawer-body-text">
+                Service description loading...
+            </div>
+
+            <div class="drawer-pitch-list" id="drawer-pitch-container">
+                <!-- Dynamic content -->
+            </div>
+
+            <div class="drawer-integrations-section">
+                <h4>Native Integrations</h4>
+                <div class="integrations-chips" id="drawer-integrations-container">
+                    <!-- Integration chips injected dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Appointment Modal -->
+    <div class="modal-overlay" id="appointment-modal-overlay" onclick="closeAppointmentModalOnOverlay(event)">
+        <div class="appointment-modal">
+            <button class="btn-close-modal" onclick="closeAppointmentModal()">
+                <i data-lucide="x"></i>
+            </button>
+            <h2>Secure Genesis Session</h2>
+            <p class="modal-sub">Schedule a direct architectural review of your custom requirements.</p>
+
+            <form id="appointment-form" onsubmit="handleAppointmentSubmit(event)">
+                <div class="form-group">
+                    <label>Full Name*</label>
+                    <input type="text" id="appt-name" required placeholder="e.g. Erlich Bachman">
+                </div>
+                <div class="form-group">
+                    <label>Corporate Email Address*</label>
+                    <input type="email" id="appt-email" required placeholder="e.g. erlich@raviga.com">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Desired Appointment Day*</label>
+                        <input type="date" id="appt-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Preferred Time Window*</label>
+                        <select id="appt-time" required>
+                            <option value="" disabled selected>Select window</option>
+                            <option value="09:00 AM - 12:00 PM">Morning (09:00 AM - 12:00 PM)</option>
+                            <option value="12:00 PM - 03:00 PM">Midday (12:00 PM - 03:00 PM)</option>
+                            <option value="03:00 PM - 06:00 PM">Afternoon (03:00 PM - 06:00 PM)</option>
+                            <option value="06:00 PM - 09:00 PM">Evening (06:00 PM - 09:00 PM)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Automation Goals / Discussion Scope*</label>
+                    <textarea id="appt-scope" rows="3" required placeholder="Outline what core pipelines you intend to deploy (e.g. voice agent handling, CRM sync rules...)"></textarea>
+                </div>
+                <button type="submit" class="btn-submit-glow" id="appt-submit-btn">
+                    <span>Deploy Request</span>
+                    <i data-lucide="send"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Global Cyber Footer -->
+    <footer class="cyber-footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h2>Fantom<span>AI</span></h2>
+                <p class="footer-tagline">Architecting the Autonomous Frontier. Elimination of operational latency through deterministic intelligence.</p>
+                <div class="badge-glow green" style="margin-bottom: 0;">
+                    <span class="badge-dot"></span>
+                    <span>ALL SYSTEMS OPERATIONAL</span>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="/nexus">Nexus Core</a></li>
+                    <li><a href="/genesis">Genesis Story</a></li>
+                    <li><a href="/ecosystem">Ecosystem Stack</a></li>
+                    <li><a href="/edge">The Fantom Edge</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Offerings</h4>
+                <ul class="footer-links">
+                    <li><a href="/offerings/voice">AI Voice Receptionist</a></li>
+                    <li><a href="/offerings/crm">CRM Sync Pipelines</a></li>
+                    <li><a href="/offerings/drafts">Auto-Draft Replies</a></li>
+                    <li><a href="/offerings/webdev">Custom Web Dev</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Direct Contact</h4>
+                <a href="mailto:contact@fantomai.site" class="footer-contact-item">
+                    <i data-lucide="mail"></i>
+                    <span>contact@fantomai.site</span>
+                </a>
+                <a href="https://wa.me/923364656329" class="footer-contact-item" target="_blank">
+                    <i data-lucide="phone"></i>
+                    <span>+92 336 4656329</span>
+                </a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>&copy; 2026 Fantom AI. All Rights Reserved. Engineered by Chaudary Moaz Kashif &amp; Umer Siddiqui.</div>
+            <div>Autonomous Architecture V2.4</div>
+        </div>
+    </footer>
+
+    <script src="/static/fantom-common.js"></script>
+    <script>
+        // ECOSYSTEM SERVICE DETAILS DATA
+        const serviceData = {
+            voice: {
+                title: "AI Voice Receptionists",
+                subtitle: "24/7 Smart Call Handling Infrastructure",
+                icon: "phone-call",
+                desc: "Never let another prospective customer call go to voicemail again. Our custom-trained voice receptionists deliver sub-millisecond conversation processing to handle infinite lines simultaneously.",
+                pitches: [
+                    { h: "Instant Answering", p: "Operates with next-generation low-latency audio pipelines, managing infinite concurrent dialers 24/7/365." },
+                    { h: "Human Cognition Engine", p: "Processes accents, dynamic interruptions, and natural intent shifts seamlessly in multiple custom brand personas." },
+                    { h: "Autonomous Pipeline Link", p: "Scans live availability (Google calendar, Outlook or native CRM slots) to lock booking schedules instantly." },
+                    { h: "Intelligent Lead Qualification", p: "Qualifies inbound caller leads on budget, time constraints, and goals before transferring details." }
+                ],
+                integrations: ["HubSpot", "Salesforce", "Zoho CRM", "n8n Webhooks", "Zapier", "Custom SIP/VoIP Trunks"]
+            },
+            crm: {
+                title: "CRM Sync & Pipeline Rules",
+                subtitle: "End-to-End Data Harmonization",
+                icon: "git-merge",
+                desc: "Banish manual copying and pasting forever. Unify ad clicks, webhook structures, and inbound web intake forms into clean data structures automatically mapped to your dashboard database.",
+                pitches: [
+                    { h: "Eradicate Copy-Paste Inertia", p: "Instantly unify lead databases from ads, landing sites, emails, and phone channels without human action." },
+                    { h: "Live Synchronization Engines", p: "Transmit user profiles directly into active databases (HubSalesforce, HubSpot, Airtable) with zero data loss." },
+                    { h: "Automated Transition Triggers", p: "Label incoming inquiries automatically, trigger notifications, and move pipeline stages based on context parsing." }
+                ],
+                integrations: ["HubSpot", "Salesforce", "Airtable", "n8n Engine", "ActiveCampaign", "PostgreSQL"]
+            },
+            drafts: {
+                title: "Auto-Draft Replies",
+                subtitle: "AI-Powered Conversational Accelerators",
+                icon: "mail-check",
+                desc: "Supercharge your human follow-up speeds. Our system runs incoming client inquiries through localized LLM nodes, scoring intent and preparing draft email replies ready for review.",
+                pitches: [
+                    { h: "Inbound Intent Scoring", p: "Advanced parsers score incoming support tickets or sales inquiries on dollar value and urgency." },
+                    { h: "Instant Response Outlines", p: "Builds structured custom proposals or support answers based on historical documentation guides." },
+                    { h: "Human-in-the-Loop Velocity", p: "Staff receives complete drafts, allowing them to review, tweak, and deploy personalized emails in seconds." }
+                ],
+                integrations: ["n8n.io", "Gmail Node", "Microsoft Outlook", "Resend API", "Zendesk Support", "Intercom API"]
+            },
+            webdev: {
+                title: "Custom Web Development",
+                subtitle: "High-Performance Digital Architecture",
+                icon: "code-2",
+                desc: "We develop high-performance visual platforms with rich interactive layers (Three.js and GSAP) designed to convert visitors and load instantly on all screen configurations.",
+                pitches: [
+                    { h: "Immersive Visual Graphics", p: "High-end layout animations built with Three.js rendering pipelines, WebGL layouts, and GSAP scroll triggers." },
+                    { h: "Core Vitals Optimizations", p: "Ensures flawless speed performance metrics, perfect SEO rankings, and maximum prospect capture retention." },
+                    { h: "Built-In AI Integration", p: "Every platform speaks natively to backend CRM systems, auto-responders, and customer classification rules." }
+                ],
+                integrations: ["Three.js", "GSAP Engine", "FastAPI Server", "Vite Bundler", "Cloudflare CDN", "Tailwind CSS"]
+            }
+        };
+
+        // Drawer Operations
+        function openDrawer(serviceKey) {
+            const data = serviceData[serviceKey];
+            if (!data) return;
+
+            document.getElementById('drawer-title').innerText = data.title;
+            document.getElementById('drawer-subtitle').innerText = data.subtitle;
+            document.getElementById('drawer-body-text').innerText = data.desc;
+
+            // Render Icon
+            const iconWrap = document.getElementById('drawer-icon-container');
+            iconWrap.innerHTML = `<i data-lucide="${data.icon}" size="36"></i>`;
+
+            // Render Pitches
+            const pitchWrap = document.getElementById('drawer-pitch-container');
+            pitchWrap.innerHTML = '';
+            data.pitches.forEach(pitch => {
+                pitchWrap.innerHTML += `
+                    <div class="drawer-pitch-item">
+                        <i data-lucide="check-circle-2" size="20"></i>
+                        <div>
+                            <h4>${pitch.h}</h4>
+                            <p>${pitch.p}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Render Integrations
+            const intWrap = document.getElementById('drawer-integrations-container');
+            intWrap.innerHTML = '';
+            data.integrations.forEach(integration => {
+                intWrap.innerHTML += `<span class="integration-chip">${integration}</span>`;
+            });
+
+            // Re-trigger Lucide icon render
+            lucide.createIcons();
+
+            // Toggle active classes
+            document.getElementById('drawer-overlay').classList.add('active');
+            document.getElementById('details-drawer').classList.add('active');
+            document.body.style.overflow = 'hidden'; // Lock background scroll
+        }
+
+        function closeDrawer() {
+            document.getElementById('drawer-overlay').classList.remove('active');
+            document.getElementById('details-drawer').classList.remove('active');
+            document.body.style.overflow = 'auto'; // Unlock background scroll
+        }
+
+        function updateRoiCalc() {
+            const leads = parseInt(document.getElementById('roi-leads-range').value);
+            const rate = parseInt(document.getElementById('roi-rate-range').value);
+
+            document.getElementById('roi-leads-display').innerText = `${leads} leads`;
+            document.getElementById('roi-rate-display').innerText = `$${rate} / hr`;
+
+            let multiplier = 0;
+            if (document.getElementById('chk-voice').checked) multiplier += 0.12;
+            if (document.getElementById('chk-crm').checked) multiplier += 0.08;
+            if (document.getElementById('chk-drafts').checked) multiplier += 0.05;
+
+            const hoursSaved = Math.round(leads * multiplier);
+            const dollarsSaved = hoursSaved * rate;
+            const recovery = Math.round(leads * 0.08 * 350);
+
+            document.getElementById('calc-hours').innerText = `${hoursSaved} hrs`;
+            document.getElementById('calc-dollars').innerText = `$${dollarsSaved.toLocaleString()} / mo`;
+            document.getElementById('calc-recovery').innerText = `+$${recovery.toLocaleString()} / mo`;
+        }
+    </script>
+</body>
+</html>

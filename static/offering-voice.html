@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Voice Receptionists — Autonomous Telephony | Fantom AI</title>
+    <meta name="description" content="Deploy persistent low-latency speech agents that handle inbound calls, answer customer queries, qualify leads, and update schedules 24/7/365.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/fantom-site.css">
+
+    <script src="/static/vendor/lucide.min.js"></script>
+    <script src="/static/vendor/three.min.js"></script>
+    <script src="/static/vendor/confetti.browser.min.js"></script>
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Global Navigation -->
+    <header class="navbar">
+        <a href="/nexus" class="brand-logo-container">
+            <div class="logo-q-infinity" id="nav-q-logo"></div>
+            <span class="brand-title">Fantom<span>AI</span></span>
+        </a>
+        <nav class="nav-links">
+            <a href="/nexus">Nexus</a>
+            <a href="/genesis">Genesis</a>
+            <a href="/ecosystem" class="active">Ecosystem</a>
+            <a href="/edge">The Edge</a>
+        </nav>
+        <div class="nav-actions">
+            <button class="btn-nav-appointment" onclick="openAppointmentModal()">
+                <i data-lucide="calendar"></i>
+                <span>Book Appointment</span>
+            </button>
+            <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-menu">
+        <a href="/nexus">Nexus</a>
+        <a href="/genesis">Genesis</a>
+        <a href="/ecosystem" class="active">Ecosystem</a>
+        <a href="/edge">The Edge</a>
+        <button class="btn-submit-glow" onclick="openAppointmentModal()" style="margin-top: 1rem;">Book An Appointment</button>
+    </div>
+
+    <!-- Main Page Wrapper -->
+    <main class="page-wrapper">
+        <div class="container">
+            <!-- Breadcrumbs -->
+            <div class="breadcrumbs">
+                <a href="/nexus">Nexus</a>
+                <span class="separator">/</span>
+                <a href="/ecosystem">Ecosystem</a>
+                <span class="separator">/</span>
+                <span class="current">AI Voice Receptionists</span>
+            </div>
+
+            <!-- Offering Hero -->
+            <section class="offering-hero">
+                <div class="badge-glow">
+                    <span class="badge-dot"></span>
+                    <span>PILLAR 01 &bull; 24/7 AUTONOMOUS TELEPHONY</span>
+                </div>
+                <h1>AI Voice <span>Receptionists</span></h1>
+                <p class="lead-desc">
+                    Never let another prospective customer call go to voicemail again. Our custom-trained neural speech agents deliver sub-280ms roundtrip conversation latency to handle infinite telephone lines simultaneously with human warmth and precision.
+                </p>
+
+                <div class="hero-stats-row">
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number">&lt; 280ms</span>
+                        <span class="hero-stat-label">Speech-to-Speech Latency</span>
+                    </div>
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number">&infin;</span>
+                        <span class="hero-stat-label">Concurrent Callers</span>
+                    </div>
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number">99.4%</span>
+                        <span class="hero-stat-label">Intent Classification</span>
+                    </div>
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number">100%</span>
+                        <span class="hero-stat-label">Calendar Sync Accuracy</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Visual Architecture Diagram -->
+            <section class="diagram-section">
+                <div class="diagram-card">
+                    <div class="diagram-card-header">
+                        <div class="diagram-card-title">
+                            <h3>Full-Duplex Speech &amp; Telephony Pipeline</h3>
+                            <p>End-to-end stream: from inbound PSTN / SIP trunk to neural speech transcription, LLM reasoning, live calendar resolution, and high-fidelity audio synthesis.</p>
+                        </div>
+                        <div class="diagram-badge">INFRASTRUCTURE ARCHITECTURE</div>
+                    </div>
+                    <div class="diagram-frame">
+                        <img src="/static/images/voice-architecture.svg" alt="Fantom AI Voice Receptionist Architecture Diagram">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Live Interactive Call Simulator -->
+            <section class="simulator-section">
+                <div class="simulator-card">
+                    <div class="simulator-header">
+                        <div class="badge-glow">LIVE INTERACTIVE BENCHMARK</div>
+                        <h3>Simulated Neural Voice Agent Console</h3>
+                        <p>Select a prospective caller scenario to experience the simulated dialogue stream and real-time audio transcript.</p>
+                    </div>
+
+                    <div class="simulator-body">
+                        <div class="simulator-controls">
+                            <div class="form-group">
+                                <label>Select Brand Voice Persona:</label>
+                                <select id="voice-persona" onchange="resetVoiceSim()">
+                                    <option value="executive">Sophia (Executive Assistant &bull; Formal &bull; Ultra-Crisp)</option>
+                                    <option value="warm">Marcus (Customer Care &bull; Empathetic &bull; Problem Solver)</option>
+                                    <option value="booking">Elena (Dispatch &amp; Booking Specialist &bull; High Conversion)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Select Inbound Caller Scenario:</label>
+                                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                    <button class="btn btn-cyber-secondary" onclick="simulateVoiceCall('booking')" style="justify-content: flex-start; text-align: left; padding: 0.75rem 1rem;">
+                                        <i data-lucide="calendar" size="18" style="color: var(--holographic-cyan);"></i>
+                                        <span>"I need an urgent demo this Thursday afternoon"</span>
+                                    </button>
+                                    <button class="btn btn-cyber-secondary" onclick="simulateVoiceCall('pricing')" style="justify-content: flex-start; text-align: left; padding: 0.75rem 1rem;">
+                                        <i data-lucide="tag" size="18" style="color: #c084fc;"></i>
+                                        <span>"What is your pricing tier for 2,000 monthly calls?"</span>
+                                    </button>
+                                    <button class="btn btn-cyber-secondary" onclick="simulateVoiceCall('support')" style="justify-content: flex-start; text-align: left; padding: 0.75rem 1rem;">
+                                        <i data-lucide="alert-circle" size="18" style="color: #10b981;"></i>
+                                        <span>"I need to reschedule my Friday meeting to Monday"</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Audio Waveform Visualization -->
+                            <div class="waveform-bars" id="voice-waveform">
+                                <div class="waveform-bar"></div>
+                                <div class="waveform-bar"></div>
+                                <div class="waveform-bar"></div>
+                                <div class="waveform-bar"></div>
+                                <div class="waveform-bar"></div>
+                                <div class="waveform-bar"></div>
+                                <div class="waveform-bar"></div>
+                                <div class="waveform-bar"></div>
+                                <div class="waveform-bar"></div>
+                                <div class="waveform-bar"></div>
+                                <div class="waveform-bar"></div>
+                                <div class="waveform-bar"></div>
+                                <div class="waveform-bar"></div>
+                                <div class="waveform-bar"></div>
+                                <div class="waveform-bar"></div>
+                            </div>
+                        </div>
+
+                        <div class="simulator-console">
+                            <div class="console-output-area" id="voice-transcript">
+                                <div style="color: var(--text-muted); font-style: italic;">[Ready] Select a caller scenario on the left to initiate the simulated full-duplex session...</div>
+                            </div>
+                            <div class="console-status-bar">
+                                <span id="voice-status">SIP LINE: IDLE</span>
+                                <span id="voice-metric" style="color: var(--holographic-cyan);">RTT: -- ms</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Detailed Capabilities Grid -->
+            <section style="margin: 5rem 0;">
+                <div class="section-header">
+                    <h2>Engineered for <span>Zero Compromise</span></h2>
+                    <p>Designed from first principles to overcome the failures of legacy IVRs and robotic menu trees.</p>
+                </div>
+
+                <div class="features-grid-3">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i data-lucide="mic-2"></i>
+                        </div>
+                        <h3>Human-Grade Audio Ingestion</h3>
+                        <p>Processes heavy accents, background traffic noise, colloquial slang, and spontaneous intent shifts seamlessly without asking callers to repeat themselves.</p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Word Error Rate</span>
+                            <span class="metric-val">&lt; 3.2% On VoIP</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i data-lucide="calendar-check"></i>
+                        </div>
+                        <h3>Autonomous Calendar Locking</h3>
+                        <p>Scans live availability directly across Google Calendar, Outlook 365, or native CRM slots to negotiate and confirm appointments in real time during the call.</p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Resolution Speed</span>
+                            <span class="metric-val">&lt; 350ms Query</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i data-lucide="filter"></i>
+                        </div>
+                        <h3>Budget &amp; Goal Qualification</h3>
+                        <p>Gently guides callers through custom qualification rubrics (timeline, budget range, decision-maker authority) before routing or scheduling appointments.</p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Lead Qualification</span>
+                            <span class="metric-val">100% Automated</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i data-lucide="corner-down-right"></i>
+                        </div>
+                        <h3>Warm Call Transfers</h3>
+                        <p>When an emergency or VIP client requests an immediate human operator, the agent executes a warm transfer, briefing the executive on caller context beforehand.</p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Transfer Protocols</span>
+                            <span class="metric-val">SIP REFER / Twilio Trunk</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i data-lucide="globe-2"></i>
+                        </div>
+                        <h3>Multilingual Dialects</h3>
+                        <p>Speaks and understands 40+ languages and localized regional idioms natively, switching dialects automatically the moment the caller changes languages.</p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Supported Languages</span>
+                            <span class="metric-val">40+ Global</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i data-lucide="file-text"></i>
+                        </div>
+                        <h3>Instant CRM Summarization</h3>
+                        <p>The instant the call terminates, the agent posts full transcriptions, audio recordings, sentiment tags, and structured JSON directly into your CRM database.</p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Post-Call Delivery</span>
+                            <span class="metric-val">&lt; 2.5 Seconds</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Technical Specifications Table -->
+            <section class="spec-table-container">
+                <div class="spec-table-title">Technical Specifications &amp; Telephony Protocols</div>
+                <table class="spec-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Fantom Implementation</th>
+                            <th>Architecture Note</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="spec-name">Telephony Connectivity</td>
+                            <td class="spec-val">SIP Trunking / WebRTC / PSTN Direct DID</td>
+                            <td>Compatible with Twilio, Vonage, Bland, Telnyx, Asterisk</td>
+                        </tr>
+                        <tr>
+                            <td class="spec-name">Audio Ingestion Codecs</td>
+                            <td class="spec-val">Opus (48kHz) / G.711 &mu;-law (PCMU) / G.722 HD</td>
+                            <td>Automatic audio resampling and jitter buffer management</td>
+                        </tr>
+                        <tr>
+                            <td class="spec-name">Speech Synthesis Engine</td>
+                            <td class="spec-val">Neural Streaming TTS (&lt; 90ms First Byte)</td>
+                            <td>ElevenLabs, Cartesia, and customized high-fidelity voice clones</td>
+                        </tr>
+                        <tr>
+                            <td class="spec-name">Concurrency Scaling</td>
+                            <td class="spec-val">Elastic Virtual Voice Nodes</td>
+                            <td>Zero queue delay; dynamically provisioned across global regions</td>
+                        </tr>
+                        <tr>
+                            <td class="spec-name">Calendar Sync APIs</td>
+                            <td class="spec-val">OAuth2 REST + CalDAV / Microsoft Graph API</td>
+                            <td>Immediate lock prevention to ensure zero double-booking</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Integrations Section -->
+            <section class="integrations-box">
+                <div class="badge-glow">COMPATIBLE INFRASTRUCTURE</div>
+                <h3>Native Telephony &amp; CRM Connectors</h3>
+                <p>Deploy voice receptionists seamlessly with your existing stack.</p>
+                <div class="integrations-grid">
+                    <div class="integration-tag"><i data-lucide="phone"></i><span>Twilio SIP</span></div>
+                    <div class="integration-tag"><i data-lucide="radio"></i><span>Vonage VoIP</span></div>
+                    <div class="integration-tag"><i data-lucide="bot"></i><span>Vapi &amp; Bland</span></div>
+                    <div class="integration-tag"><i data-lucide="calendar"></i><span>Google Calendar</span></div>
+                    <div class="integration-tag"><i data-lucide="calendar-check"></i><span>Outlook 365</span></div>
+                    <div class="integration-tag"><i data-lucide="database"></i><span>HubSpot CRM</span></div>
+                    <div class="integration-tag"><i data-lucide="cloud"></i><span>Salesforce</span></div>
+                    <div class="integration-tag"><i data-lucide="server"></i><span>Supabase Postgres</span></div>
+                    <div class="integration-tag"><i data-lucide="workflow"></i><span>n8n Webhooks</span></div>
+                </div>
+            </section>
+
+            <!-- Conversion CTA Banner -->
+            <section class="cta-banner">
+                <h2>Deploy Your <span>24/7 AI Voice Receptionist</span></h2>
+                <p>Book a Genesis Session with Chaudary Moaz Kashif &amp; Umer Siddiqui to hear live customized voice demos trained on your business domain.</p>
+                <div class="cta-banner-buttons">
+                    <button class="btn btn-cyber-primary" onclick="openAppointmentModal()">
+                        <span>Schedule Voice Demo</span>
+                        <i data-lucide="arrow-right"></i>
+                    </button>
+                    <a href="/offerings/crm" class="btn btn-cyber-secondary">
+                        <span>Explore CRM Sync</span>
+                        <i data-lucide="git-merge"></i>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Appointment Modal -->
+    <div class="modal-overlay" id="appointment-modal-overlay" onclick="closeAppointmentModalOnOverlay(event)">
+        <div class="appointment-modal">
+            <button class="btn-close-modal" onclick="closeAppointmentModal()">
+                <i data-lucide="x"></i>
+            </button>
+            <h2>Secure Genesis Session</h2>
+            <p class="modal-sub">Schedule a direct architectural review of your voice automation requirements.</p>
+
+            <form id="appointment-form" onsubmit="handleAppointmentSubmit(event)">
+                <div class="form-group">
+                    <label>Full Name*</label>
+                    <input type="text" id="appt-name" required placeholder="e.g. Erlich Bachman">
+                </div>
+                <div class="form-group">
+                    <label>Corporate Email Address*</label>
+                    <input type="email" id="appt-email" required placeholder="e.g. erlich@raviga.com">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Desired Appointment Day*</label>
+                        <input type="date" id="appt-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Preferred Time Window*</label>
+                        <select id="appt-time" required>
+                            <option value="" disabled selected>Select window</option>
+                            <option value="09:00 AM - 12:00 PM">Morning (09:00 AM - 12:00 PM)</option>
+                            <option value="12:00 PM - 03:00 PM">Midday (12:00 PM - 03:00 PM)</option>
+                            <option value="03:00 PM - 06:00 PM">Afternoon (03:00 PM - 06:00 PM)</option>
+                            <option value="06:00 PM - 09:00 PM">Evening (06:00 PM - 09:00 PM)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Automation Goals / Discussion Scope*</label>
+                    <textarea id="appt-scope" rows="3" required placeholder="Outline your telephony volume, current telephone carrier, and target booking flow..."></textarea>
+                </div>
+                <button type="submit" class="btn-submit-glow" id="appt-submit-btn">
+                    <span>Deploy Request</span>
+                    <i data-lucide="send"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Global Cyber Footer -->
+    <footer class="cyber-footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h2>Fantom<span>AI</span></h2>
+                <p class="footer-tagline">Architecting the Autonomous Frontier. Elimination of operational latency through deterministic intelligence.</p>
+                <div class="badge-glow green" style="margin-bottom: 0;">
+                    <span class="badge-dot"></span>
+                    <span>ALL SYSTEMS OPERATIONAL</span>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="/nexus">Nexus Core</a></li>
+                    <li><a href="/genesis">Genesis Story</a></li>
+                    <li><a href="/ecosystem">Ecosystem Stack</a></li>
+                    <li><a href="/edge">The Fantom Edge</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Offerings</h4>
+                <ul class="footer-links">
+                    <li><a href="/offerings/voice">AI Voice Receptionist</a></li>
+                    <li><a href="/offerings/crm">CRM Sync Pipelines</a></li>
+                    <li><a href="/offerings/drafts">Auto-Draft Replies</a></li>
+                    <li><a href="/offerings/webdev">Custom Web Dev</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Direct Contact</h4>
+                <a href="mailto:contact@fantomai.site" class="footer-contact-item">
+                    <i data-lucide="mail"></i>
+                    <span>contact@fantomai.site</span>
+                </a>
+                <a href="https://wa.me/923364656329" class="footer-contact-item" target="_blank">
+                    <i data-lucide="phone"></i>
+                    <span>+92 336 4656329</span>
+                </a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>&copy; 2026 Fantom AI. All Rights Reserved. Engineered by Chaudary Moaz Kashif &amp; Umer Siddiqui.</div>
+            <div>Autonomous Architecture V2.4</div>
+        </div>
+    </footer>
+
+    <script src="/static/fantom-common.js"></script>
+    <script>
+        const scenarioScripts = {
+            booking: [
+                { speaker: "Caller", text: "Hi, I saw your site and want to lock in an urgent architectural review for Thursday afternoon." },
+                { speaker: "Fantom Agent", text: "Hello! Absolutely, I can reserve that for you right now. I have open slots at 2:00 PM and 4:30 PM EST this Thursday. Which window suits your team best?" },
+                { speaker: "Caller", text: "Let's lock in 2:00 PM please." },
+                { speaker: "Fantom Agent", text: "2:00 PM Thursday is confirmed on our calendar. I've sent a calendar invitation and SMS confirmation to your phone. We look forward to meeting you!" }
+            ],
+            pricing: [
+                { speaker: "Caller", text: "Can you tell me what your pricing tier is for approximately 2,000 monthly voice calls?" },
+                { speaker: "Fantom Agent", text: "Certainly! At 2,000 monthly calls, our Growth Tier covers infinite concurrent lines, full calendar synchronization, and custom brand persona training starting at $799/month with zero per-minute overages." },
+                { speaker: "Caller", text: "Does that include CRM sync to HubSpot?" },
+                { speaker: "Fantom Agent", text: "Yes, full bidirectional HubSpot and Salesforce synchronization is included out of the box with zero data leakage guarantees." }
+            ],
+            support: [
+                { speaker: "Caller", text: "Hey, I need to reschedule my Friday meeting with Moaz Kashif to next Monday morning." },
+                { speaker: "Fantom Agent", text: "No problem at all! Let me pull up your account. I see the session on Friday. For Monday, Moaz has 10:00 AM or 11:30 AM available. Which one shall I switch you to?" },
+                { speaker: "Caller", text: "10:00 AM Monday works perfectly." },
+                { speaker: "Fantom Agent", text: "Done! Your meeting has been moved to Monday at 10:00 AM. Updated calendar invite dispatched to your inbox." }
+            ]
+        };
+
+        function resetVoiceSim() {
+            document.getElementById('voice-transcript').innerHTML = `<div style="color: var(--text-muted); font-style: italic;">[Ready] Persona updated. Select a scenario above to test dialog...</div>`;
+            document.getElementById('voice-status').innerText = 'SIP LINE: READY';
+            document.getElementById('voice-metric').innerText = 'RTT: -- ms';
+            document.getElementById('voice-waveform').classList.remove('active');
+        }
+
+        function simulateVoiceCall(key) {
+            const transcript = document.getElementById('voice-transcript');
+            const status = document.getElementById('voice-status');
+            const metric = document.getElementById('voice-metric');
+            const wave = document.getElementById('voice-waveform');
+            const persona = document.getElementById('voice-persona').value;
+
+            transcript.innerHTML = '';
+            status.innerText = 'SIP LINE: CONNECTED';
+            metric.innerText = 'STREAMING AUDIO';
+            wave.classList.add('active');
+
+            const script = scenarioScripts[key];
+            let index = 0;
+
+            function playNextLine() {
+                if (index >= script.length) {
+                    status.innerText = 'CALL COMPLETED & LOGGED';
+                    metric.innerText = 'RTT: 218ms AVG';
+                    wave.classList.remove('active');
+                    transcript.innerHTML += `<div style="color: #10b981; font-weight: 700; margin-top: 0.75rem;">&bull; Action completed: Calendar invitation dispatched &amp; CRM record updated in 180ms.</div>`;
+                    return;
+                }
+
+                const item = script[index];
+                const isAgent = item.speaker.includes('Fantom');
+                const color = isAgent ? 'var(--holographic-cyan)' : '#f3f4f6';
+                const prefix = isAgent ? `[${persona.toUpperCase()} VOICE AGENT]` : '[PROSPECT CALLER]';
+
+                transcript.innerHTML += `
+                    <div style="margin-bottom: 0.6rem;">
+                        <span style="color: ${color}; font-weight: 700;">${prefix}: </span>
+                        <span>${item.text}</span>
+                    </div>
+                `;
+                transcript.scrollTop = transcript.scrollHeight;
+
+                index++;
+                setTimeout(playNextLine, 1200);
+            }
+
+            playNextLine();
+        }
+    </script>
+</body>
+</html>

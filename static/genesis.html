@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genesis — Origin &amp; Leadership | Fantom AI</title>
+    <meta name="description" content="Discover the origins of Fantom AI, founded in 2026 by Chaudary Moaz Kashif and Umer Siddiqui to forge an autonomous, zero-friction enterprise paradigm.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/fantom-site.css">
+
+    <script src="/static/vendor/lucide.min.js"></script>
+    <script src="/static/vendor/three.min.js"></script>
+    <script src="/static/vendor/confetti.browser.min.js"></script>
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Global Navigation -->
+    <header class="navbar">
+        <a href="/nexus" class="brand-logo-container">
+            <div class="logo-q-infinity" id="nav-q-logo"></div>
+            <span class="brand-title">Fantom<span>AI</span></span>
+        </a>
+        <nav class="nav-links">
+            <a href="/nexus">Nexus</a>
+            <a href="/genesis" class="active">Genesis</a>
+            <a href="/ecosystem">Ecosystem</a>
+            <a href="/edge">The Edge</a>
+        </nav>
+        <div class="nav-actions">
+            <button class="btn-nav-appointment" onclick="openAppointmentModal()">
+                <i data-lucide="calendar"></i>
+                <span>Book Appointment</span>
+            </button>
+            <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-menu">
+        <a href="/nexus">Nexus</a>
+        <a href="/genesis" class="active">Genesis</a>
+        <a href="/ecosystem">Ecosystem</a>
+        <a href="/edge">The Edge</a>
+        <button class="btn-submit-glow" onclick="openAppointmentModal()" style="margin-top: 1rem;">Book An Appointment</button>
+    </div>
+
+    <!-- Main Page Wrapper -->
+    <main class="page-wrapper">
+        <div class="container">
+            <!-- Breadcrumbs -->
+            <div class="breadcrumbs">
+                <a href="/nexus">Nexus</a>
+                <span class="separator">/</span>
+                <span class="current">Genesis</span>
+            </div>
+
+            <!-- Genesis Hero Section -->
+            <section class="offering-hero">
+                <div class="badge-glow violet">
+                    <span class="badge-dot"></span>
+                    <span>ORIGIN NARRATIVE &amp; ARCHITECTURAL TENETS</span>
+                </div>
+                <h1>Born in 2026. Forged in Data. <span>Built for Scale.</span></h1>
+                <p class="lead-desc">
+                    Forging a borderless automated paradigm to eliminate the friction of human operations. We engineer deterministic, self-healing AI agents that handle speech, CRM synchronization, and automated communications with microsecond responsiveness.
+                </p>
+
+                <div class="hero-stats-row">
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number">2026</span>
+                        <span class="hero-stat-label">Inception Year</span>
+                    </div>
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number">100%</span>
+                        <span class="hero-stat-label">Autonomous Uptime</span>
+                    </div>
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number">&lt; 80ms</span>
+                        <span class="hero-stat-label">Telemetry Ingress</span>
+                    </div>
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number">Zero</span>
+                        <span class="hero-stat-label">Data Leakage</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Visual Genesis Timeline -->
+            <section class="diagram-section">
+                <div class="diagram-card">
+                    <div class="diagram-card-header">
+                        <div class="diagram-card-title">
+                            <h3>Genesis Timeline &amp; Engineering Trajectory</h3>
+                            <p>From conceptual pitch at FAST-NUCES &amp; UMT to multi-regional enterprise autonomous infrastructure.</p>
+                        </div>
+                        <div class="diagram-badge">ROADMAP &amp; ORIGIN</div>
+                    </div>
+                    <div class="diagram-frame">
+                        <img src="/static/images/genesis-timeline.svg" alt="Genesis Timeline &amp; Trajectory">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Founders & Leadership Duel-Blocks -->
+            <section style="margin: 5rem 0;">
+                <div class="section-header">
+                    <h2>Executive <span>Leadership</span></h2>
+                    <p>Engineered by specialized researchers and distributed systems practitioners.</p>
+                </div>
+
+                <div class="features-grid-2">
+                    <!-- Founder Card -->
+                    <div class="feature-card" style="border-color: rgba(0, 242, 254, 0.35);">
+                        <div style="display: flex; gap: 1.5rem; align-items: center; margin-bottom: 1.5rem;">
+                            <div style="width: 76px; height: 76px; border-radius: 50%; background: linear-gradient(135deg, var(--holographic-cyan), var(--electric-violet)); padding: 3px; flex-shrink: 0;">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: #0c0c1e; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.65rem; font-weight: 800; color: white;">MK</div>
+                            </div>
+                            <div>
+                                <h3 style="margin-bottom: 0.25rem;">Chaudary Moaz Kashif</h3>
+                                <div style="color: var(--holographic-cyan); font-family: var(--font-display); font-size: 0.88rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Founder &amp; Chief AI Architect</div>
+                                <div style="color: var(--text-muted); font-size: 0.85rem;">FAST-NUCES (BS Data Science)</div>
+                            </div>
+                        </div>
+                        <p>
+                            Visionary behind the Fantom AI autonomous core framework. Spearheading advanced data patterns, predictive modeling, cognitive agent pipelines, and LLM orchestration topologies to eliminate human operational latency.
+                        </p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Core Focus</span>
+                            <span class="metric-val">Cognitive Agent Architectures &amp; NLP</span>
+                        </div>
+                    </div>
+
+                    <!-- Co-Founder Card -->
+                    <div class="feature-card" style="border-color: rgba(127, 0, 255, 0.35);">
+                        <div style="display: flex; gap: 1.5rem; align-items: center; margin-bottom: 1.5rem;">
+                            <div style="width: 76px; height: 76px; border-radius: 50%; background: linear-gradient(135deg, var(--electric-violet), #ec4899); padding: 3px; flex-shrink: 0;">
+                                <div style="width: 100%; height: 100%; border-radius: 50%; background: #0c0c1e; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.65rem; font-weight: 800; color: white;">US</div>
+                            </div>
+                            <div>
+                                <h3 style="margin-bottom: 0.25rem;">Umer Siddiqui</h3>
+                                <div style="color: #c084fc; font-family: var(--font-display); font-size: 0.88rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Co-Founder &amp; Systems Lead</div>
+                                <div style="color: var(--text-muted); font-size: 0.85rem;">UMT (BS Computer Science)</div>
+                            </div>
+                        </div>
+                        <p>
+                            Mastermind behind Fantom's distributed software execution fabrics. Directing fault-tolerant microservices, asynchronous message queues, SIP voice transport conduits, and bulletproof database synchronization pipelines.
+                        </p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Core Focus</span>
+                            <span class="metric-val">Distributed High-Availability Systems</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Architectural Tenets -->
+            <section style="margin: 5rem 0;">
+                <div class="section-header">
+                    <h2>Core Architectural <span>Tenets</span></h2>
+                    <p>The engineering principles guiding every line of code deployed in the Fantom AI ecosystem.</p>
+                </div>
+
+                <div class="features-grid-3">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i data-lucide="zap"></i>
+                        </div>
+                        <h3>Zero-Latency Telephony</h3>
+                        <p>Real-time conversational processing requires sub-millisecond audio streaming. We optimize STT, LLM inference, and TTS pipelines to respond within natural human pause thresholds (&lt; 280ms).</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i data-lucide="shield-check"></i>
+                        </div>
+                        <h3>Deterministic Data Sync</h3>
+                        <p>We eliminate copy-paste inertia. Every customer interaction is validated against strict JSON schemas and written into production databases with zero record dropping.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i data-lucide="refresh-cw"></i>
+                        </div>
+                        <h3>Self-Healing Workflows</h3>
+                        <p>Our automation pipelines detect edge cases, rate limits, and network anomalies dynamically, falling back to jittered exponential backoffs without human intervention.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i data-lucide="lock"></i>
+                        </div>
+                        <h3>Air-Tight Security</h3>
+                        <p>AES-256 encryption at rest and in transit, isolated 2FA credentials, rigorous CORS policies, and strict least-privilege API scope enforcement.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i data-lucide="users-round"></i>
+                        </div>
+                        <h3>Human-in-the-Loop Velocity</h3>
+                        <p>AI should supercharge operators, not blindside them. Inbound inquiries receive instant auto-draft replies ready for 1-click human review and deployment.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <i data-lucide="layers"></i>
+                        </div>
+                        <h3>Unbounded Concurrency</h3>
+                        <p>Whether handling 5 calls or 5,000 simultaneous inquiries across global time zones, our cloud-native microservices scale automatically without performance degradation.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Conversion CTA Banner -->
+            <section class="cta-banner">
+                <h2>Ready to Deploy <span>Genesis Intelligence?</span></h2>
+                <p>Schedule a private architectural review directly with Chaudary Moaz Kashif and Umer Siddiqui to map your enterprise bottlenecks into autonomous workflows.</p>
+                <div class="cta-banner-buttons">
+                    <button class="btn btn-cyber-primary" onclick="openAppointmentModal()">
+                        <span>Schedule Genesis Session</span>
+                        <i data-lucide="arrow-right"></i>
+                    </button>
+                    <a href="/ecosystem" class="btn btn-cyber-secondary">
+                        <span>Explore Offerings</span>
+                        <i data-lucide="layers"></i>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Appointment Modal -->
+    <div class="modal-overlay" id="appointment-modal-overlay" onclick="closeAppointmentModalOnOverlay(event)">
+        <div class="appointment-modal">
+            <button class="btn-close-modal" onclick="closeAppointmentModal()">
+                <i data-lucide="x"></i>
+            </button>
+            <h2>Secure Genesis Session</h2>
+            <p class="modal-sub">Schedule a direct architectural review of your custom requirements.</p>
+
+            <form id="appointment-form" onsubmit="handleAppointmentSubmit(event)">
+                <div class="form-group">
+                    <label>Full Name*</label>
+                    <input type="text" id="appt-name" required placeholder="e.g. Erlich Bachman">
+                </div>
+                <div class="form-group">
+                    <label>Corporate Email Address*</label>
+                    <input type="email" id="appt-email" required placeholder="e.g. erlich@raviga.com">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Desired Appointment Day*</label>
+                        <input type="date" id="appt-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Preferred Time Window*</label>
+                        <select id="appt-time" required>
+                            <option value="" disabled selected>Select window</option>
+                            <option value="09:00 AM - 12:00 PM">Morning (09:00 AM - 12:00 PM)</option>
+                            <option value="12:00 PM - 03:00 PM">Midday (12:00 PM - 03:00 PM)</option>
+                            <option value="03:00 PM - 06:00 PM">Afternoon (03:00 PM - 06:00 PM)</option>
+                            <option value="06:00 PM - 09:00 PM">Evening (06:00 PM - 09:00 PM)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Automation Goals / Discussion Scope*</label>
+                    <textarea id="appt-scope" rows="3" required placeholder="Outline what core pipelines you intend to deploy (e.g. voice agent handling, CRM sync rules...)"></textarea>
+                </div>
+                <button type="submit" class="btn-submit-glow" id="appt-submit-btn">
+                    <span>Deploy Request</span>
+                    <i data-lucide="send"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Global Cyber Footer -->
+    <footer class="cyber-footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h2>Fantom<span>AI</span></h2>
+                <p class="footer-tagline">Architecting the Autonomous Frontier. Elimination of operational latency through deterministic intelligence.</p>
+                <div class="badge-glow green" style="margin-bottom: 0;">
+                    <span class="badge-dot"></span>
+                    <span>ALL SYSTEMS OPERATIONAL</span>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="/nexus">Nexus Core</a></li>
+                    <li><a href="/genesis">Genesis Story</a></li>
+                    <li><a href="/ecosystem">Ecosystem Stack</a></li>
+                    <li><a href="/edge">The Fantom Edge</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Offerings</h4>
+                <ul class="footer-links">
+                    <li><a href="/offerings/voice">AI Voice Receptionist</a></li>
+                    <li><a href="/offerings/crm">CRM Sync Pipelines</a></li>
+                    <li><a href="/offerings/drafts">Auto-Draft Replies</a></li>
+                    <li><a href="/offerings/webdev">Custom Web Dev</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Direct Contact</h4>
+                <a href="mailto:contact@fantomai.site" class="footer-contact-item">
+                    <i data-lucide="mail"></i>
+                    <span>contact@fantomai.site</span>
+                </a>
+                <a href="https://wa.me/923364656329" class="footer-contact-item" target="_blank">
+                    <i data-lucide="phone"></i>
+                    <span>+92 336 4656329</span>
+                </a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>&copy; 2026 Fantom AI. All Rights Reserved. Engineered by Chaudary Moaz Kashif &amp; Umer Siddiqui.</div>
+            <div>Autonomous Architecture V2.4</div>
+        </div>
+    </footer>
+
+    <script src="/static/fantom-common.js"></script>
+</body>
+</html>

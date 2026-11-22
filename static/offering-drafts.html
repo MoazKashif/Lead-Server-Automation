@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto-Draft Replies — AI Conversational Accelerators | Fantom AI</title>
+    <meta name="description" content="Supercharge follow-up speeds by 10x. Semantic classifiers inspect support tickets and sales emails to prepare contextual responses ready for 1-click human review.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/fantom-site.css">
+
+    <script src="/static/vendor/lucide.min.js"></script>
+    <script src="/static/vendor/three.min.js"></script>
+    <script src="/static/vendor/confetti.browser.min.js"></script>
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Global Navigation -->
+    <header class="navbar">
+        <a href="/nexus" class="brand-logo-container">
+            <div class="logo-q-infinity" id="nav-q-logo"></div>
+            <span class="brand-title">Fantom<span>AI</span></span>
+        </a>
+        <nav class="nav-links">
+            <a href="/nexus">Nexus</a>
+            <a href="/genesis">Genesis</a>
+            <a href="/ecosystem" class="active">Ecosystem</a>
+            <a href="/edge">The Edge</a>
+        </nav>
+        <div class="nav-actions">
+            <button class="btn-nav-appointment" onclick="openAppointmentModal()">
+                <i data-lucide="calendar"></i>
+                <span>Book Appointment</span>
+            </button>
+            <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-menu">
+        <a href="/nexus">Nexus</a>
+        <a href="/genesis">Genesis</a>
+        <a href="/ecosystem" class="active">Ecosystem</a>
+        <a href="/edge">The Edge</a>
+        <button class="btn-submit-glow" onclick="openAppointmentModal()" style="margin-top: 1rem;">Book An Appointment</button>
+    </div>
+
+    <!-- Main Page Wrapper -->
+    <main class="page-wrapper">
+        <div class="container">
+            <!-- Breadcrumbs -->
+            <div class="breadcrumbs">
+                <a href="/nexus">Nexus</a>
+                <span class="separator">/</span>
+                <a href="/ecosystem">Ecosystem</a>
+                <span class="separator">/</span>
+                <span class="current">Auto-Draft Replies</span>
+            </div>
+
+            <!-- Offering Hero -->
+            <section class="offering-hero">
+                <div class="badge-glow violet">
+                    <span class="badge-dot" style="background-color: var(--electric-violet);"></span>
+                    <span>PILLAR 03 &bull; COGNITIVE CONVERSATIONAL ACCELERATORS</span>
+                </div>
+                <h1>Auto-Draft <span>Replies</span></h1>
+                <p class="lead-desc">
+                    Supercharge your human follow-up speeds by 10x. Our localized cognitive engine scores incoming client inquiries by intent and urgency, extracting context from your internal knowledge base to draft polished proposals ready for 1-click review.
+                </p>
+
+                <div class="hero-stats-row">
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number" style="color: #c084fc;">10x</span>
+                        <span class="hero-stat-label">Response Velocity</span>
+                    </div>
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number" style="color: #10b981;">99.1%</span>
+                        <span class="hero-stat-label">Factual Accuracy</span>
+                    </div>
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number" style="color: var(--holographic-cyan);">&lt; 30s</span>
+                        <span class="hero-stat-label">Draft Generation Time</span>
+                    </div>
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number" style="color: #0082ff;">100%</span>
+                        <span class="hero-stat-label">Human-in-the-Loop Control</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Visual Architecture Diagram -->
+            <section class="diagram-section">
+                <div class="diagram-card">
+                    <div class="diagram-card-header">
+                        <div class="diagram-card-title">
+                            <h3>Cognitive Reasoning &amp; Human-in-the-Loop Pipeline</h3>
+                            <p>From inbound email ingestion through Gemini intent classification, RAG context retrieval, draft generation, and 1-click review dispatch.</p>
+                        </div>
+                        <div class="diagram-badge">COGNITIVE ENGINE TOPOLOGY</div>
+                    </div>
+                    <div class="diagram-frame">
+                        <img src="/static/images/drafts-architecture.svg" alt="Fantom AI Auto-Draft Replies Architecture Diagram">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Live Interactive Email Copilot Simulator -->
+            <section class="simulator-section">
+                <div class="simulator-card">
+                    <div class="simulator-header">
+                        <div class="badge-glow violet">LIVE COGNITIVE DEMO</div>
+                        <h3>Interactive AI Email Copilot Simulator</h3>
+                        <p>Select a realistic incoming client email to watch instant intent classification, urgency scoring, and structured draft generation.</p>
+                    </div>
+
+                    <div class="simulator-body">
+                        <div class="simulator-controls">
+                            <div class="form-group">
+                                <label>Select Incoming Customer Inquiry:</label>
+                                <div style="display: flex; flex-direction: column; gap: 0.65rem;">
+                                    <button class="btn btn-cyber-secondary" onclick="simulateDraft('enterprise')" style="justify-content: flex-start; text-align: left; padding: 0.85rem 1rem;">
+                                        <i data-lucide="building" size="18" style="color: #c084fc;"></i>
+                                        <div>
+                                            <div style="font-weight: 700;">Enterprise SLA &amp; Volume Quote</div>
+                                            <div style="font-size: 0.8rem; color: var(--text-muted);">From: VP Operations &bull; 8,000 monthly calls</div>
+                                        </div>
+                                    </button>
+                                    <button class="btn btn-cyber-secondary" onclick="simulateDraft('technical')" style="justify-content: flex-start; text-align: left; padding: 0.85rem 1rem;">
+                                        <i data-lucide="wrench" size="18" style="color: #ef4444;"></i>
+                                        <div>
+                                            <div style="font-weight: 700;">Critical Webhook Auth Timeout</div>
+                                            <div style="font-size: 0.8rem; color: var(--text-muted);">From: Lead Engineer &bull; 401 Unauthorized Error</div>
+                                        </div>
+                                    </button>
+                                    <button class="btn btn-cyber-secondary" onclick="simulateDraft('partnership')" style="justify-content: flex-start; text-align: left; padding: 0.85rem 1rem;">
+                                        <i data-lucide="handshake" size="18" style="color: var(--holographic-cyan);"></i>
+                                        <div>
+                                            <div style="font-weight: 700;">Agency Reseller Partnership</div>
+                                            <div style="font-size: 0.8rem; color: var(--text-muted);">From: Digital Marketing Agency Director</div>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div style="background: rgba(10, 10, 25, 0.6); padding: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); font-size: 0.85rem;">
+                                <div style="color: var(--text-muted); margin-bottom: 0.35rem;">Ingestion Sources:</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+                                    <span style="background: rgba(234, 67, 53, 0.15); color: #ea4335; padding: 2px 8px; border-radius: 4px; font-weight: 600;">Gmail Node</span>
+                                    <span style="background: rgba(0, 120, 212, 0.15); color: #0078d4; padding: 2px 8px; border-radius: 4px; font-weight: 600;">Outlook 365</span>
+                                    <span style="background: rgba(3, 54, 61, 0.4); color: #00F2FE; padding: 2px 8px; border-radius: 4px; font-weight: 600;">Zendesk Tickets</span>
+                                    <span style="background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 2px 8px; border-radius: 4px; font-weight: 600;">Resend API</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="simulator-console">
+                            <div class="console-output-area" id="draft-console-output">
+                                <div style="color: var(--text-muted); font-style: italic;">[Ready] Select an incoming email above to generate structured draft responses...</div>
+                            </div>
+                            <div class="console-status-bar">
+                                <span id="draft-status">MODEL: IDLE</span>
+                                <span id="draft-perf" style="color: #c084fc;">LATENCY: --</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Detailed Capabilities Grid -->
+            <section style="margin: 5rem 0;">
+                <div class="section-header">
+                    <h2>Human-in-the-Loop <span>Acceleration</span></h2>
+                    <p>Designed to multiply your executive staff's bandwidth rather than replace critical human relationships.</p>
+                </div>
+
+                <div class="features-grid-3">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper" style="color: #c084fc; border-color: rgba(127, 0, 255, 0.4);">
+                            <i data-lucide="compass"></i>
+                        </div>
+                        <h3>Semantic Intent &amp; Urgency Scoring</h3>
+                        <p>Evaluates incoming customer inquiries across 5 distinct categories (Inquiry, Support, Partnership, Career, Spam) and tags urgency as High, Medium, or Low with transparent rationale.</p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Classification Accuracy</span>
+                            <span class="metric-val">99.4% F1-Score</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper" style="color: var(--holographic-cyan); border-color: rgba(0, 242, 254, 0.4);">
+                            <i data-lucide="book-open-check"></i>
+                        </div>
+                        <h3>RAG Company Knowledge Integration</h3>
+                        <p>Indexes your company's product documentation, pricing tiers, SLAs, and previous high-converting sales emails to produce hyper-accurate contextual proposals.</p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Hallucination Guard</span>
+                            <span class="metric-val">Strict Grounding</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper" style="color: #10b981; border-color: rgba(16, 185, 129, 0.4);">
+                            <i data-lucide="check-check"></i>
+                        </div>
+                        <h3>1-Click Operator Approval</h3>
+                        <p>Drafts appear directly in staff inboxes or the Fantom Admin Console. Team members review, make custom adjustments if desired, and deploy with a single click.</p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Time Saved per Email</span>
+                            <span class="metric-val">8 - 12 Minutes</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper" style="color: #0082ff; border-color: rgba(0, 130, 255, 0.4);">
+                            <i data-lucide="languages"></i>
+                        </div>
+                        <h3>Polite &amp; Brand-Aligned Tone</h3>
+                        <p>Adapts greeting, sign-off, and conversational cadence to match your organization's formal executive or modern approachable voice tone flawlessly.</p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Persona Consistency</span>
+                            <span class="metric-val">Custom System Prompts</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper" style="color: #f59e0b; border-color: rgba(245, 158, 11, 0.4);">
+                            <i data-lucide="list-checks"></i>
+                        </div>
+                        <h3>Multi-Point Executive Summaries</h3>
+                        <p>Produces a concise 2-3 bullet point summary above every draft, giving busy executives instant comprehension of client requirements before reading details.</p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Summary Format</span>
+                            <span class="metric-val">Structured Bullets</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper" style="color: #ec4899; border-color: rgba(236, 72, 153, 0.4);">
+                            <i data-lucide="send"></i>
+                        </div>
+                        <h3>Native Email API Dispatch</h3>
+                        <p>Integrates natively with Gmail OAuth, Outlook Graph API, and transactional delivery engines like Resend and SendGrid to dispatch emails through authenticated domains.</p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Deliverability</span>
+                            <span class="metric-val">DKIM &amp; SPF Aligned</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Technical Specifications Table -->
+            <section class="spec-table-container">
+                <div class="spec-table-title">Cognitive Engine Specifications</div>
+                <table class="spec-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Fantom Implementation</th>
+                            <th>Technical Guarantee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="spec-name">Foundational Model Core</td>
+                            <td class="spec-val">Google Gemini 2.5 Flash / Pro via Python SDK</td>
+                            <td>Sub-second token streaming and schema enforcement</td>
+                        </tr>
+                        <tr>
+                            <td class="spec-name">Structured Schema Typing</td>
+                            <td class="spec-val">Pydantic Model (Urgency, Category, Summary, Draft)</td>
+                            <td>Guaranteed valid JSON parse &bull; Zero schema drift</td>
+                        </tr>
+                        <tr>
+                            <td class="spec-name">Context Window Ingestion</td>
+                            <td class="spec-val">Up to 1M Tokens Context Memory</td>
+                            <td>Can ingest full customer history threads &amp; attached PDFs</td>
+                        </tr>
+                        <tr>
+                            <td class="spec-name">Mail Service Connectors</td>
+                            <td class="spec-val">Gmail REST API, Microsoft Graph API, IMAP/SMTP</td>
+                            <td>OAuth2 refresh token persistence with TLS 1.3 encryption</td>
+                        </tr>
+                        <tr>
+                            <td class="spec-name">Review Controls</td>
+                            <td class="spec-val">Human Approval Gateway with Edit-in-Place</td>
+                            <td>Emails are never dispatched blindly without authorization</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Conversion CTA Banner -->
+            <section class="cta-banner">
+                <h2>Supercharge Your <span>Inbound Follow-Ups</span></h2>
+                <p>Schedule a Genesis Session to integrate Fantom Auto-Draft Accelerators with your corporate inboxes and CRM pipelines.</p>
+                <div class="cta-banner-buttons">
+                    <button class="btn btn-cyber-primary" onclick="openAppointmentModal()">
+                        <span>Schedule Cognitive Review</span>
+                        <i data-lucide="arrow-right"></i>
+                    </button>
+                    <a href="/offerings/webdev" class="btn btn-cyber-secondary">
+                        <span>Explore Web Development</span>
+                        <i data-lucide="code-2"></i>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Appointment Modal -->
+    <div class="modal-overlay" id="appointment-modal-overlay" onclick="closeAppointmentModalOnOverlay(event)">
+        <div class="appointment-modal">
+            <button class="btn-close-modal" onclick="closeAppointmentModal()">
+                <i data-lucide="x"></i>
+            </button>
+            <h2>Secure Genesis Session</h2>
+            <p class="modal-sub">Schedule a direct architectural review of your auto-draft requirements.</p>
+
+            <form id="appointment-form" onsubmit="handleAppointmentSubmit(event)">
+                <div class="form-group">
+                    <label>Full Name*</label>
+                    <input type="text" id="appt-name" required placeholder="e.g. Erlich Bachman">
+                </div>
+                <div class="form-group">
+                    <label>Corporate Email Address*</label>
+                    <input type="email" id="appt-email" required placeholder="e.g. erlich@raviga.com">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Desired Appointment Day*</label>
+                        <input type="date" id="appt-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Preferred Time Window*</label>
+                        <select id="appt-time" required>
+                            <option value="" disabled selected>Select window</option>
+                            <option value="09:00 AM - 12:00 PM">Morning (09:00 AM - 12:00 PM)</option>
+                            <option value="12:00 PM - 03:00 PM">Midday (12:00 PM - 03:00 PM)</option>
+                            <option value="03:00 PM - 06:00 PM">Afternoon (03:00 PM - 06:00 PM)</option>
+                            <option value="06:00 PM - 09:00 PM">Evening (06:00 PM - 09:00 PM)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Automation Goals / Discussion Scope*</label>
+                    <textarea id="appt-scope" rows="3" required placeholder="Detail your monthly incoming email volume and knowledge base format..."></textarea>
+                </div>
+                <button type="submit" class="btn-submit-glow" id="appt-submit-btn">
+                    <span>Deploy Request</span>
+                    <i data-lucide="send"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Global Cyber Footer -->
+    <footer class="cyber-footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h2>Fantom<span>AI</span></h2>
+                <p class="footer-tagline">Architecting the Autonomous Frontier. Elimination of operational latency through deterministic intelligence.</p>
+                <div class="badge-glow green" style="margin-bottom: 0;">
+                    <span class="badge-dot"></span>
+                    <span>ALL SYSTEMS OPERATIONAL</span>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="/nexus">Nexus Core</a></li>
+                    <li><a href="/genesis">Genesis Story</a></li>
+                    <li><a href="/ecosystem">Ecosystem Stack</a></li>
+                    <li><a href="/edge">The Fantom Edge</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Offerings</h4>
+                <ul class="footer-links">
+                    <li><a href="/offerings/voice">AI Voice Receptionist</a></li>
+                    <li><a href="/offerings/crm">CRM Sync Pipelines</a></li>
+                    <li><a href="/offerings/drafts">Auto-Draft Replies</a></li>
+                    <li><a href="/offerings/webdev">Custom Web Dev</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Direct Contact</h4>
+                <a href="mailto:contact@fantomai.site" class="footer-contact-item">
+                    <i data-lucide="mail"></i>
+                    <span>contact@fantomai.site</span>
+                </a>
+                <a href="https://wa.me/923364656329" class="footer-contact-item" target="_blank">
+                    <i data-lucide="phone"></i>
+                    <span>+92 336 4656329</span>
+                </a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>&copy; 2026 Fantom AI. All Rights Reserved. Engineered by Chaudary Moaz Kashif &amp; Umer Siddiqui.</div>
+            <div>Autonomous Architecture V2.4</div>
+        </div>
+    </footer>
+
+    <script src="/static/fantom-common.js"></script>
+    <script>
+        const draftScenarios = {
+            enterprise: {
+                urgency: "High",
+                category: "Inquiry",
+                summary: [
+                    "Client is evaluating an 8,000 call/mo enterprise tier deployment.",
+                    "Requested custom SIP trunk integration documentation and SLA guarantee.",
+                    "Decision timeline is end of current month with high budget readiness."
+                ],
+                draft: "Hi David,\n\nThank you for reaching out to Fantom AI. For an enterprise volume of 8,000 monthly calls, our dedicated high-availability infrastructure provides unlimited concurrent SIP lines with a 99.9% uptime SLA.\n\nI have attached our technical SIP interconnection specs and security audit documents. We would love to walk your engineering team through an interactive live trial this Thursday or Friday.\n\nPlease pick a convenient time on our executive calendar here: https://fantomai.site/nexus#appointment\n\nBest regards,\nChaudary Moaz Kashif\nFounder & Chief AI Architect, Fantom AI"
+            },
+            technical: {
+                urgency: "High",
+                category: "Technical Support",
+                summary: [
+                    "Lead engineer reporting 401 Unauthorized errors on webhook endpoint.",
+                    "Payload signatures failing verification after secret rotation.",
+                    "Requires guidance on regenerating HMAC SHA-256 webhook credentials."
+                ],
+                draft: "Hi Sarah,\n\nThank you for alerting our systems engineering team. When you rotate your webhook secret in the Fantom Admin Console, you must update the HMAC SHA-256 signature header header 'X-Fantom-Signature' in your ingestion worker.\n\nI have re-synchronized your sandbox endpoint credentials. You can test immediate dispatch with a dummy event directly in your developer settings. Please let us know if you observe any further 401 response codes.\n\nBest regards,\nUmer Siddiqui\nCo-Founder & Systems Lead, Fantom AI"
+            },
+            partnership: {
+                urgency: "Medium",
+                category: "Partnership",
+                summary: [
+                    "Digital marketing agency director looking to white-label Fantom AI Voice & CRM sync.",
+                    "Currently manages 35 local business clients with high inbound lead volume.",
+                    "Seeking reseller commission structure and portal access."
+                ],
+                draft: "Hi Marcus,\n\nWe appreciate your interest in partnering with Fantom AI! Our Agency Reseller Program allows partners to white-label our autonomous voice receptionists and CRM synchronization rules across their client portfolios with dedicated multi-tenant sub-accounts.\n\nWe offer attractive tiered revenue shares starting at 25% recurring margin. Let's schedule an architectural partner briefing to review the partner portal:\n\nSchedule here: https://fantomai.site/genesis\n\nWarm regards,\nFantom AI Strategic Partnerships Team"
+            }
+        };
+
+        function simulateDraft(key) {
+            const out = document.getElementById('draft-console-output');
+            const status = document.getElementById('draft-status');
+            const perf = document.getElementById('draft-perf');
+
+            out.innerHTML = `<div style="color: var(--holographic-cyan); font-style: italic;">[Inference] Gemini Cognitive Model streaming analysis...</div>`;
+            status.innerText = 'MODEL: INFERRING';
+            perf.innerText = 'STREAMING...';
+
+            setTimeout(() => {
+                const data = draftScenarios[key];
+                const urgencyColor = data.urgency === 'High' ? '#ef4444' : '#f59e0b';
+
+                out.innerHTML = `
+                    <div style="display: flex; gap: 1rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
+                        <span style="background: rgba(255,255,255,0.06); padding: 3px 8px; border-radius: 4px; font-weight: 700;">CATEGORY: ${data.category}</span>
+                        <span style="background: rgba(239, 68, 68, 0.15); color: ${urgencyColor}; padding: 3px 8px; border-radius: 4px; font-weight: 700;">URGENCY: ${data.urgency.toUpperCase()}</span>
+                        <span style="background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 3px 8px; border-radius: 4px; font-weight: 700;">CONFIDENCE: 99.2%</span>
+                    </div>
+
+                    <div style="margin-bottom: 0.75rem;">
+                        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Executive Summary:</div>
+                        <ul style="padding-left: 1.25rem; font-size: 0.85rem; color: #f3f4f6; margin-top: 0.25rem;">
+                            ${data.summary.map(s => `<li>${s}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div style="background: rgba(14, 14, 30, 0.9); border: 1px solid rgba(127, 0, 255, 0.3); border-radius: 8px; padding: 0.85rem; margin-top: 0.75rem;">
+                        <div style="color: #c084fc; font-weight: 700; font-size: 0.8rem; margin-bottom: 0.4rem;">&bull; GENERATED DRAFT PROPOSAL (READY FOR 1-CLICK SEND):</div>
+                        <div style="white-space: pre-wrap; font-size: 0.85rem; color: #e2e8f0; line-height: 1.5;">${data.draft}</div>
+                    </div>
+                `;
+
+                status.innerText = 'STATUS: DRAFT PREPARED';
+                perf.innerText = 'LATENCY: 412ms';
+            }, 600);
+        }
+    </script>
+</body>
+</html>

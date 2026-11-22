@@ -9,13 +9,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles.css">
     <!-- Icon library -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="/static/vendor/lucide.min.js"></script>
     <!-- Animation & Graphics Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="/static/vendor/three.min.js"></script>
+    <script src="/static/vendor/gsap.min.js"></script>
+    <script src="/static/vendor/ScrollTrigger.min.js"></script>
     <!-- Confetti for success animations -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="/static/vendor/confetti.browser.min.js"></script>
     
     <style>
         /* Overrides and custom styles for next-generation tech design */
@@ -1228,15 +1228,15 @@
         
         <!-- Navigation Bar -->
         <header class="navbar" id="global-nav">
-            <a href="#" class="brand-logo-container">
+            <a href="/nexus" class="brand-logo-container">
                 <div class="logo-q-infinity" id="nav-q-logo"></div>
                         <h2 class="brand" style="margin-bottom: 0;">Fantom<span>AI</span></h2>
             </a>
             <nav class="nav-links">
-                <a href="#nexus">Nexus</a>
-                <a href="#genesis">Genesis</a>
-                <a href="#ecosystem">Ecosystem</a>
-                <a href="#edge">The Edge</a>
+                <a href="/nexus" class="active">Nexus</a>
+                <a href="/genesis">Genesis</a>
+                <a href="/ecosystem">Ecosystem</a>
+                <a href="/edge">The Edge</a>
             </nav>
             <button class="btn btn-nav-appointment" onclick="openAppointmentModal()">Book An Appointment</button>
         </header>
@@ -1267,7 +1267,7 @@
                     </div>
                     <div class="terminal-body" id="terminal-content">
                         <!-- Content will stream here dynamically -->
-                        <div class="terminal-line"><span class="cmd">$ python3 agent.py --status=active</span></div>
+                        <div class="terminal-line visible"><span class="cmd">$ python3 agent.py --status=active</span></div>
                     </div>
                 </div>
             </div>
@@ -1312,13 +1312,25 @@
                     </div>
                 </div>
             </div>
+            <div style="text-align: center; margin-top: 2.5rem;">
+                <a href="/genesis" class="btn btn-cyber-secondary">
+                    <span>Read Full Genesis Origin &amp; Leadership Story</span>
+                    <i data-lucide="arrow-right"></i>
+                </a>
+            </div>
         </section>
 
         <!-- PAGE 3: ECOSYSTEM (SERVICES) -->
         <section id="ecosystem" class="gs-reveal" style="margin-bottom: 6rem;">
             <div class="section-header">
                 <h2>Our Ecosystem</h2>
-                <p>Click on any capability to load a structural deep-dive and view native integrations.</p>
+                <p>Click on any capability to explore its dedicated deep-dive page and view native integrations.</p>
+                <div style="margin-top: 1.25rem;">
+                    <a href="/ecosystem" class="btn btn-cyber-secondary" style="font-size: 0.9rem; padding: 0.6rem 1.4rem;">
+                        <span>Explore Full Ecosystem Hub &amp; ROI Simulator</span>
+                        <i data-lucide="arrow-right"></i>
+                    </a>
+                </div>
             </div>
             
             <div class="ecosystem-grid">
@@ -1331,10 +1343,16 @@
                         </div>
                         <h3>AI Voice Receptionists</h3>
                         <p>Deploy persistent low-latency speech agents that handle inbound calls, answer customer queries, qualify leads, and update schedules 24/7/365.</p>
-                        <button class="btn-learn-more">
-                            <span>Explore Infrastructure</span>
-                            <i data-lucide="arrow-up-right"></i>
-                        </button>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem; flex-wrap: wrap;">
+                            <a href="/offerings/voice" class="btn btn-cyber-primary" style="font-size: 0.85rem; padding: 0.5rem 1rem;" onclick="event.stopPropagation()">
+                                <span>Inspect Detail Page</span>
+                                <i data-lucide="arrow-right"></i>
+                            </a>
+                            <button class="btn-learn-more" style="margin-top: 0;" onclick="event.stopPropagation(); openDrawer('voice')">
+                                <span>Quick Drawer</span>
+                                <i data-lucide="sidebar"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -1347,10 +1365,16 @@
                         </div>
                         <h3>CRM Sync & Pipeline Rules</h3>
                         <p>Harmonize data flow across your business. Automate lead ingestion from ads, forms, and tools into unified production databases without manual effort.</p>
-                        <button class="btn-learn-more">
-                            <span>Explore Data Pipelines</span>
-                            <i data-lucide="arrow-up-right"></i>
-                        </button>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem; flex-wrap: wrap;">
+                            <a href="/offerings/crm" class="btn btn-cyber-primary" style="font-size: 0.85rem; padding: 0.5rem 1rem;" onclick="event.stopPropagation()">
+                                <span>Inspect Detail Page</span>
+                                <i data-lucide="arrow-right"></i>
+                            </a>
+                            <button class="btn-learn-more" style="margin-top: 0;" onclick="event.stopPropagation(); openDrawer('crm')">
+                                <span>Quick Drawer</span>
+                                <i data-lucide="sidebar"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -1363,10 +1387,16 @@
                         </div>
                         <h3>Auto-Draft Replies</h3>
                         <p>Review and deploy perfect AI proposals instantly. Semantic classifiers inspect support tickets and sales emails to prepare contextual responses.</p>
-                        <button class="btn-learn-more">
-                            <span>Explore Accelerators</span>
-                            <i data-lucide="arrow-up-right"></i>
-                        </button>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem; flex-wrap: wrap;">
+                            <a href="/offerings/drafts" class="btn btn-cyber-primary" style="font-size: 0.85rem; padding: 0.5rem 1rem;" onclick="event.stopPropagation()">
+                                <span>Inspect Detail Page</span>
+                                <i data-lucide="arrow-right"></i>
+                            </a>
+                            <button class="btn-learn-more" style="margin-top: 0;" onclick="event.stopPropagation(); openDrawer('drafts')">
+                                <span>Quick Drawer</span>
+                                <i data-lucide="sidebar"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -1379,10 +1409,16 @@
                         </div>
                         <h3>Custom Web Development</h3>
                         <p>We build immersive Web3, 3D, and AI-enabled websites that load instantly, secure SEO prominence, and communicate natively with backend models.</p>
-                        <button class="btn-learn-more">
-                            <span>Explore Architecture</span>
-                            <i data-lucide="arrow-up-right"></i>
-                        </button>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem; flex-wrap: wrap;">
+                            <a href="/offerings/webdev" class="btn btn-cyber-primary" style="font-size: 0.85rem; padding: 0.5rem 1rem;" onclick="event.stopPropagation()">
+                                <span>Inspect Detail Page</span>
+                                <i data-lucide="arrow-right"></i>
+                            </a>
+                            <button class="btn-learn-more" style="margin-top: 0;" onclick="event.stopPropagation(); openDrawer('webdev')">
+                                <span>Quick Drawer</span>
+                                <i data-lucide="sidebar"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1411,6 +1447,12 @@
                     <h3>Operational Scale</h3>
                     <p>Expand lead captures, CRM updates, and customer intake without hiring more support representatives.</p>
                 </div>
+            </div>
+            <div style="text-align: center; margin-top: 2.5rem;">
+                <a href="/edge" class="btn btn-cyber-secondary">
+                    <span>Inspect Audited Operational Benchmarks</span>
+                    <i data-lucide="arrow-right"></i>
+                </a>
             </div>
         </section>
 
@@ -1472,15 +1514,30 @@
 
         <!-- UNIVERSAL FOOTER -->
         <footer class="cyber-footer">
-            <div class="footer-grid">
+            <div class="footer-grid" style="grid-template-columns: 1.5fr 1fr 1fr 1.2fr;">
                 <div class="footer-brand">
                     <div class="footer-logo-row">
                         <div class="footer-q-logo" id="footer-q-logo"></div>
-                <h2 class="brand" style="margin-bottom: 0;">Fantom<span>AI</span></h2>
+                        <h2 class="brand" style="margin-bottom: 0;">Fantom<span>AI</span></h2>
                     </div>
-                    <div class="footer-tagline">Architecting the Autonomous Frontier.</div>
+                    <div class="footer-tagline">Architecting the Autonomous Frontier. Elimination of operational friction through deterministic intelligence.</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <h4 style="font-family: var(--font-display); color: white; font-size: 0.95rem; text-transform: uppercase;">Navigation</h4>
+                    <a href="/nexus" style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">Nexus Core</a>
+                    <a href="/genesis" style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">Genesis Story</a>
+                    <a href="/ecosystem" style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">Ecosystem Stack</a>
+                    <a href="/edge" style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">The Fantom Edge</a>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <h4 style="font-family: var(--font-display); color: white; font-size: 0.95rem; text-transform: uppercase;">Offerings</h4>
+                    <a href="/offerings/voice" style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">AI Voice Receptionist</a>
+                    <a href="/offerings/crm" style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">CRM Sync Pipelines</a>
+                    <a href="/offerings/drafts" style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">Auto-Draft Replies</a>
+                    <a href="/offerings/webdev" style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;">Custom Web Dev</a>
                 </div>
                 <div class="footer-contacts">
+                    <h4 style="font-family: var(--font-display); color: white; font-size: 0.95rem; text-transform: uppercase;">Contact</h4>
                     <a href="mailto:contact@fantomai.site" class="footer-contact-item">
                         <i data-lucide="mail"></i>
                         <span>contact@fantomai.site</span>
@@ -1493,8 +1550,8 @@
             </div>
             
             <div class="footer-bottom">
-                <div>&copy; 2026 Fantom AI. All Rights Reserved.</div>
-                <div>Engineered for Scalability</div>
+                <div>&copy; 2026 Fantom AI. All Rights Reserved. Founded by Chaudary Moaz Kashif &amp; Umer Siddiqui.</div>
+                <div>Engineered for Planetary Scale</div>
             </div>
         </footer>
 
@@ -1579,15 +1636,23 @@
                     <!-- Integration chips injected dynamically -->
                 </div>
             </div>
+            <a id="drawer-deep-dive-btn" href="/offerings/voice" class="btn btn-cyber-primary" style="display: flex; width: 100%; margin-top: 1.5rem; text-decoration: none; justify-content: center;">
+                <span>Open Dedicated Offering Detail Page</span>
+                <i data-lucide="arrow-right"></i>
+            </a>
         </div>
     </div>
 
     <script>
-        // Init Lucide Icons
-        lucide.createIcons();
+        // Init Lucide Icons (optional enhancement)
+        if (window.lucide) {
+            lucide.createIcons();
+        }
 
-        // Register GSAP ScrollTrigger
-        gsap.registerPlugin(ScrollTrigger);
+        // Register GSAP ScrollTrigger (optional enhancement)
+        if (window.gsap && window.ScrollTrigger) {
+            gsap.registerPlugin(ScrollTrigger);
+        }
 
         // Preloader Logic with SVG/Three-Simulated Progress
         window.addEventListener('load', () => {
@@ -1616,7 +1681,19 @@
             }, 50);
         });
 
-        // Preloader Three.js morphing core
+        // Safety net: never let a slow/hanging asset trap the page behind the preloader
+        setTimeout(() => {
+            const preloader = document.getElementById('preloader');
+            if (preloader && getComputedStyle(preloader).visibility !== 'hidden') {
+                preloader.style.opacity = '0';
+                preloader.style.visibility = 'hidden';
+                document.body.style.overflowY = 'auto';
+            }
+        }, 8000);
+
+        // Preloader Three.js morphing core (optional enhancement)
+        if (window.THREE) {
+        try {
         const loaderContainer = document.getElementById('loader-canvas');
         const loaderScene = new THREE.Scene();
         const loaderCamera = new THREE.PerspectiveCamera(75, 1, 0.1, 100);
@@ -1644,8 +1721,12 @@
             loaderRenderer.render(loaderScene, loaderCamera);
         }
         animateLoader();
+        } catch (err) { console.warn('Preloader 3D disabled:', err); }
+        }
 
         // Background Immersive Particle Field with Mouse Interaction
+        if (window.THREE) {
+        try {
         const bgCanvas = document.getElementById('bg-canvas');
         const bgScene = new THREE.Scene();
         const bgCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -1762,20 +1843,23 @@
             bgRenderer.render(bgScene, bgCamera);
         }
         animateBg();
+        } catch (err) { console.warn('Background 3D disabled:', err); }
+        }
 
         // 3D Metallic/Neon F-Logo rendering in Navbar & Footer
         function buildFLogo(containerId) {
             const container = document.getElementById(containerId);
-            if (!container) return;
+            if (!container || container.dataset.logoBuilt === 'true' || !window.THREE) return;
             
-            const w = container.clientWidth;
-            const h = container.clientHeight;
+            const w = container.clientWidth || 42;
+            const h = container.clientHeight || 42;
             
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
             const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(w, h);
             container.appendChild(renderer.domElement);
+            container.dataset.logoBuilt = 'true';
             
             // Vertical stem of F
             const stemGeo = new THREE.BoxGeometry(0.35, 2.4, 0.35);
@@ -1807,8 +1891,26 @@
             anim();
         }
 
-        buildFLogo('nav-q-logo');
-        buildFLogo('footer-q-logo');
+        function mountLogoFallback(containerId) {
+            const container = document.getElementById(containerId);
+            if (!container || container.dataset.logoBuilt === 'true') return;
+            container.innerHTML = '<img src="/static/fantom-logo.svg" alt="Fantom AI" style="width:100%;height:100%;object-fit:contain;">';
+            container.dataset.logoBuilt = 'true';
+        }
+
+        try {
+            if (window.THREE) {
+                buildFLogo('nav-q-logo');
+                buildFLogo('footer-q-logo');
+            } else {
+                mountLogoFallback('nav-q-logo');
+                mountLogoFallback('footer-q-logo');
+            }
+        } catch (err) {
+            console.warn('3D logo disabled, using static fallback:', err);
+            mountLogoFallback('nav-q-logo');
+            mountLogoFallback('footer-q-logo');
+        }
 
         // Navbar scrolled layout shift
         window.addEventListener('scroll', () => {
@@ -1822,6 +1924,7 @@
 
         // GSAP ScrollTrigger Animations setup
         function triggerHeroAnimations() {
+            if (!window.gsap) return;
             gsap.from('#nexus h1', {
                 opacity: 0,
                 y: 60,
@@ -1852,21 +1955,23 @@
             });
         }
 
-        // Generic block reveals
-        gsap.utils.toArray('.gs-reveal').forEach((elem) => {
-            gsap.from(elem, {
-                scrollTrigger: {
-                    trigger: elem,
-                    start: 'top 82%',
-                    toggleActions: 'play none none none'
-                },
-                opacity: 0,
-                y: 50,
-                filter: 'blur(10px)',
-                duration: 1,
-                ease: 'power3.out'
+        // Generic block reveals (optional enhancement)
+        if (window.gsap && window.ScrollTrigger) {
+            gsap.utils.toArray('.gs-reveal').forEach((elem) => {
+                gsap.from(elem, {
+                    scrollTrigger: {
+                        trigger: elem,
+                        start: 'top 82%',
+                        toggleActions: 'play none none none'
+                    },
+                    opacity: 0,
+                    y: 50,
+                    filter: 'blur(10px)',
+                    duration: 1,
+                    ease: 'power3.out'
+                });
             });
-        });
+        }
 
         // Interactive 3D Card Parallax Tilt Effect
         const cards = document.querySelectorAll('.service-card, .team-card');
@@ -1947,7 +2052,7 @@
         setTimeout(renderTerminalLines, 2500);
 
         // ECOSYSTEM SERVICE DETAILS DATA
-        const serviceData = {
+        var serviceData = {
             voice: {
                 title: "AI Voice Receptionists",
                 subtitle: "24/7 Smart Call Handling Infrastructure",
@@ -2027,6 +2132,10 @@
                 `;
             });
 
+            // Update deep dive button
+            const dBtn = document.getElementById('drawer-deep-dive-btn');
+            if (dBtn) dBtn.href = '/offerings/' + serviceKey;
+
             // Render Integrations
             const intWrap = document.getElementById('drawer-integrations-container');
             intWrap.innerHTML = '';
@@ -2035,7 +2144,7 @@
             });
 
             // Re-trigger Lucide icon render
-            lucide.createIcons();
+            if (window.lucide) lucide.createIcons();
 
             // Toggle active classes
             document.getElementById('drawer-overlay').classList.add('active');
@@ -2069,6 +2178,7 @@
 
         // CONFETTI EFFECT HELPER
         function launchSuccessConfetti() {
+            if (typeof confetti !== 'function') return;
             const count = 200;
             const defaults = {
                 origin: { y: 0.6 }
@@ -2169,7 +2279,7 @@
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = `<span>Submit Inquiry</span><i data-lucide="send"></i>`;
-                lucide.createIcons();
+                if (window.lucide) lucide.createIcons();
             }
         }
 
@@ -2236,7 +2346,7 @@
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = `<span>Deploy Request</span><i data-lucide="shield-alert"></i>`;
-                lucide.createIcons();
+                if (window.lucide) lucide.createIcons();
             }
         }
     </script>

@@ -112,8 +112,11 @@ SESSION_COOKIE_NAME = "fai_session"
 PUBLIC_PATHS = {
     "/", "/login", "/website", "/webhook", "/docs", "/openapi.json", "/redoc", "/health",
     "/api/auth/login", "/api/auth/verify-2fa", "/api/auth/logout",
+    "/nexus", "/genesis", "/ecosystem", "/edge",
+    "/offerings/voice", "/offerings/crm", "/offerings/drafts", "/offerings/webdev",
+    "/ecosystem/voice", "/ecosystem/crm", "/ecosystem/drafts", "/ecosystem/webdev",
 }
-PUBLIC_PREFIXES = ("/static/",)
+PUBLIC_PREFIXES = ("/static/", "/offerings/", "/ecosystem/")
 
 
 def get_attempt_key(email: str, ip: str) -> str:
@@ -795,6 +798,75 @@ async def serve_login():
 @app.get("/website")
 async def serve_website():
     resp = FileResponse("static/landing.html")
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    resp.headers["Pragma"] = "no-cache"
+    resp.headers["Expires"] = "0"
+    return resp
+
+# Serve dedicated routable public pages
+@app.get("/nexus")
+async def serve_nexus():
+    resp = FileResponse("static/nexus.html")
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    resp.headers["Pragma"] = "no-cache"
+    resp.headers["Expires"] = "0"
+    return resp
+
+@app.get("/genesis")
+async def serve_genesis():
+    resp = FileResponse("static/genesis.html")
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    resp.headers["Pragma"] = "no-cache"
+    resp.headers["Expires"] = "0"
+    return resp
+
+@app.get("/ecosystem")
+async def serve_ecosystem():
+    resp = FileResponse("static/ecosystem.html")
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    resp.headers["Pragma"] = "no-cache"
+    resp.headers["Expires"] = "0"
+    return resp
+
+@app.get("/edge")
+async def serve_edge():
+    resp = FileResponse("static/edge.html")
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    resp.headers["Pragma"] = "no-cache"
+    resp.headers["Expires"] = "0"
+    return resp
+
+@app.get("/offerings/voice")
+@app.get("/ecosystem/voice")
+async def serve_offering_voice():
+    resp = FileResponse("static/offering-voice.html")
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    resp.headers["Pragma"] = "no-cache"
+    resp.headers["Expires"] = "0"
+    return resp
+
+@app.get("/offerings/crm")
+@app.get("/ecosystem/crm")
+async def serve_offering_crm():
+    resp = FileResponse("static/offering-crm.html")
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    resp.headers["Pragma"] = "no-cache"
+    resp.headers["Expires"] = "0"
+    return resp
+
+@app.get("/offerings/drafts")
+@app.get("/ecosystem/drafts")
+async def serve_offering_drafts():
+    resp = FileResponse("static/offering-drafts.html")
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    resp.headers["Pragma"] = "no-cache"
+    resp.headers["Expires"] = "0"
+    return resp
+
+@app.get("/offerings/webdev")
+@app.get("/ecosystem/webdev")
+async def serve_offering_webdev():
+    resp = FileResponse("static/offering-webdev.html")
     resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     resp.headers["Pragma"] = "no-cache"
     resp.headers["Expires"] = "0"

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Sync &amp; Pipeline Rules — Data Harmonization | Fantom AI</title>
+    <meta name="description" content="Harmonize data flow across your business. Automate lead ingestion from ads, forms, and telephony into unified production databases without manual effort.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/fantom-site.css">
+
+    <script src="/static/vendor/lucide.min.js"></script>
+    <script src="/static/vendor/three.min.js"></script>
+    <script src="/static/vendor/confetti.browser.min.js"></script>
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Global Navigation -->
+    <header class="navbar">
+        <a href="/nexus" class="brand-logo-container">
+            <div class="logo-q-infinity" id="nav-q-logo"></div>
+            <span class="brand-title">Fantom<span>AI</span></span>
+        </a>
+        <nav class="nav-links">
+            <a href="/nexus">Nexus</a>
+            <a href="/genesis">Genesis</a>
+            <a href="/ecosystem" class="active">Ecosystem</a>
+            <a href="/edge">The Edge</a>
+        </nav>
+        <div class="nav-actions">
+            <button class="btn-nav-appointment" onclick="openAppointmentModal()">
+                <i data-lucide="calendar"></i>
+                <span>Book Appointment</span>
+            </button>
+            <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-menu">
+        <a href="/nexus">Nexus</a>
+        <a href="/genesis">Genesis</a>
+        <a href="/ecosystem" class="active">Ecosystem</a>
+        <a href="/edge">The Edge</a>
+        <button class="btn-submit-glow" onclick="openAppointmentModal()" style="margin-top: 1rem;">Book An Appointment</button>
+    </div>
+
+    <!-- Main Page Wrapper -->
+    <main class="page-wrapper">
+        <div class="container">
+            <!-- Breadcrumbs -->
+            <div class="breadcrumbs">
+                <a href="/nexus">Nexus</a>
+                <span class="separator">/</span>
+                <a href="/ecosystem">Ecosystem</a>
+                <span class="separator">/</span>
+                <span class="current">CRM Sync &amp; Pipeline Rules</span>
+            </div>
+
+            <!-- Offering Hero -->
+            <section class="offering-hero">
+                <div class="badge-glow" style="color: #60a5fa; border-color: rgba(0, 130, 255, 0.4);">
+                    <span class="badge-dot" style="background-color: #0082ff;"></span>
+                    <span>PILLAR 02 &bull; CONTINUOUS DATA HARMONIZATION</span>
+                </div>
+                <h1>CRM Sync &amp; <span>Pipeline Rules</span></h1>
+                <p class="lead-desc">
+                    Banish manual copy-paste inertia forever. Unify ad clicks, webhook structures, and inbound intake forms into clean data structures automatically mapped to your dashboard database.
+                </p>
+
+                <div class="hero-stats-row">
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number" style="color: #60a5fa;">182ms</span>
+                        <span class="hero-stat-label">Average Pipeline Transit</span>
+                    </div>
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number" style="color: #10b981;">0.00%</span>
+                        <span class="hero-stat-label">Data Record Dropping</span>
+                    </div>
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number" style="color: #c084fc;">100%</span>
+                        <span class="hero-stat-label">Schema Validation</span>
+                    </div>
+                    <div class="hero-stat-pill">
+                        <span class="hero-stat-number" style="color: #00F2FE;">AES-256</span>
+                        <span class="hero-stat-label">Encryption Standard</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Visual Architecture Diagram -->
+            <section class="diagram-section">
+                <div class="diagram-card">
+                    <div class="diagram-card-header">
+                        <div class="diagram-card-title">
+                            <h3>High-Throughput Data Harmonization Architecture</h3>
+                            <p>Multi-source ingestion pipeline with asynchronous queueing, schema validation, AI enrichment, and parallel multi-destination synchronization.</p>
+                        </div>
+                        <div class="diagram-badge">DATA ENGINE SPECIFICATION</div>
+                    </div>
+                    <div class="diagram-frame">
+                        <img src="/static/images/crm-architecture.svg" alt="Fantom AI CRM Sync Architecture Diagram">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Live Interactive Pipeline Rule Simulator -->
+            <section class="simulator-section">
+                <div class="simulator-card">
+                    <div class="simulator-header">
+                        <div class="badge-glow" style="color: #60a5fa; border-color: rgba(0, 130, 255, 0.4);">LIVE DATA FLOW SIMULATOR</div>
+                        <h3>Interactive Pipeline Rule Execution Engine</h3>
+                        <p>Trigger an inbound payload event to watch real-time schema validation, enrichment, and parallel CRM dispatch.</p>
+                    </div>
+
+                    <div class="simulator-body">
+                        <div class="simulator-controls">
+                            <div class="form-group">
+                                <label>Trigger Simulated Inbound Event:</label>
+                                <div style="display: flex; flex-direction: column; gap: 0.65rem;">
+                                    <button class="btn btn-cyber-secondary" onclick="simulateCrmEvent('meta_ad')" style="justify-content: flex-start; text-align: left; padding: 0.85rem 1rem;">
+                                        <i data-lucide="share-2" size="18" style="color: #0ea5e9;"></i>
+                                        <div>
+                                            <div style="font-weight: 700;">Meta Ad High-Intent Lead</div>
+                                            <div style="font-size: 0.8rem; color: var(--text-muted);">Payload: Name, Email, Budget ($15k/mo)</div>
+                                        </div>
+                                    </button>
+                                    <button class="btn btn-cyber-secondary" onclick="simulateCrmEvent('voice_call')" style="justify-content: flex-start; text-align: left; padding: 0.85rem 1rem;">
+                                        <i data-lucide="phone-call" size="18" style="color: #10b981;"></i>
+                                        <div>
+                                            <div style="font-weight: 700;">AI Voice Agent Booking Completed</div>
+                                            <div style="font-size: 0.8rem; color: var(--text-muted);">Payload: Caller DID, Date/Time, Audio URI</div>
+                                        </div>
+                                    </button>
+                                    <button class="btn btn-cyber-secondary" onclick="simulateCrmEvent('webhook_raw')" style="justify-content: flex-start; text-align: left; padding: 0.85rem 1rem;">
+                                        <i data-lucide="webhook" size="18" style="color: #f59e0b;"></i>
+                                        <div>
+                                            <div style="font-weight: 700;">Unstructured Webhook Inflow</div>
+                                            <div style="font-size: 0.8rem; color: var(--text-muted);">Payload: Raw JSON, Untrusted Schema</div>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div style="background: rgba(10, 10, 25, 0.6); padding: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); font-size: 0.85rem;">
+                                <div style="color: var(--text-muted); margin-bottom: 0.35rem;">Target Synchronized Endpoints:</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+                                    <span style="background: rgba(249, 115, 22, 0.15); color: #f97316; padding: 2px 8px; border-radius: 4px; font-weight: 600;">HubSpot Deals</span>
+                                    <span style="background: rgba(2, 132, 199, 0.15); color: #0284c7; padding: 2px 8px; border-radius: 4px; font-weight: 600;">Salesforce Leads</span>
+                                    <span style="background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 2px 8px; border-radius: 4px; font-weight: 600;">Supabase Postgres</span>
+                                    <span style="background: rgba(127, 0, 255, 0.15); color: #c084fc; padding: 2px 8px; border-radius: 4px; font-weight: 600;">Slack #deals</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="simulator-console">
+                            <div class="console-output-area" id="crm-console-output">
+                                <div style="color: var(--text-muted); font-style: italic;">[Ready] Select an event above to inspect live pipeline execution &amp; routing telemetry...</div>
+                            </div>
+                            <div class="console-status-bar">
+                                <span id="crm-status">ROUTER: STANDBY</span>
+                                <span id="crm-perf" style="color: #10b981;">QUEUE: 0 PENDING</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Detailed Capabilities Grid -->
+            <section style="margin: 5rem 0;">
+                <div class="section-header">
+                    <h2>Continuous Data <span>Harmonization</span></h2>
+                    <p>Built for enterprises with complex sales pipelines and zero tolerance for lost prospects.</p>
+                </div>
+
+                <div class="features-grid-3">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper" style="color: #60a5fa; border-color: rgba(0, 130, 255, 0.4);">
+                            <i data-lucide="sparkles"></i>
+                        </div>
+                        <h3>Intelligent Field Normalization</h3>
+                        <p>Automatically reconciles dirty data. Phone numbers are formatted to E.164 international standards, corporate domains are extracted from email strings, and duplicates are merged.</p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Schema Compliance</span>
+                            <span class="metric-val">100% Pydantic Validated</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper" style="color: #10b981; border-color: rgba(16, 185, 129, 0.4);">
+                            <i data-lucide="git-branch"></i>
+                        </div>
+                        <h3>Dynamic Pipeline Routing</h3>
+                        <p>Route high-value inquiries directly to specialized account executives based on custom rule triggers, geography, budget brackets, or product category intent.</p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Routing Decision</span>
+                            <span class="metric-val">&lt; 15ms In-Memory</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper" style="color: #c084fc; border-color: rgba(127, 0, 255, 0.4);">
+                            <i data-lucide="repeat"></i>
+                        </div>
+                        <h3>Bi-Directional State Mirroring</h3>
+                        <p>When an account executive moves a deal stage in Salesforce or HubSpot, corresponding records across your custom web dashboards and billing systems sync instantly.</p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Sync Mechanism</span>
+                            <span class="metric-val">Webhooks &amp; Change Streams</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper" style="color: #f59e0b; border-color: rgba(245, 158, 11, 0.4);">
+                            <i data-lucide="bell-ring"></i>
+                        </div>
+                        <h3>Instant Representative Notifications</h3>
+                        <p>Trigger rich Slack and Microsoft Teams cards the millisecond a qualified lead arrives, complete with lead background, company summary, and 1-click call links.</p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Alert Latency</span>
+                            <span class="metric-val">&lt; 1 Second</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.4);">
+                            <i data-lucide="shield-alert"></i>
+                        </div>
+                        <h3>Automatic Spambot Defense</h3>
+                        <p>Embedded cognitive filters inspect form submissions for bot signatures, spoofed IP blocks, and phishing payloads, isolating malicious records before they taint your CRM.</p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Spam Interception</span>
+                            <span class="metric-val">99.7% Filtered</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper" style="color: #00F2FE; border-color: rgba(0, 242, 254, 0.4);">
+                            <i data-lucide="history"></i>
+                        </div>
+                        <h3>Immutable Audit Logging</h3>
+                        <p>Maintain full enterprise observability. Every ingestion event, field mapping decision, and webhook payload is recorded in tamper-proof append-only databases.</p>
+                        <div class="feature-card-metric">
+                            <span class="metric-label">Audit Retention</span>
+                            <span class="metric-val">Unlimited / Searchable</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Technical Specifications Table -->
+            <section class="spec-table-container">
+                <div class="spec-table-title">Pipeline Architecture &amp; Database Compatibility</div>
+                <table class="spec-table">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Fantom Implementation</th>
+                            <th>Reliability SLA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="spec-name">Supported CRM Platforms</td>
+                            <td class="spec-val">HubSpot, Salesforce, Zoho, ActiveCampaign, Airtable</td>
+                            <td>Official OAuth2 REST v3/v4 &amp; Webhook connectors</td>
+                        </tr>
+                        <tr>
+                            <td class="spec-name">Database Backends</td>
+                            <td class="spec-val">PostgreSQL, Supabase, MySQL, Redis Caching</td>
+                            <td>ACID transactional guarantees with connection pooling</td>
+                        </tr>
+                        <tr>
+                            <td class="spec-name">Retry Strategy</td>
+                            <td class="spec-val">Exponential backoff with full jitter (up to 7 retries)</td>
+                            <td>Zero lost payloads during target API downtime</td>
+                        </tr>
+                        <tr>
+                            <td class="spec-name">Payload Throughput</td>
+                            <td class="spec-val">10,000+ events per second asynchronous burst</td>
+                            <td>Distributed Redis/Celery queue topology</td>
+                        </tr>
+                        <tr>
+                            <td class="spec-name">Security Isolation</td>
+                            <td class="spec-val">Tenant-isolated credential storage with AES-256-GCM</td>
+                            <td>SOC2 compliant credential vault integration</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Conversion CTA Banner -->
+            <section class="cta-banner">
+                <h2>Harmonize Your <span>Pipeline Rules</span></h2>
+                <p>Schedule a Genesis Session to architect a bulletproof automated ingestion pipeline customized for your enterprise databases.</p>
+                <div class="cta-banner-buttons">
+                    <button class="btn btn-cyber-primary" onclick="openAppointmentModal()">
+                        <span>Schedule Architecture Review</span>
+                        <i data-lucide="arrow-right"></i>
+                    </button>
+                    <a href="/offerings/drafts" class="btn btn-cyber-secondary">
+                        <span>Inspect Auto-Draft Replies</span>
+                        <i data-lucide="mail-check"></i>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Appointment Modal -->
+    <div class="modal-overlay" id="appointment-modal-overlay" onclick="closeAppointmentModalOnOverlay(event)">
+        <div class="appointment-modal">
+            <button class="btn-close-modal" onclick="closeAppointmentModal()">
+                <i data-lucide="x"></i>
+            </button>
+            <h2>Secure Genesis Session</h2>
+            <p class="modal-sub">Schedule a direct architectural review of your CRM sync requirements.</p>
+
+            <form id="appointment-form" onsubmit="handleAppointmentSubmit(event)">
+                <div class="form-group">
+                    <label>Full Name*</label>
+                    <input type="text" id="appt-name" required placeholder="e.g. Erlich Bachman">
+                </div>
+                <div class="form-group">
+                    <label>Corporate Email Address*</label>
+                    <input type="email" id="appt-email" required placeholder="e.g. erlich@raviga.com">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Desired Appointment Day*</label>
+                        <input type="date" id="appt-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Preferred Time Window*</label>
+                        <select id="appt-time" required>
+                            <option value="" disabled selected>Select window</option>
+                            <option value="09:00 AM - 12:00 PM">Morning (09:00 AM - 12:00 PM)</option>
+                            <option value="12:00 PM - 03:00 PM">Midday (12:00 PM - 03:00 PM)</option>
+                            <option value="03:00 PM - 06:00 PM">Afternoon (03:00 PM - 06:00 PM)</option>
+                            <option value="06:00 PM - 09:00 PM">Evening (06:00 PM - 09:00 PM)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Automation Goals / Discussion Scope*</label>
+                    <textarea id="appt-scope" rows="3" required placeholder="Detail what CRMs you currently operate and what data mapping rules you wish to enforce..."></textarea>
+                </div>
+                <button type="submit" class="btn-submit-glow" id="appt-submit-btn">
+                    <span>Deploy Request</span>
+                    <i data-lucide="send"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Global Cyber Footer -->
+    <footer class="cyber-footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h2>Fantom<span>AI</span></h2>
+                <p class="footer-tagline">Architecting the Autonomous Frontier. Elimination of operational latency through deterministic intelligence.</p>
+                <div class="badge-glow green" style="margin-bottom: 0;">
+                    <span class="badge-dot"></span>
+                    <span>ALL SYSTEMS OPERATIONAL</span>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="/nexus">Nexus Core</a></li>
+                    <li><a href="/genesis">Genesis Story</a></li>
+                    <li><a href="/ecosystem">Ecosystem Stack</a></li>
+                    <li><a href="/edge">The Fantom Edge</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Offerings</h4>
+                <ul class="footer-links">
+                    <li><a href="/offerings/voice">AI Voice Receptionist</a></li>
+                    <li><a href="/offerings/crm">CRM Sync Pipelines</a></li>
+                    <li><a href="/offerings/drafts">Auto-Draft Replies</a></li>
+                    <li><a href="/offerings/webdev">Custom Web Dev</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Direct Contact</h4>
+                <a href="mailto:contact@fantomai.site" class="footer-contact-item">
+                    <i data-lucide="mail"></i>
+                    <span>contact@fantomai.site</span>
+                </a>
+                <a href="https://wa.me/923364656329" class="footer-contact-item" target="_blank">
+                    <i data-lucide="phone"></i>
+                    <span>+92 336 4656329</span>
+                </a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>&copy; 2026 Fantom AI. All Rights Reserved. Engineered by Chaudary Moaz Kashif &amp; Umer Siddiqui.</div>
+            <div>Autonomous Architecture V2.4</div>
+        </div>
+    </footer>
+
+    <script src="/static/fantom-common.js"></script>
+    <script>
+        const crmEvents = {
+            meta_ad: [
+                { step: "[Ingest]", msg: "Webhook received from Meta Ad Campaign ID: cmp_984210" },
+                { step: "[Validate]", msg: "Validating payload: Name='Alexander Vance', Email='alex@vanceholdings.com', Phone='+1-415-555-0199'" },
+                { step: "[Enrich]", msg: "Extracted corporate domain: 'vanceholdings.com' &bull; Urgency Score: HIGH (Budget: $15,000/mo)" },
+                { step: "[Route]", msg: "Assigning to Enterprise Rep: Tier-1 Queue &bull; Pipeline Stage: 'Qualified Meeting'" },
+                { step: "[Parallel Sync]", msg: "Writing &bull; HubSpot Deal #8491 created &bull; Salesforce Lead #SF-9912 created &bull; Supabase row logged" },
+                { step: "[Alert]", msg: "Slack ping sent to #enterprise-deals (Transit time: 142ms &bull; 0 Errors)" }
+            ],
+            voice_call: [
+                { step: "[Ingest]", msg: "Inbound SIP Call Completed (Duration: 2m 14s &bull; Caller DID: +1-312-555-0822)" },
+                { step: "[Validate]", msg: "Whisper transcript transcribed &bull; 100% audio packet recovery verified" },
+                { step: "[Action]", msg: "Appointment Locked: Thursday 2:00 PM EST &bull; Google Calendar Event ID: gcal_87319" },
+                { step: "[Parallel Sync]", msg: "Updating HubSpot Contact with audio transcript &bull; Status: 'Appointment Scheduled'" },
+                { step: "[Alert]", msg: "SMS confirmation dispatched to caller &bull; Email invite delivered to executive" }
+            ],
+            webhook_raw: [
+                { step: "[Ingest]", msg: "Raw incoming POST to /webhook with unknown JSON headers" },
+                { step: "[Inspect]", msg: "Executing AI Pydantic schema classifier &bull; Stripping malicious script tags" },
+                { step: "[Normalize]", msg: "Schema mapped to standard LeadRequest &bull; Clean telephone format enforced" },
+                { step: "[Dispatch]", msg: "Transmitted to Postgres buffer &bull; Status: 'Queued for Review' (18ms)" }
+            ]
+        };
+
+        function simulateCrmEvent(key) {
+            const consoleArea = document.getElementById('crm-console-output');
+            const status = document.getElementById('crm-status');
+            const perf = document.getElementById('crm-perf');
+
+            consoleArea.innerHTML = '';
+            status.innerText = 'ROUTER: PROCESSING';
+            perf.innerText = 'STATUS: ACTIVE INGEST';
+
+            const steps = crmEvents[key];
+            let i = 0;
+
+            function runStep() {
+                if (i >= steps.length) {
+                    status.innerText = 'ROUTER: SYNCHRONIZED';
+                    perf.innerText = 'TRANSIT: 142ms (0 ERRORS)';
+                    consoleArea.innerHTML += `<div style="color: #10b981; font-weight: 700; margin-top: 0.5rem;">&check; ACID Transaction Committed across all 3 databases with zero data loss.</div>`;
+                    return;
+                }
+
+                const s = steps[i];
+                consoleArea.innerHTML += `
+                    <div style="margin-bottom: 0.45rem;">
+                        <span style="color: #60a5fa; font-weight: 700;">${s.step}</span> 
+                        <span>${s.msg}</span>
+                    </div>
+                `;
+                consoleArea.scrollTop = consoleArea.scrollHeight;
+                i++;
+                setTimeout(runStep, 450);
+            }
+
+            runStep();
+        }
+    </script>
+</body>
+</html>

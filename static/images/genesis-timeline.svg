@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 440" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGenesis" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c071e"/>
+      <stop offset="50%" stop-color="#070614"/>
+      <stop offset="100%" stop-color="#03030a"/>
+    </linearGradient>
+    <linearGradient id="gradGenLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00F2FE"/>
+      <stop offset="50%" stop-color="#7F00FF"/>
+      <stop offset="100%" stop-color="#ec4899"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="960" height="440" rx="16" fill="url(#bgGenesis)" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1.5"/>
+
+  <!-- Title Badge -->
+  <g transform="translate(60, 36)">
+    <rect width="250" height="28" rx="14" fill="rgba(127, 0, 255, 0.12)" stroke="rgba(127, 0, 255, 0.4)"/>
+    <circle cx="16" cy="14" r="5" fill="#7F00FF"/>
+    <text x="32" y="18" fill="#c084fc" font-family="'Space Grotesk', sans-serif" font-size="12" font-weight="700" letter-spacing="1.5">GENESIS TIMELINE &amp; TRAJECTORY</text>
+  </g>
+  <text x="900" y="54" fill="#9ca3af" font-family="'Space Grotesk', sans-serif" font-size="12" text-anchor="end">ESTABLISHED 2026</text>
+
+  <!-- Horizontal Timeline Central Axis -->
+  <line x1="100" y1="210" x2="860" y2="210" stroke="url(#gradGenLine)" stroke-width="3"/>
+
+  <!-- Milestone 1: Origin Vision (2026 Q1) -->
+  <g transform="translate(100, 210)">
+    <circle cx="0" cy="0" r="14" fill="#03030a" stroke="#00F2FE" stroke-width="3"/>
+    <circle cx="0" cy="0" r="6" fill="#00F2FE"/>
+
+    <!-- Upward Card -->
+    <g transform="translate(-85, -135)">
+      <rect width="170" height="110" rx="10" fill="rgba(18, 22, 48, 0.85)" stroke="rgba(0, 242, 254, 0.3)" stroke-width="1.5"/>
+      <rect x="12" y="12" width="60" height="18" rx="9" fill="rgba(0, 242, 254, 0.15)"/>
+      <text x="42" y="25" fill="#00F2FE" font-family="'Space Grotesk', sans-serif" font-size="10" font-weight="700" text-anchor="middle">PHASE 1</text>
+      <text x="12" y="50" fill="#ffffff" font-family="'Space Grotesk', sans-serif" font-size="13" font-weight="700">The Conceptual Pitch</text>
+      <text x="12" y="68" fill="#9ca3af" font-family="'Plus Jakarta Sans', sans-serif" font-size="10">Chaudary Moaz Kashif drafts</text>
+      <text x="12" y="82" fill="#9ca3af" font-family="'Plus Jakarta Sans', sans-serif" font-size="10">the autonomous pipeline</text>
+      <text x="12" y="96" fill="#9ca3af" font-family="'Plus Jakarta Sans', sans-serif" font-size="10">roadmap at FAST-NUCES.</text>
+    </g>
+  </g>
+
+  <!-- Milestone 2: Systems Lead Integration (2026 Q2) -->
+  <g transform="translate(340, 210)">
+    <circle cx="0" cy="0" r="14" fill="#03030a" stroke="#7F00FF" stroke-width="3"/>
+    <circle cx="0" cy="0" r="6" fill="#7F00FF"/>
+
+    <!-- Downward Card -->
+    <g transform="translate(-85, 25)">
+      <rect width="170" height="110" rx="10" fill="rgba(24, 18, 52, 0.85)" stroke="rgba(127, 0, 255, 0.3)" stroke-width="1.5"/>
+      <rect x="12" y="12" width="60" height="18" rx="9" fill="rgba(127, 0, 255, 0.15)"/>
+      <text x="42" y="25" fill="#c084fc" font-family="'Space Grotesk', sans-serif" font-size="10" font-weight="700" text-anchor="middle">PHASE 2</text>
+      <text x="12" y="50" fill="#ffffff" font-family="'Space Grotesk', sans-serif" font-size="13" font-weight="700">Systems Architecture</text>
+      <text x="12" y="68" fill="#9ca3af" font-family="'Plus Jakarta Sans', sans-serif" font-size="10">Umer Siddiqui (UMT) joins,</text>
+      <text x="12" y="82" fill="#9ca3af" font-family="'Plus Jakarta Sans', sans-serif" font-size="10">engineering high-availability</text>
+      <text x="12" y="96" fill="#9ca3af" font-family="'Plus Jakarta Sans', sans-serif" font-size="10">distributed execution trunks.</text>
+    </g>
+  </g>
+
+  <!-- Milestone 3: Telephony & CRM Sync Engine (2026 Q3) -->
+  <g transform="translate(580, 210)">
+    <circle cx="0" cy="0" r="14" fill="#03030a" stroke="#a855f7" stroke-width="3"/>
+    <circle cx="0" cy="0" r="6" fill="#a855f7"/>
+
+    <!-- Upward Card -->
+    <g transform="translate(-85, -135)">
+      <rect width="170" height="110" rx="10" fill="rgba(28, 16, 56, 0.85)" stroke="rgba(168, 85, 247, 0.3)" stroke-width="1.5"/>
+      <rect x="12" y="12" width="60" height="18" rx="9" fill="rgba(168, 85, 247, 0.15)"/>
+      <text x="42" y="25" fill="#d8b4fe" font-family="'Space Grotesk', sans-serif" font-size="10" font-weight="700" text-anchor="middle">PHASE 3</text>
+      <text x="12" y="50" fill="#ffffff" font-family="'Space Grotesk', sans-serif" font-size="13" font-weight="700">Autonomous Core V1</text>
+      <text x="12" y="68" fill="#9ca3af" font-family="'Plus Jakarta Sans', sans-serif" font-size="10">Sub-second voice dialer,</text>
+      <text x="12" y="82" fill="#9ca3af" font-family="'Plus Jakarta Sans', sans-serif" font-size="10">zero-loss CRM sync, and</text>
+      <text x="12" y="96" fill="#9ca3af" font-family="'Plus Jakarta Sans', sans-serif" font-size="10">AI draft pipelines deployed.</text>
+    </g>
+  </g>
+
+  <!-- Milestone 4: Global Enterprise Scale (2026+) -->
+  <g transform="translate(820, 210)">
+    <circle cx="0" cy="0" r="14" fill="#03030a" stroke="#ec4899" stroke-width="3"/>
+    <circle cx="0" cy="0" r="6" fill="#ec4899"/>
+
+    <!-- Downward Card -->
+    <g transform="translate(-85, 25)">
+      <rect width="170" height="110" rx="10" fill="rgba(32, 14, 48, 0.85)" stroke="rgba(236, 72, 153, 0.3)" stroke-width="1.5"/>
+      <rect x="12" y="12" width="60" height="18" rx="9" fill="rgba(236, 72, 153, 0.15)"/>
+      <text x="42" y="25" fill="#f472b6" font-family="'Space Grotesk', sans-serif" font-size="10" font-weight="700" text-anchor="middle">PHASE 4</text>
+      <text x="12" y="50" fill="#ffffff" font-family="'Space Grotesk', sans-serif" font-size="13" font-weight="700">Planetary Footprint</text>
+      <text x="12" y="68" fill="#9ca3af" font-family="'Plus Jakarta Sans', sans-serif" font-size="10">Empowering modern teams</text>
+      <text x="12" y="82" fill="#9ca3af" font-family="'Plus Jakarta Sans', sans-serif" font-size="10">worldwide with self-driving</text>
+      <text x="12" y="96" fill="#9ca3af" font-family="'Plus Jakarta Sans', sans-serif" font-size="10">frictionless business ops.</text>
+    </g>
+  </g>
+
+  <!-- Bottom Metric Bar -->
+  <g transform="translate(60, 395)">
+    <text x="0" y="15" fill="#6b7280" font-family="'Space Grotesk', sans-serif" font-size="11">CORE PRINCIPLE:</text>
+    <text x="110" y="15" fill="#ffffff" font-family="'Space Grotesk', sans-serif" font-size="11" font-weight="600">"ELIMINATE THE FRICTION OF HUMAN OPERATIONAL LATENCY"</text>
+  </g>
+</svg>
